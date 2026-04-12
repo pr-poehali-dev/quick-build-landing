@@ -55,9 +55,9 @@
 
 .hero-overlay {
   background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.94) 0%,
-    rgba(255, 255, 255, 0.75) 55%,
+    135deg,
+    rgba(255, 255, 255, 0.97) 0%,
+    rgba(255, 255, 255, 0.85) 45%,
     rgba(255, 255, 255, 0.2) 100%
   );
 }
@@ -185,4 +185,26 @@
 .animate-word-flip {
   display: inline-block;
   animation: word-flip 2s ease both;
+}
+
+/* Mobile overflow guard */
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+img {
+  max-width: 100%;
+}
+
+@media (max-width: 767px) {
+  h1 {
+    word-break: break-word;
+  }
+  .hero-overlay {
+    background: rgba(255, 255, 255, 0.92) !important;
+  }
 }
