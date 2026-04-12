@@ -1,98 +1,150 @@
 import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 
-const HERO_IMAGE = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/files/743e51e9-ceec-411a-832f-0554702885ed.jpg";
-const PORTFOLIO_IMAGE_1 = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/files/d29e9bb7-82fb-4cfd-98e3-116d675a9332.jpg";
-const PORTFOLIO_IMAGE_2 = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/files/d7cf6e80-7218-4732-9738-539e2555f6e3.jpg";
+// ── Images ──────────────────────────────────────────────────────────────────
+const HERO_BG = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/files/743e51e9-ceec-411a-832f-0554702885ed.jpg";
 
-const quizQuestions = [
+const IMG_WAREHOUSE = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/files/a4cbbfd8-4f55-4ad0-9498-9d69a60a62c9.jpg";
+const IMG_FACTORY   = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/files/ea209454-b909-4daa-af92-c0da34240618.jpg";
+const IMG_TRADE     = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/files/8e5eb3d6-5c31-48ea-8143-dc4a7452062f.jpg";
+const IMG_AUTO      = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/files/ac8a4f07-7780-4883-83be-5083ef582f7b.jpg";
+const IMG_AGRO      = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/files/6ac49967-de43-46ce-93dc-88c223f213d4.jpg";
+const IMG_FRAME     = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/files/d3e9eb1f-3859-449d-98c2-1eb5bb54e512.jpg";
+
+// ── Types ────────────────────────────────────────────────────────────────────
+interface Project {
+  id: number;
+  img: string;
+  img2?: string;
+  title: string;
+  location: string;
+  area: string;
+  category: string;
+  purpose: string;
+  length: string;
+  width: string;
+  height: string;
+  walls: string;
+}
+
+// ── Projects data ─────────────────────────────────────────────────────────────
+const projects: Project[] = [
   {
     id: 1,
-    question: "Какой тип производства вас интересует?",
-    options: [
-      { value: "metal", label: "Металлообработка", icon: "Wrench" },
-      { value: "construct", label: "Строительство", icon: "Building2" },
-      { value: "auto", label: "Автоматизация", icon: "Settings" },
-      { value: "energy", label: "Энергетика", icon: "Zap" },
-    ],
+    img: IMG_WAREHOUSE,
+    img2: IMG_AGRO,
+    title: "Склад для хранения металлоизделий, 18×30×6 м",
+    location: "Россия, Ярославская обл., г. Рыбинск",
+    area: "540 кв.м",
+    category: "Склады и ангары",
+    purpose: "Склад и ангар",
+    length: "30 м",
+    width: "18 м",
+    height: "6 м",
+    walls: "Сэндвич-панели",
   },
   {
     id: 2,
-    question: "Каков масштаб вашего проекта?",
-    options: [
-      { value: "small", label: "До 1 млн руб.", icon: "PackageOpen" },
-      { value: "medium", label: "1–10 млн руб.", icon: "Package" },
-      { value: "large", label: "10–50 млн руб.", icon: "Boxes" },
-      { value: "enterprise", label: "Свыше 50 млн руб.", icon: "Factory" },
-    ],
+    img: IMG_FRAME,
+    img2: IMG_FACTORY,
+    title: "Производственный цех, 24×48×8 м",
+    location: "Россия, Московская обл., г. Подольск",
+    area: "1152 кв.м",
+    category: "Производственные здания",
+    purpose: "Производств. здание",
+    length: "48 м",
+    width: "24 м",
+    height: "8 м",
+    walls: "Профлист",
   },
   {
     id: 3,
-    question: "Какие сроки реализации?",
+    img: IMG_TRADE,
+    img2: IMG_TRADE,
+    title: "Торговый центр, 30×60×6 м",
+    location: "Россия, Краснодарский край, г. Сочи",
+    area: "1800 кв.м",
+    category: "Магазины и торговые здания",
+    purpose: "Торговое здание",
+    length: "60 м",
+    width: "30 м",
+    height: "6 м",
+    walls: "Сэндвич-панели",
+  },
+  {
+    id: 4,
+    img: IMG_AUTO,
+    img2: IMG_AUTO,
+    title: "Автосервис с автомойкой, 12×24×4.8 м",
+    location: "Россия, Свердловская обл., г. Екатеринбург",
+    area: "288 кв.м",
+    category: "Здания для транспорта",
+    purpose: "Автосервис",
+    length: "24 м",
+    width: "12 м",
+    height: "4.8 м",
+    walls: "Профлист",
+  },
+];
+
+// ── Quiz data ─────────────────────────────────────────────────────────────────
+const quizSteps = [
+  {
+    question: "Выберите назначение здания",
+    hint: "Шаг 1 из 4",
     options: [
-      { value: "urgent", label: "До 1 месяца", icon: "Timer" },
-      { value: "short", label: "1–3 месяца", icon: "Clock" },
-      { value: "medium_t", label: "3–6 месяцев", icon: "CalendarDays" },
-      { value: "long", label: "Более 6 месяцев", icon: "CalendarRange" },
+      { label: "Склад / Ангар", icon: "Package" },
+      { label: "Производство", icon: "Factory" },
+      { label: "Торговля / ТЦ", icon: "ShoppingBag" },
+      { label: "Сельское хозяйство", icon: "Leaf" },
+      { label: "Автосервис / Паркинг", icon: "Car" },
+      { label: "Другое", icon: "MoreHorizontal" },
+    ],
+  },
+  {
+    question: "Укажите площадь здания",
+    hint: "Шаг 2 из 4",
+    options: [
+      { label: "До 300 кв.м", icon: "Square" },
+      { label: "300 – 1 000 кв.м", icon: "Square" },
+      { label: "1 000 – 3 000 кв.м", icon: "Square" },
+      { label: "Более 3 000 кв.м", icon: "Square" },
+    ],
+  },
+  {
+    question: "Когда планируете начать строительство?",
+    hint: "Шаг 3 из 4",
+    options: [
+      { label: "В ближайший месяц", icon: "Timer" },
+      { label: "В течение 3 месяцев", icon: "Clock" },
+      { label: "В течение полугода", icon: "CalendarDays" },
+      { label: "Пока изучаю варианты", icon: "Search" },
+    ],
+  },
+  {
+    question: "Ваш регион строительства",
+    hint: "Шаг 4 из 4",
+    options: [
+      { label: "Москва и МО", icon: "MapPin" },
+      { label: "Санкт-Петербург", icon: "MapPin" },
+      { label: "Центральная Россия", icon: "MapPin" },
+      { label: "Другой регион", icon: "MapPin" },
     ],
   },
 ];
 
-const recommendations: Record<string, { title: string; desc: string; icon: string }> = {
-  metal_small: { title: "Малосерийная токарная обработка", desc: "Быстрое изготовление малых партий с точностью до 0.01 мм", icon: "Wrench" },
-  metal_medium: { title: "Серийное фрезерование", desc: "Оптимальное соотношение цены и качества для средних партий", icon: "Wrench" },
-  metal_large: { title: "Крупносерийное производство", desc: "Полный цикл обработки металла под ваш проект", icon: "Factory" },
-  metal_enterprise: { title: "Промышленный аутсорсинг", desc: "Комплексное производство с гарантией поставок", icon: "Factory" },
-  construct_small: { title: "Малые конструкции", desc: "Металлоконструкции для небольших объектов и помещений", icon: "Building2" },
-  construct_medium: { title: "Гражданское строительство", desc: "Проектирование и монтаж промышленных зданий", icon: "Building2" },
-  construct_large: { title: "Промышленное строительство", desc: "Полный комплекс строительных работ под ключ", icon: "Building2" },
-  construct_enterprise: { title: "Инфраструктурные проекты", desc: "Масштабные промышленные объекты с нуля", icon: "Building2" },
-  auto_small: { title: "Частичная автоматизация", desc: "Автоматизация отдельных процессов вашего производства", icon: "Settings" },
-  auto_medium: { title: "Комплексная автоматизация цеха", desc: "Внедрение SCADA и управляющих систем", icon: "Settings" },
-  auto_large: { title: "Интеграция ERP + MES", desc: "Полная цифровизация производственных процессов", icon: "Settings" },
-  auto_enterprise: { title: "Умный завод (Smart Factory)", desc: "Создание цифрового двойника и полная автоматизация", icon: "Settings" },
-  energy_small: { title: "Локальная энергетика", desc: "Резервное питание и локальные решения", icon: "Zap" },
-  energy_medium: { title: "Электроснабжение предприятия", desc: "Проектирование и монтаж электросетей", icon: "Zap" },
-  energy_large: { title: "Подстанции и ВЛ", desc: "Строительство подстанций и воздушных линий", icon: "Zap" },
-  energy_enterprise: { title: "Генерация и распределение", desc: "Создание собственных энергетических объектов", icon: "Zap" },
-};
-
-const sizeMap: Record<string, string> = {
-  small: "small", medium: "medium", large: "large", enterprise: "enterprise"
-};
-
+// ── Services ──────────────────────────────────────────────────────────────────
 const services = [
-  { icon: "Wrench", title: "Металлообработка", desc: "Токарные, фрезерные и сварочные работы любой сложности. Точность до 0.01 мм.", color: "#1a8fff" },
-  { icon: "Building2", title: "Промышленное строительство", desc: "Возведение производственных корпусов, складов и инфраструктурных объектов.", color: "#ff6b1a" },
-  { icon: "Settings", title: "Автоматизация производства", desc: "Внедрение роботизированных линий, SCADA-систем и цифровых технологий.", color: "#a78bfa" },
-  { icon: "Zap", title: "Электроэнергетика", desc: "Проектирование и монтаж электрических сетей промышленного уровня.", color: "#22d3ee" },
-  { icon: "Shield", title: "Промышленная безопасность", desc: "Аудит, сертификация и внедрение систем промышленной безопасности.", color: "#34d399" },
-  { icon: "TrendingUp", title: "Инжиниринговый консалтинг", desc: "Технические экспертизы, проектная документация и сопровождение.", color: "#f59e0b" },
+  { icon: "Package", title: "Склады и ангары", desc: "Быстровозводимые склады любого размера под ключ" },
+  { icon: "Factory", title: "Производственные здания", desc: "Цеха, производства, ангары для промышленности" },
+  { icon: "ShoppingBag", title: "Торговые здания", desc: "ТЦ, магазины, торговые павильоны на металлокаркасе" },
+  { icon: "Leaf", title: "Сельхоз здания", desc: "Зернохранилища, коровники, фермы и агропостройки" },
+  { icon: "Car", title: "Здания для транспорта", desc: "Автосервисы, паркинги, автомойки и автосалоны" },
+  { icon: "Building2", title: "Административные здания", desc: "Офисы, бытовки, модульные здания любой конфигурации" },
 ];
 
-const portfolio = [
-  { img: PORTFOLIO_IMAGE_1, title: "Завод «СтальПром»", tag: "Строительство", year: "2024", large: true },
-  { img: PORTFOLIO_IMAGE_2, title: "ЦНИИмаш — линия ЧПУ", tag: "Автоматизация", year: "2024", large: false },
-  { img: HERO_IMAGE, title: "Энергоцентр Новосибирск", tag: "Энергетика", year: "2023", large: false },
-  { img: PORTFOLIO_IMAGE_2, title: "АвтоДеталь — фрезеровка", tag: "Металлообработка", year: "2023", large: false },
-  { img: PORTFOLIO_IMAGE_1, title: "Склад класса A", tag: "Строительство", year: "2023", large: false },
-  { img: HERO_IMAGE, title: "Подстанция 110/10 кВ", tag: "Энергетика", year: "2022", large: false },
-];
-
-const stats = [
-  { value: "12+", label: "Лет на рынке" },
-  { value: "340+", label: "Завершённых объектов" },
-  { value: "98%", label: "Клиентов возвращаются" },
-  { value: "47", label: "Специалистов в штате" },
-];
-
-const team = [
-  { name: "Александр Громов", role: "Генеральный директор", exp: "20 лет опыта" },
-  { name: "Ирина Соколова", role: "Главный инженер", exp: "15 лет опыта" },
-  { name: "Дмитрий Ковалёв", role: "Руководитель проектов", exp: "12 лет опыта" },
-];
-
-function useInView(threshold = 0.15) {
+// ── InView hook ───────────────────────────────────────────────────────────────
+function useInView(threshold = 0.12) {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
   useEffect(() => {
@@ -103,535 +155,525 @@ function useInView(threshold = 0.15) {
   return { ref, inView };
 }
 
+// ── Recommendation logic ──────────────────────────────────────────────────────
+function getRecommendation(answers: string[]) {
+  const purpose = answers[0] || "";
+  const size = answers[1] || "";
+  if (purpose.includes("Склад")) return { title: "Склад-ангар на металлокаркасе", desc: "Оптимальное решение — быстровозводимый ангар с профлистом. Срок монтажа от 25 дней.", area: size };
+  if (purpose.includes("Производство")) return { title: "Производственный цех", desc: "Многопролётное производственное здание с кран-балкой и утеплением. Под ключ.", area: size };
+  if (purpose.includes("Торговля")) return { title: "Торговый павильон / ТЦ", desc: "Светлое здание с большими витринными проёмами. Фасад на выбор: сэндвич-панели или алюминий.", area: size };
+  if (purpose.includes("Сельское")) return { title: "Сельскохозяйственный ангар", desc: "Зернохранилище, коровник или овощехранилище. Утеплённое, с принудительной вентиляцией.", area: size };
+  if (purpose.includes("Авто")) return { title: "Автосервис / Паркинг", desc: "Здание с большими гаражными воротами, смотровыми ямами и удобной планировкой.", area: size };
+  return { title: "Индивидуальный проект", desc: "Наш инженер свяжется с вами и подберёт оптимальное решение под ваши задачи.", area: size };
+}
+
+// ════════════════════════════════════════════════════════════════════════════
 export default function Index() {
-  const [navScrolled, setNavScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Modal
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [modalImgIdx, setModalImgIdx] = useState(0);
+
+  // Quiz
+  const [quizOpen, setQuizOpen] = useState(false);
   const [quizStep, setQuizStep] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState<string[]>([]);
-  const [quizResult, setQuizResult] = useState<{ title: string; desc: string; icon: string } | null>(null);
+  const [quizDone, setQuizDone] = useState(false);
 
   useEffect(() => {
-    const handler = () => setNavScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handler);
-    return () => window.removeEventListener("scroll", handler);
+    const h = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", h);
+    return () => window.removeEventListener("scroll", h);
   }, []);
+
+  // lock scroll when modal/quiz open
+  useEffect(() => {
+    document.body.style.overflow = (activeProject || quizOpen) ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [activeProject, quizOpen]);
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     setMobileOpen(false);
   };
 
-  const handleQuizAnswer = (value: string) => {
-    const step = quizStep - 1;
-    const newAnswers = [...quizAnswers];
-    newAnswers[step] = value;
-    setQuizAnswers(newAnswers);
+  const openQuiz = () => {
+    setQuizOpen(true);
+    setQuizStep(0);
+    setQuizAnswers([]);
+    setQuizDone(false);
+  };
 
-    if (quizStep < quizQuestions.length) {
-      setQuizStep(quizStep + 1);
+  const handleQuizAnswer = (label: string) => {
+    const newAnswers = [...quizAnswers, label];
+    setQuizAnswers(newAnswers);
+    if (quizStep + 1 >= quizSteps.length) {
+      setQuizDone(true);
     } else {
-      const industry = newAnswers[0];
-      const rawSize = step === 1 ? value : newAnswers[1];
-      const size = sizeMap[rawSize] || "medium";
-      const key = `${industry}_${size}`;
-      setQuizResult(recommendations[key] || {
-        title: "Индивидуальное решение",
-        desc: "Мы подберём оптимальное решение после консультации с нашим специалистом.",
-        icon: "Star",
-      });
-      setQuizStep(quizQuestions.length + 1);
+      setQuizStep(quizStep + 1);
     }
   };
 
-  const resetQuiz = () => {
-    setQuizStep(0);
-    setQuizAnswers([]);
-    setQuizResult(null);
-  };
+  const recommendation = quizDone ? getRecommendation(quizAnswers) : null;
+  const progress = quizDone ? 100 : Math.round(((quizStep) / quizSteps.length) * 100);
 
-  const progress = quizStep === 0 ? 0 : Math.round((quizStep / quizQuestions.length) * 100);
-
-  const heroRef = useInView(0.1);
-  const aboutRef = useInView(0.1);
-  const servicesRef = useInView(0.1);
-  const portfolioRef = useInView(0.1);
-  const quizRef = useInView(0.1);
-  const contactRef = useInView(0.1);
+  const heroRef    = useInView(0.05);
+  const statsRef   = useInView(0.1);
+  const servRef    = useInView(0.1);
+  const portRef    = useInView(0.1);
+  const quizSecRef = useInView(0.1);
+  const contRef    = useInView(0.1);
 
   return (
-    <div className="min-h-screen font-golos" style={{ backgroundColor: "var(--dark-bg)", color: "#e8eef5" }}>
+    <div className="min-h-screen bg-white text-gray-900" style={{ fontFamily: "'Golos Text', sans-serif" }}>
 
-      {/* NAVBAR */}
-      <nav
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-        style={{ background: navScrolled ? "rgba(9,12,18,0.95)" : "transparent", backdropFilter: navScrolled ? "blur(20px)" : "none", borderBottom: navScrolled ? "1px solid rgba(26,143,255,0.1)" : "none" }}
-      >
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded flex items-center justify-center" style={{ background: "var(--neon-blue)" }}>
-              <Icon name="Factory" size={16} className="text-white" />
+      {/* ══ TOPBAR ══════════════════════════════════════════════════════════ */}
+      <header className="border-b border-gray-200 bg-white">
+        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+          {/* Logo */}
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="w-12 h-12 flex flex-col items-center justify-center border-2 border-gray-900 rounded text-center leading-none p-1">
+              <span className="text-[8px] font-black tracking-tight text-gray-900 leading-tight">EVRAZ</span>
+              <span className="text-[8px] font-black tracking-tight leading-tight" style={{ color: "var(--orange)" }}>STEEL</span>
+              <span className="text-[8px] font-black tracking-tight text-gray-900 leading-tight">BOX</span>
             </div>
-            <span className="font-oswald text-xl font-bold tracking-wider text-white">ПРОМТЕХ</span>
-          </div>
-
-          <div className="hidden md:flex items-center gap-8">
-            {[["hero","Главная"],["about","О компании"],["services","Услуги"],["portfolio","Портфолио"],["quiz","Квиз"],["contacts","Контакты"]].map(([id, label]) => (
-              <button key={id} onClick={() => scrollTo(id)}
-                className="text-sm font-medium transition-colors hover:text-white"
-                style={{ color: "#94a3b8" }}>
-                {label}
-              </button>
-            ))}
-          </div>
-
-          <button onClick={() => scrollTo("contacts")}
-            className="hidden md:flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold text-white btn-shimmer">
-            Консультация
-          </button>
-
-          <button className="md:hidden p-2" onClick={() => setMobileOpen(!mobileOpen)} style={{ color: "#94a3b8" }}>
-            <Icon name={mobileOpen ? "X" : "Menu"} size={24} />
-          </button>
-        </div>
-
-        {mobileOpen && (
-          <div className="md:hidden glass-card border-t px-6 py-4 flex flex-col gap-3" style={{ borderColor: "var(--dark-border)" }}>
-            {[["hero","Главная"],["about","О компании"],["services","Услуги"],["portfolio","Портфолио"],["quiz","Квиз"],["contacts","Контакты"]].map(([id, label]) => (
-              <button key={id} onClick={() => scrollTo(id)} className="text-left font-medium py-2" style={{ color: "#94a3b8" }}>
-                {label}
-              </button>
-            ))}
-          </div>
-        )}
-      </nav>
-
-      {/* HERO */}
-      <section id="hero" className="relative min-h-screen flex items-center overflow-hidden grid-bg">
-        <div className="absolute inset-0">
-          <img src={HERO_IMAGE} alt="hero" className="w-full h-full object-cover opacity-25" />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(9,12,18,0.95) 0%, rgba(9,12,18,0.6) 50%, rgba(9,12,18,0.9) 100%)" }} />
-        </div>
-
-        <div className="absolute top-1/4 right-10 w-96 h-96 rounded-full opacity-10 animate-float"
-          style={{ background: "radial-gradient(circle, #1a8fff 0%, transparent 70%)" }} />
-        <div className="absolute bottom-1/4 left-10 w-64 h-64 rounded-full opacity-10 animate-float" style={{ animationDelay: "2s",
-          background: "radial-gradient(circle, #ff6b1a 0%, transparent 70%)" }} />
-        <div className="absolute top-20 right-20 w-40 h-40 opacity-20 animate-rotate-slow hidden lg:block"
-          style={{ border: "1px solid #1a8fff", borderRadius: "50%", borderTopColor: "transparent" }} />
-
-        <div ref={heroRef.ref} className="relative max-w-7xl mx-auto px-6 pt-24 pb-16 w-full">
-          <div className={`max-w-3xl transition-all duration-1000 ${heroRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-px w-12" style={{ background: "var(--neon-blue)" }} />
-              <span className="section-tag">Промышленные решения нового поколения</span>
-            </div>
-            <h1 className="font-oswald text-5xl md:text-7xl font-bold leading-none mb-6 text-white">
-              МЫ СТРОИМ<br />
-              <span className="gradient-text">БУДУЩЕЕ</span><br />
-              ПРОМЫШЛЕННОСТИ
-            </h1>
-            <p className="text-lg md:text-xl mb-10 max-w-xl leading-relaxed" style={{ color: "#94a3b8" }}>
-              Комплексные инженерные решения — от проектирования до сдачи объекта. 
-              12 лет опыта, 340+ успешных проектов по всей России.
+            <p className="text-xs text-gray-500 max-w-[170px] leading-snug hidden sm:block">
+              Российский разработчик и поставщик полнокомплектных быстровозводимых зданий на металлическом каркасе
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button onClick={() => scrollTo("quiz")}
-                className="px-8 py-4 rounded-xl font-bold text-white btn-shimmer text-base">
-                Подобрать решение
-                <Icon name="ArrowRight" size={18} className="inline ml-2" />
-              </button>
-              <button onClick={() => scrollTo("portfolio")}
-                className="px-8 py-4 rounded-xl font-semibold neon-border transition-all text-base"
-                style={{ color: "#94a3b8", background: "rgba(26,143,255,0.05)" }}>
-                Смотреть портфолио
-              </button>
-            </div>
           </div>
 
-          <div className={`mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 transition-all duration-1000 delay-300 ${heroRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-            {stats.map((s) => (
-              <div key={s.label} className="glass-card rounded-xl p-5 neon-border text-center">
-                <div className="font-oswald text-3xl md:text-4xl font-bold gradient-text-blue">{s.value}</div>
-                <div className="text-sm mt-1" style={{ color: "#64748b" }}>{s.label}</div>
-              </div>
-            ))}
+          {/* Schedule */}
+          <div className="hidden md:block text-center">
+            <div className="text-xs font-semibold text-gray-700">Время и график работы</div>
+            <div className="text-xs text-gray-500">Пн – Пт &nbsp; 09:30 – 18:00</div>
+          </div>
+
+          {/* Phone + buttons */}
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="hidden sm:block text-right">
+              <div className="font-bold text-lg text-gray-900 leading-tight">+7 (800) 302-65-29</div>
+              <div className="text-xs" style={{ color: "var(--orange)" }}>sales.box2@evrazsteel.ru</div>
+            </div>
+            <a href="https://t.me/" className="flex items-center gap-1.5 px-3 py-2 rounded text-white text-sm font-semibold" style={{ background: "#2AABEE" }}>
+              <Icon name="Send" size={14} /> Telegram
+            </a>
+            <button onClick={() => scrollTo("contacts")} className="px-3 py-2 rounded border border-gray-300 text-sm font-semibold text-gray-700 hover:border-gray-500 transition-colors">
+              Обратный звонок
+            </button>
+            <button className="md:hidden p-2" onClick={() => setMobileOpen(!mobileOpen)}>
+              <Icon name={mobileOpen ? "X" : "Menu"} size={22} />
+            </button>
           </div>
         </div>
+      </header>
 
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
-          <span className="text-xs" style={{ color: "#64748b", letterSpacing: "0.1em" }}>SCROLL</span>
-          <div className="w-px h-10 animate-pulse" style={{ background: "var(--neon-blue)" }} />
+      {/* Mobile nav */}
+      {mobileOpen && (
+        <div className="bg-white border-b border-gray-200 px-4 py-3 flex flex-col gap-2 md:hidden">
+          {[["hero","Главная"],["about","О нас"],["services","Услуги"],["portfolio","Проекты"],["quiz","Рассчитать"],["contacts","Контакты"]].map(([id, label]) => (
+            <button key={id} onClick={() => scrollTo(id)} className="text-left py-2 text-sm font-medium text-gray-700 border-b border-gray-100 last:border-0">
+              {label}
+            </button>
+          ))}
         </div>
-      </section>
+      )}
 
-      {/* ABOUT */}
-      <section id="about" className="py-28 relative" style={{ backgroundColor: "var(--dark-card)" }}>
-        <div className="absolute inset-0 grid-bg opacity-30" />
-        <div ref={aboutRef.ref} className="relative max-w-7xl mx-auto px-6">
-          <div className={`grid md:grid-cols-2 gap-16 items-center transition-all duration-1000 ${aboutRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-            <div>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="h-px w-12" style={{ background: "var(--neon-orange)" }} />
-                <span className="section-tag" style={{ color: "var(--neon-orange)" }}>О КОМПАНИИ</span>
-              </div>
-              <h2 className="font-oswald text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-                ИНЖЕНЕРНЫЙ ОПЫТ<br />
-                <span className="gradient-text">В КАЖДОМ ПРОЕКТЕ</span>
-              </h2>
-              <p className="text-base leading-relaxed mb-6" style={{ color: "#94a3b8" }}>
-                С 2012 года мы реализуем сложные промышленные проекты по всей России. 
-                Наша команда из 47 специалистов объединяет инженеров, технологов и менеджеров 
-                с опытом в металлообработке, строительстве и автоматизации.
+      {/* ══ HERO ════════════════════════════════════════════════════════════ */}
+      <section id="hero" className="relative overflow-hidden" style={{ minHeight: "520px" }}>
+        {/* BG image */}
+        <div className="absolute inset-0">
+          <img src={HERO_BG} alt="bg" className="w-full h-full object-cover" />
+          <div className="hero-overlay absolute inset-0" />
+        </div>
+
+        <div ref={heroRef.ref} className="relative max-w-7xl mx-auto px-4 py-16 md:py-24">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* Left: headline */}
+            <div className={`transition-all duration-700 ${heroRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-gray-900 mb-4">
+                Проектирование, производство<br />
+                и строительство<br />
+                быстровозводимых<br />
+                <span style={{ color: "var(--orange)" }}>сельхоз зданий</span><br />
+                под ключ за <span style={{ color: "var(--orange)" }}>40 дней</span>
+              </h1>
+              <p className="text-gray-600 mb-8 text-base">
+                Пройдите тест за <strong>1 минуту</strong> чтобы узнать стоимость и получить расчёт
               </p>
-              <p className="text-base leading-relaxed mb-8" style={{ color: "#94a3b8" }}>
-                Мы не просто выполняем заказы — мы создаём долгосрочные партнёрства, 
-                обеспечивая полный цикл от концепции до запуска производства.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                {["ISO 9001:2015", "СРО Строителей", "НАКС Сварка", "ПАО Россети"].map((cert) => (
-                  <span key={cert} className="px-3 py-1.5 rounded-lg text-xs font-semibold neon-border"
-                    style={{ color: "var(--neon-blue)", background: "rgba(26,143,255,0.05)" }}>
-                    {cert}
-                  </span>
-                ))}
-              </div>
+              <button onClick={openQuiz} className="btn-orange px-8 py-4 rounded text-sm inline-flex items-center gap-2">
+                РАССЧИТАТЬ СТОИМОСТЬ →
+              </button>
             </div>
 
-            <div className="space-y-4">
-              {team.map((member, i) => (
-                <div key={i} className="glass-card rounded-xl p-5 flex items-center gap-4 neon-border transition-all hover:translate-x-1">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center font-oswald font-bold text-lg shrink-0"
-                    style={{ background: "linear-gradient(135deg, var(--neon-blue), #a78bfa)", color: "#fff" }}>
-                    {member.name.charAt(0)}
+            {/* Right: stats */}
+            <div ref={statsRef.ref} className={`space-y-6 transition-all duration-700 delay-200 ${statsRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+              {[
+                { num: "300+", desc: "Реализованных проектов промышленных и коммерческих зданий по всей России" },
+                { num: "40 дней", desc: "Всего за 40 дней мы обеспечиваем поставку и монтаж быстровозводимых зданий SMALL BOX для малого и среднего бизнеса" },
+                { num: "500+ тыс.кв.м", desc: "Запроектированных объектов в нашем портфеле и более 300 тыс.кв.м построенных объектов BIG BOX" },
+                { num: "60+", desc: "Запроектировали многоуровневых паркингов на 50000 машиномест и построили более 20 паркингов на 9000 машиномест" },
+              ].map((s, i) => (
+                <div key={i} className="flex gap-5 items-start">
+                  <div className="shrink-0 font-bold text-xl md:text-2xl leading-tight" style={{ color: "var(--orange)", minWidth: "110px" }}>
+                    {s.num}
                   </div>
-                  <div>
-                    <div className="font-semibold text-white text-sm">{member.name}</div>
-                    <div className="text-xs" style={{ color: "#64748b" }}>{member.role} · {member.exp}</div>
-                  </div>
-                  <Icon name="ChevronRight" size={16} className="ml-auto" style={{ color: "var(--neon-blue)" }} />
+                  <p className="text-sm text-gray-600 leading-relaxed">{s.desc}</p>
                 </div>
               ))}
-              <div className="glass-card rounded-xl p-5 neon-border" style={{ borderColor: "rgba(255,107,26,0.3)" }}>
-                <div className="flex items-center gap-3 mb-2">
-                  <Icon name="Award" size={20} style={{ color: "var(--neon-orange)" }} />
-                  <span className="font-semibold text-white text-sm">Лауреат «Промышленник года 2023»</span>
-                </div>
-                <p className="text-xs" style={{ color: "#64748b" }}>
-                  Победитель в номинации «Лучший инженерный проект» по итогам года
-                </p>
-              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* SERVICES */}
-      <section id="services" className="py-28 relative" style={{ backgroundColor: "var(--dark-bg)" }}>
-        <div className="absolute inset-0 grid-bg opacity-20" />
-        <div ref={servicesRef.ref} className="relative max-w-7xl mx-auto px-6">
-          <div className={`text-center mb-16 transition-all duration-1000 ${servicesRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-            <div className="flex items-center justify-center gap-3 mb-5">
-              <div className="h-px w-12" style={{ background: "var(--neon-blue)" }} />
-              <span className="section-tag">НАШИ УСЛУГИ</span>
-              <div className="h-px w-12" style={{ background: "var(--neon-blue)" }} />
-            </div>
-            <h2 className="font-oswald text-4xl md:text-5xl font-bold text-white mb-4">
-              ПОЛНЫЙ СПЕКТР<br />
-              <span className="gradient-text">ПРОМЫШЛЕННЫХ РЕШЕНИЙ</span>
-            </h2>
+      {/* ══ ABOUT ════════════════════════════════════════════════════════════ */}
+      <section id="about" className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { icon: "Award", title: "Собственное производство", desc: "Завод в Липецкой области площадью 15 000 кв.м. Полный производственный цикл металлоконструкций." },
+              { icon: "Shield", title: "Гарантия 25 лет", desc: "На металлокаркас здания. Используем только сертифицированный российский металлопрокат." },
+              { icon: "Truck", title: "Доставка по всей России", desc: "Собственный парк спецтехники. Доставляем и монтируем здания в любой регион России." },
+            ].map((c, i) => (
+              <div key={i} className="flex gap-4 items-start">
+                <div className="w-10 h-10 rounded flex items-center justify-center shrink-0" style={{ background: "#fff3ee" }}>
+                  <Icon name={c.icon} size={20} style={{ color: "var(--orange)" }} />
+                </div>
+                <div>
+                  <div className="font-bold text-gray-900 mb-1">{c.title}</div>
+                  <div className="text-sm text-gray-500 leading-relaxed">{c.desc}</div>
+                </div>
+              </div>
+            ))}
           </div>
+        </div>
+      </section>
 
-          <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-1000 delay-200 ${servicesRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+      {/* ══ SERVICES ═════════════════════════════════════════════════════════ */}
+      <section id="services" className="py-16 bg-white">
+        <div ref={servRef.ref} className="max-w-7xl mx-auto px-4">
+          <h2 className={`text-2xl md:text-3xl font-bold text-gray-900 mb-8 transition-all duration-700 ${servRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}>
+            Виды зданий:
+          </h2>
+          <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 transition-all duration-700 delay-100 ${servRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}>
             {services.map((svc, i) => (
-              <div key={i}
-                className="glass-card rounded-2xl p-7 group cursor-pointer transition-all duration-300 hover:-translate-y-1"
-                style={{ border: "1px solid var(--dark-border)" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = svc.color + "55"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--dark-border)"; }}>
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-transform group-hover:scale-110"
-                  style={{ background: svc.color + "15", border: `1px solid ${svc.color}30` }}>
-                  <Icon name={svc.icon} size={22} style={{ color: svc.color }} />
+              <div key={i} className="border border-gray-200 rounded-xl p-5 hover:border-orange-300 transition-colors cursor-pointer group">
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3" style={{ background: "#fff3ee" }}>
+                  <Icon name={svc.icon} size={18} style={{ color: "var(--orange)" }} />
                 </div>
-                <h3 className="font-oswald text-xl font-bold text-white mb-3">{svc.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: "#64748b" }}>{svc.desc}</p>
-                <div className="flex items-center gap-2 mt-5 text-sm font-medium transition-all group-hover:gap-3"
-                  style={{ color: svc.color }}>
-                  Подробнее <Icon name="ArrowRight" size={14} />
-                </div>
+                <div className="font-semibold text-gray-900 text-sm mb-1">{svc.title}</div>
+                <div className="text-xs text-gray-500 leading-relaxed">{svc.desc}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* PORTFOLIO */}
-      <section id="portfolio" className="py-28 relative" style={{ backgroundColor: "var(--dark-card)" }}>
-        <div ref={portfolioRef.ref} className="relative max-w-7xl mx-auto px-6">
-          <div className={`flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6 transition-all duration-1000 ${portfolioRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-            <div>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="h-px w-12" style={{ background: "var(--neon-blue)" }} />
-                <span className="section-tag">ПОРТФОЛИО</span>
+      {/* ══ PORTFOLIO ════════════════════════════════════════════════════════ */}
+      <section id="portfolio" className="py-16" style={{ background: "#f4f4f4" }}>
+        <div ref={portRef.ref} className="max-w-7xl mx-auto px-4">
+          <h2 className={`text-2xl md:text-3xl font-bold text-gray-900 mb-8 transition-all duration-700 ${portRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}>
+            Примеры реализованных проектов:
+          </h2>
+
+          <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 transition-all duration-700 delay-100 ${portRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}>
+            {projects.map((p) => (
+              <div key={p.id} className="project-card bg-white rounded-xl overflow-hidden border border-gray-200"
+                onClick={() => { setActiveProject(p); setModalImgIdx(0); }}>
+                {/* Image */}
+                <div className="relative" style={{ height: "180px" }}>
+                  <img src={p.img} alt={p.title} className="w-full h-full object-cover" />
+                  <div className="absolute top-2 right-2 px-2 py-0.5 rounded text-xs font-semibold text-white" style={{ background: "rgba(30,30,30,0.75)" }}>
+                    +1 фото
+                  </div>
+                </div>
+                {/* Info */}
+                <div className="p-4">
+                  <div className="font-semibold text-gray-900 text-sm mb-2 leading-snug">{p.title}</div>
+                  <div className="flex items-center gap-1 text-xs text-gray-400 mb-3">
+                    <Icon name="MapPin" size={11} />
+                    {p.location}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-gray-900 text-sm">{p.area}</span>
+                    <span className="text-xs px-2 py-1 rounded" style={{ background: "#f4f4f4", color: "#555" }}>{p.category}</span>
+                  </div>
+                </div>
               </div>
-              <h2 className="font-oswald text-4xl md:text-5xl font-bold text-white">
-                НАШИ ЛУЧШИЕ<br />
-                <span className="gradient-text">ПРОЕКТЫ</span>
-              </h2>
-            </div>
-            <p className="text-sm max-w-xs" style={{ color: "#64748b" }}>
-              Более 340 реализованных проектов в разных отраслях промышленности
+            ))}
+          </div>
+
+          {/* CTA row */}
+          <div className={`mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 transition-all duration-700 delay-200 ${portRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}>
+            <p className="text-gray-700 text-sm">
+              Пройдите тест за <strong>1 минуту</strong> чтобы узнать стоимость вашего здания
             </p>
-          </div>
-
-          <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 transition-all duration-1000 delay-200 ${portfolioRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-            {portfolio.map((item, i) => (
-              <div key={i}
-                className={`portfolio-card rounded-2xl cursor-pointer group ${item.large && i === 0 ? "lg:col-span-2" : ""}`}
-                style={{ border: "1px solid var(--dark-border)", background: "var(--dark-bg)" }}>
-                <div className="relative overflow-hidden rounded-t-2xl" style={{ height: item.large && i === 0 ? "300px" : "210px" }}>
-                  <img src={item.img} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400"
-                    style={{ background: "linear-gradient(180deg, transparent 40%, rgba(9,12,18,0.92) 100%)" }} />
-                  <div className="absolute top-3 left-3">
-                    <span className="text-xs font-semibold px-2 py-1 rounded" style={{ background: "var(--neon-blue)", color: "#fff" }}>
-                      {item.tag}
-                    </span>
-                  </div>
-                </div>
-                <div className="p-4 flex items-center justify-between">
-                  <div>
-                    <div className="font-semibold text-white text-sm">{item.title}</div>
-                    <div className="text-xs mt-0.5" style={{ color: "#64748b" }}>{item.tag} · {item.year}</div>
-                  </div>
-                  <Icon name="ExternalLink" size={15} style={{ color: "#334155" }} />
-                </div>
-              </div>
-            ))}
+            <button onClick={openQuiz} className="btn-orange px-8 py-3 rounded text-sm shrink-0">
+              РАССЧИТАТЬ →
+            </button>
           </div>
         </div>
       </section>
 
-      {/* QUIZ */}
-      <section id="quiz" className="py-28 relative overflow-hidden" style={{ backgroundColor: "var(--dark-bg)" }}>
-        <div className="absolute inset-0 grid-bg opacity-20" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 opacity-10 pointer-events-none"
-          style={{ background: "radial-gradient(circle, var(--neon-blue) 0%, transparent 70%)", filter: "blur(40px)" }} />
-
-        <div ref={quizRef.ref} className="relative max-w-2xl mx-auto px-6">
-          <div className={`text-center mb-12 transition-all duration-1000 ${quizRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-            <div className="flex items-center justify-center gap-3 mb-5">
-              <div className="h-px w-12" style={{ background: "var(--neon-orange)" }} />
-              <span className="section-tag" style={{ color: "var(--neon-orange)" }}>УМНЫЙ КВИЗ</span>
-              <div className="h-px w-12" style={{ background: "var(--neon-orange)" }} />
-            </div>
-            <h2 className="font-oswald text-4xl md:text-5xl font-bold text-white mb-4">
-              ПОДБЕРЁМ РЕШЕНИЕ<br />
-              <span className="gradient-text">ЗА 3 ВОПРОСА</span>
+      {/* ══ QUIZ SECTION (inline teaser) ═════════════════════════════════════ */}
+      <section id="quiz" className="py-16 bg-white">
+        <div ref={quizSecRef.ref} className="max-w-3xl mx-auto px-4 text-center">
+          <div className={`transition-all duration-700 ${quizSecRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+              Узнайте стоимость вашего здания за <span style={{ color: "var(--orange)" }}>1 минуту</span>
             </h2>
-            <p className="text-sm" style={{ color: "#64748b" }}>
-              Ответьте на несколько вопросов — получите персональную рекомендацию
+            <p className="text-gray-500 text-sm mb-8">
+              Пройдите короткий тест — получите персональный расчёт и коммерческое предложение
             </p>
-          </div>
-
-          <div className={`glass-card rounded-2xl p-8 neon-border transition-all duration-1000 delay-200 ${quizRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-            {quizStep > 0 && quizStep <= quizQuestions.length && (
-              <div className="mb-8">
-                <div className="flex justify-between text-xs mb-2" style={{ color: "#64748b" }}>
-                  <span>Вопрос {quizStep} из {quizQuestions.length}</span>
-                  <span>{progress}%</span>
-                </div>
-                <div className="h-1.5 rounded-full" style={{ background: "var(--dark-border)" }}>
-                  <div className="h-full rounded-full quiz-progress-bar" style={{ width: `${progress}%` }} />
-                </div>
-              </div>
-            )}
-
-            {quizStep === 0 && (
-              <div className="text-center py-6">
-                <div className="w-20 h-20 rounded-2xl mx-auto mb-6 flex items-center justify-center animate-glow-pulse"
-                  style={{ background: "linear-gradient(135deg, rgba(26,143,255,0.2), rgba(167,139,250,0.2))", border: "1px solid rgba(26,143,255,0.4)" }}>
-                  <Icon name="Sparkles" size={36} style={{ color: "var(--neon-blue)" }} />
-                </div>
-                <h3 className="font-oswald text-2xl font-bold text-white mb-3">Персональный подбор решения</h3>
-                <p className="text-sm mb-8" style={{ color: "#94a3b8" }}>
-                  3 простых вопроса — и вы получите конкретное решение,
-                  подходящее именно вашему проекту
-                </p>
-                <button onClick={() => setQuizStep(1)}
-                  className="px-8 py-3.5 rounded-xl font-bold text-white btn-shimmer">
-                  Начать подбор <Icon name="ArrowRight" size={16} className="inline ml-1.5" />
-                </button>
-              </div>
-            )}
-
-            {quizStep >= 1 && quizStep <= quizQuestions.length && (
-              <div>
-                <h3 className="font-oswald text-2xl font-bold text-white mb-6">
-                  {quizQuestions[quizStep - 1].question}
-                </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {quizQuestions[quizStep - 1].options.map((opt) => (
-                    <button key={opt.value} onClick={() => handleQuizAnswer(opt.value)}
-                      className="flex items-center gap-3 p-4 rounded-xl text-left transition-all duration-200 hover:-translate-y-0.5"
-                      style={{ background: "rgba(26,143,255,0.05)", border: "1px solid var(--dark-border)", color: "#94a3b8" }}
-                      onMouseEnter={e => {
-                        const el = e.currentTarget as HTMLElement;
-                        el.style.borderColor = "rgba(26,143,255,0.6)";
-                        el.style.color = "#fff";
-                        el.style.background = "rgba(26,143,255,0.1)";
-                      }}
-                      onMouseLeave={e => {
-                        const el = e.currentTarget as HTMLElement;
-                        el.style.borderColor = "var(--dark-border)";
-                        el.style.color = "#94a3b8";
-                        el.style.background = "rgba(26,143,255,0.05)";
-                      }}>
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                        style={{ background: "rgba(26,143,255,0.1)" }}>
-                        <Icon name={opt.icon} size={15} style={{ color: "var(--neon-blue)" }} />
-                      </div>
-                      <span className="text-sm font-medium">{opt.label}</span>
-                    </button>
-                  ))}
-                </div>
-                {quizStep > 1 && (
-                  <button onClick={() => setQuizStep(quizStep - 1)}
-                    className="mt-5 text-xs flex items-center gap-1.5 transition-colors hover:text-white"
-                    style={{ color: "#64748b" }}>
-                    <Icon name="ArrowLeft" size={12} /> Назад
-                  </button>
-                )}
-              </div>
-            )}
-
-            {quizStep === quizQuestions.length + 1 && quizResult && (
-              <div className="text-center py-4">
-                <div className="w-16 h-16 rounded-2xl mx-auto mb-5 flex items-center justify-center"
-                  style={{ background: "linear-gradient(135deg, rgba(26,143,255,0.3), rgba(167,139,250,0.3))", border: "1px solid rgba(26,143,255,0.5)" }}>
-                  <Icon name={quizResult.icon} fallback="Star" size={28} style={{ color: "var(--neon-blue)" }} />
-                </div>
-                <div className="text-xs font-semibold mb-2 section-tag mx-auto">Ваше персональное решение</div>
-                <h3 className="font-oswald text-2xl font-bold text-white mb-3">{quizResult.title}</h3>
-                <p className="text-sm mb-6" style={{ color: "#94a3b8" }}>{quizResult.desc}</p>
-                <div className="p-4 rounded-xl mb-6" style={{ background: "rgba(26,143,255,0.08)", border: "1px solid rgba(26,143,255,0.2)" }}>
-                  <div className="flex items-center gap-2 justify-center mb-1">
-                    <Icon name="CheckCircle" size={16} style={{ color: "var(--neon-blue)" }} />
-                    <span className="text-sm font-semibold text-white">Получите детальный расчёт</span>
-                  </div>
-                  <p className="text-xs" style={{ color: "#64748b" }}>Оставьте заявку — КП подготовим в течение 24 часов</p>
-                </div>
-                <div className="flex gap-3">
-                  <button onClick={() => scrollTo("contacts")}
-                    className="flex-1 py-3 rounded-xl font-bold text-white btn-shimmer text-sm">
-                    Получить КП
-                  </button>
-                  <button onClick={resetQuiz}
-                    className="px-5 py-3 rounded-xl text-sm neon-border transition-all hover:text-white"
-                    style={{ color: "#64748b" }}>
-                    Заново
-                  </button>
-                </div>
-              </div>
-            )}
+            <button onClick={openQuiz} className="btn-orange px-10 py-4 rounded text-base inline-flex items-center gap-2">
+              РАССЧИТАТЬ СТОИМОСТЬ →
+            </button>
           </div>
         </div>
       </section>
 
-      {/* CONTACTS */}
-      <section id="contacts" className="py-28 relative" style={{ backgroundColor: "var(--dark-card)" }}>
-        <div className="absolute inset-0 grid-bg opacity-20" />
-        <div ref={contactRef.ref} className="relative max-w-7xl mx-auto px-6">
-          <div className={`grid md:grid-cols-2 gap-16 items-start transition-all duration-1000 ${contactRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+      {/* ══ CONTACTS ═════════════════════════════════════════════════════════ */}
+      <section id="contacts" className="py-16" style={{ background: "#f4f4f4" }}>
+        <div ref={contRef.ref} className="max-w-7xl mx-auto px-4">
+          <div className={`grid md:grid-cols-2 gap-12 items-start transition-all duration-700 ${contRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}>
             <div>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="h-px w-12" style={{ background: "var(--neon-blue)" }} />
-                <span className="section-tag">КОНТАКТЫ</span>
-              </div>
-              <h2 className="font-oswald text-4xl md:text-5xl font-bold text-white mb-6">
-                ГОТОВЫ К<br />
-                <span className="gradient-text">СОТРУДНИЧЕСТВУ?</span>
-              </h2>
-              <p className="text-base mb-8 leading-relaxed" style={{ color: "#64748b" }}>
-                Расскажите о вашем проекте — мы предложим оптимальное техническое решение 
-                с подробным расчётом в течение 24 часов.
-              </p>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">Свяжитесь с нами</h2>
               <div className="space-y-5">
                 {[
-                  { icon: "Phone", label: "+7 (800) 555-35-35", sub: "Бесплатно по России" },
-                  { icon: "Mail", label: "info@promtech.ru", sub: "Ответим в течение часа" },
-                  { icon: "MapPin", label: "Москва, ул. Промышленная, 14", sub: "Пн–Пт 9:00 – 18:00" },
+                  { icon: "Phone", label: "+7 (800) 302-65-29", sub: "Бесплатно по России, Пн–Пт 9:30–18:00" },
+                  { icon: "Mail", label: "sales.box2@evrazsteel.ru", sub: "Ответим в течение часа" },
+                  { icon: "MapPin", label: "Москва, Пресненская наб., 12", sub: "Московский офис" },
                 ].map((c, i) => (
                   <div key={i} className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                      style={{ background: "rgba(26,143,255,0.1)", border: "1px solid rgba(26,143,255,0.2)" }}>
-                      <Icon name={c.icon} size={17} style={{ color: "var(--neon-blue)" }} />
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style={{ background: "#fff3ee" }}>
+                      <Icon name={c.icon} size={18} style={{ color: "var(--orange)" }} />
                     </div>
                     <div>
-                      <div className="font-semibold text-white text-sm">{c.label}</div>
-                      <div className="text-xs" style={{ color: "#64748b" }}>{c.sub}</div>
+                      <div className="font-semibold text-gray-900 text-sm">{c.label}</div>
+                      <div className="text-xs text-gray-400">{c.sub}</div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="glass-card rounded-2xl p-8 neon-border">
-              <h3 className="font-oswald text-xl font-bold text-white mb-6">Оставить заявку</h3>
+            <div className="bg-white rounded-xl border border-gray-200 p-7">
+              <h3 className="font-bold text-gray-900 mb-5">Оставить заявку</h3>
               <form className="space-y-4" onSubmit={e => e.preventDefault()}>
-                <div>
-                  <label className="text-xs font-medium mb-1.5 block" style={{ color: "#64748b" }}>Имя *</label>
-                  <input type="text" placeholder="Иван Иванов"
-                    className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
-                    style={{ background: "rgba(26,143,255,0.05)", border: "1px solid var(--dark-border)", color: "#e8eef5" }} />
-                </div>
-                <div>
-                  <label className="text-xs font-medium mb-1.5 block" style={{ color: "#64748b" }}>Телефон *</label>
-                  <input type="tel" placeholder="+7 (___) ___-__-__"
-                    className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
-                    style={{ background: "rgba(26,143,255,0.05)", border: "1px solid var(--dark-border)", color: "#e8eef5" }} />
-                </div>
-                <div>
-                  <label className="text-xs font-medium mb-1.5 block" style={{ color: "#64748b" }}>Компания</label>
-                  <input type="text" placeholder="ООО «Название»"
-                    className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
-                    style={{ background: "rgba(26,143,255,0.05)", border: "1px solid var(--dark-border)", color: "#e8eef5" }} />
-                </div>
-                <div>
-                  <label className="text-xs font-medium mb-1.5 block" style={{ color: "#64748b" }}>Опишите задачу</label>
-                  <textarea rows={4} placeholder="Кратко опишите ваш проект..."
-                    className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all resize-none"
-                    style={{ background: "rgba(26,143,255,0.05)", border: "1px solid var(--dark-border)", color: "#e8eef5" }} />
-                </div>
-                <button type="submit" className="w-full py-4 rounded-xl font-bold text-white btn-shimmer">
-                  Отправить заявку
-                  <Icon name="Send" size={16} className="inline ml-2" />
+                <input type="text" placeholder="Ваше имя"
+                  className="w-full border border-gray-200 rounded px-4 py-3 text-sm outline-none focus:border-orange-400 transition-colors" />
+                <input type="tel" placeholder="+7 (___) ___-__-__"
+                  className="w-full border border-gray-200 rounded px-4 py-3 text-sm outline-none focus:border-orange-400 transition-colors" />
+                <textarea rows={3} placeholder="Опишите вашу задачу"
+                  className="w-full border border-gray-200 rounded px-4 py-3 text-sm outline-none focus:border-orange-400 transition-colors resize-none" />
+                <button type="submit" className="btn-orange w-full py-3.5 rounded text-sm">
+                  ОТПРАВИТЬ ЗАЯВКУ →
                 </button>
-                <p className="text-center text-xs" style={{ color: "#475569" }}>
-                  Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности
-                </p>
+                <p className="text-center text-xs text-gray-400">Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности</p>
               </form>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="py-10 border-t" style={{ borderColor: "var(--dark-border)", backgroundColor: "var(--dark-bg)" }}>
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      {/* ══ FOOTER ═══════════════════════════════════════════════════════════ */}
+      <footer className="border-t border-gray-200 bg-white py-6">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded flex items-center justify-center" style={{ background: "var(--neon-blue)" }}>
-              <Icon name="Factory" size={14} className="text-white" />
+            <div className="w-9 h-9 flex flex-col items-center justify-center border-2 border-gray-900 rounded text-center leading-none p-1">
+              <span className="text-[7px] font-black text-gray-900 leading-tight">EVRAZ</span>
+              <span className="text-[7px] font-black leading-tight" style={{ color: "var(--orange)" }}>STEEL</span>
+              <span className="text-[7px] font-black text-gray-900 leading-tight">BOX</span>
             </div>
-            <span className="font-oswald font-bold tracking-wider text-white">ПРОМТЕХ</span>
+            <span className="text-xs text-gray-500">© 2024 EVRAZ STEEL BOX. Все права защищены.</span>
           </div>
-          <p className="text-xs" style={{ color: "#475569" }}>© 2024 ПромТех. Все права защищены.</p>
           <div className="flex gap-5">
-            {["Политика","Реквизиты"].map(l => (
-              <button key={l} className="text-xs transition-colors hover:text-white" style={{ color: "#475569" }}>{l}</button>
+            {["Политика конфиденциальности", "Реквизиты"].map(l => (
+              <button key={l} className="text-xs text-gray-400 hover:text-gray-700 transition-colors">{l}</button>
             ))}
           </div>
         </div>
       </footer>
+
+      {/* ══ PROJECT MODAL ════════════════════════════════════════════════════ */}
+      {activeProject && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop animate-fade-in"
+          onClick={() => setActiveProject(null)}>
+          <div className="bg-white rounded-2xl w-full max-w-xl overflow-hidden animate-modal-in max-h-[90vh] overflow-y-auto"
+            onClick={e => e.stopPropagation()}>
+            {/* Image slider */}
+            <div className="relative bg-gray-100" style={{ height: "260px" }}>
+              <img
+                src={modalImgIdx === 0 ? activeProject.img : (activeProject.img2 || activeProject.img)}
+                alt={activeProject.title}
+                className="w-full h-full object-cover"
+              />
+              {/* Dots */}
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+                {[0, 1].map(i => (
+                  <button key={i} onClick={() => setModalImgIdx(i)}
+                    className="w-2.5 h-2.5 rounded-full border border-white transition-colors"
+                    style={{ background: modalImgIdx === i ? "#fff" : "rgba(255,255,255,0.4)" }} />
+                ))}
+              </div>
+              {/* Next arrow */}
+              <button className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white bg-opacity-80 flex items-center justify-center shadow"
+                onClick={() => setModalImgIdx(i => i === 0 ? 1 : 0)}>
+                <Icon name="ChevronRight" size={18} className="text-gray-700" />
+              </button>
+              {/* Close */}
+              <button className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white bg-opacity-90 flex items-center justify-center shadow"
+                onClick={() => setActiveProject(null)}>
+                <Icon name="X" size={16} className="text-gray-700" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6">
+              <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Карточка проекта</div>
+              <h3 className="text-xl font-bold text-gray-900 mb-6">{activeProject.title}</h3>
+
+              <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+                {/* Characteristics */}
+                <div>
+                  <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Характеристики</div>
+                  <div className="space-y-2.5 text-sm">
+                    {[
+                      ["Назначение", activeProject.purpose],
+                      ["Длина", activeProject.length],
+                      ["Ширина", activeProject.width],
+                      ["Высота", activeProject.height],
+                      ["Площадь", activeProject.area],
+                      ["Тип стен", activeProject.walls],
+                    ].map(([k, v]) => (
+                      <div key={k} className="flex justify-between gap-2">
+                        <span className="text-gray-400">{k}</span>
+                        <span className="font-semibold text-gray-900 text-right">{v}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Details */}
+                <div>
+                  <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Детали</div>
+                  <div className="space-y-2.5 text-sm">
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Icon name="CheckCircle" size={15} style={{ color: "var(--orange)" }} />
+                      Статус: Завершено
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Icon name="Tag" size={15} style={{ color: "var(--orange)" }} />
+                      Категория: {activeProject.category}
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Icon name="Maximize2" size={15} style={{ color: "var(--orange)" }} />
+                      Площадь: {activeProject.area}
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Icon name="MapPin" size={15} style={{ color: "var(--orange)" }} />
+                      {activeProject.location}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button onClick={() => { setActiveProject(null); openQuiz(); }}
+                className="btn-orange w-full mt-7 py-4 rounded text-sm">
+                РАССЧИТАТЬ ПОХОЖЕЕ ЗДАНИЕ →
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ══ QUIZ MODAL ═══════════════════════════════════════════════════════ */}
+      {quizOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop animate-fade-in"
+          onClick={() => setQuizOpen(false)}>
+          <div className="bg-white rounded-2xl w-full max-w-lg overflow-hidden animate-modal-in"
+            onClick={e => e.stopPropagation()}>
+
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 pt-6 pb-4">
+              <div>
+                <div className="text-xs text-gray-400 mb-0.5">
+                  {quizDone ? "Результат" : quizSteps[quizStep]?.hint}
+                </div>
+                <div className="text-xs font-semibold" style={{ color: "var(--orange)" }}>
+                  {quizDone ? "Готово!" : `${progress}% пройдено`}
+                </div>
+              </div>
+              <button onClick={() => setQuizOpen(false)} className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center">
+                <Icon name="X" size={15} className="text-gray-500" />
+              </button>
+            </div>
+
+            {/* Progress bar */}
+            <div className="h-1 bg-gray-100 mx-6 rounded-full mb-6">
+              <div className="quiz-bar h-full rounded-full" style={{ width: `${progress}%` }} />
+            </div>
+
+            {/* Body */}
+            <div className="px-6 pb-6">
+              {!quizDone && (
+                <>
+                  <h3 className="text-lg font-bold text-gray-900 mb-5">{quizSteps[quizStep].question}</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    {quizSteps[quizStep].options.map((opt) => (
+                      <button key={opt.label} onClick={() => handleQuizAnswer(opt.label)}
+                        className="quiz-option rounded-xl p-4 text-left flex items-center gap-3 bg-white">
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: "#fff3ee" }}>
+                          <Icon name={opt.icon} size={16} style={{ color: "var(--orange)" }} />
+                        </div>
+                        <span className="text-sm font-medium text-gray-800">{opt.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                  {quizStep > 0 && (
+                    <button onClick={() => { setQuizStep(s => s - 1); setQuizAnswers(a => a.slice(0, -1)); }}
+                      className="mt-4 text-xs flex items-center gap-1.5 text-gray-400 hover:text-gray-600 transition-colors">
+                      <Icon name="ArrowLeft" size={12} /> Назад
+                    </button>
+                  )}
+                </>
+              )}
+
+              {quizDone && recommendation && (
+                <div>
+                  <div className="p-4 rounded-xl mb-5" style={{ background: "#fff3ee", border: "1px solid #ffe0d0" }}>
+                    <div className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "var(--orange)" }}>
+                      Рекомендуемое решение
+                    </div>
+                    <div className="font-bold text-gray-900 text-base mb-1">{recommendation.title}</div>
+                    <div className="text-sm text-gray-600">{recommendation.desc}</div>
+                    {recommendation.area && (
+                      <div className="mt-2 text-xs text-gray-500">Площадь: <strong>{recommendation.area}</strong></div>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-600 mb-5">
+                    Оставьте контакты — наш менеджер пришлёт точный расчёт в течение 2 часов
+                  </p>
+                  <form className="space-y-3" onSubmit={e => e.preventDefault()}>
+                    <input type="text" placeholder="Ваше имя"
+                      className="w-full border border-gray-200 rounded px-4 py-3 text-sm outline-none focus:border-orange-300 transition-colors" />
+                    <input type="tel" placeholder="+7 (___) ___-__-__"
+                      className="w-full border border-gray-200 rounded px-4 py-3 text-sm outline-none focus:border-orange-300 transition-colors" />
+                    <button type="submit" className="btn-orange w-full py-3.5 rounded text-sm">
+                      ПОЛУЧИТЬ РАСЧЁТ →
+                    </button>
+                  </form>
+                  <button onClick={() => { setQuizStep(0); setQuizAnswers([]); setQuizDone(false); }}
+                    className="mt-3 text-xs text-gray-400 hover:text-gray-600 transition-colors mx-auto block">
+                    Пройти заново
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
