@@ -24,8 +24,8 @@
     --input: 0 0% 88%;
     --ring: 25 100% 50%;
     --radius: 0.5rem;
-    --orange: #e8581a;
-    --orange-dark: #c94a10;
+    --orange: #e07e34;
+    --orange-dark: #c46920;
   }
 }
 
@@ -162,4 +162,27 @@
 }
 .delay-400 {
   animation-delay: 0.4s;
+}
+
+@keyframes word-flip {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  12% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  88% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+.animate-word-flip {
+  display: inline-block;
+  animation: word-flip 2s ease both;
 }
