@@ -152,6 +152,18 @@ const quizSteps = [
   ]},
 ];
 
+// ── Phone mask ────────────────────────────────────────────────────────────────
+function phoneMask(raw: string): string {
+  const digits = raw.replace(/\D/g, "").slice(0, 11);
+  if (!digits) return "";
+  let result = "+7";
+  if (digits.length > 1) result += " (" + digits.slice(1, 4);
+  if (digits.length >= 4) result += ") " + digits.slice(4, 7);
+  if (digits.length >= 7) result += "-" + digits.slice(7, 9);
+  if (digits.length >= 9) result += "-" + digits.slice(9, 11);
+  return result;
+}
+
 function getRecommendation(answers: string[]) {
   const p = answers[0] || ""; const s = answers[1] || "";
   if (p.includes("Склад"))      return { title: "Склад-ангар на металлокаркасе", desc: "Быстровозводимый ангар с профлистом. Срок монтажа от 25 дней.", area: s };
@@ -193,18 +205,21 @@ function useInView(threshold = 0.12) {
 }
 
 // ── StatCard ──────────────────────────────────────────────────────────────────
-function StatCard({ stat, started, delay }: { stat: typeof STATS[0]; started: boolean; delay: number }) {
+function StatCard({ stat, started, delay, isLast }: { stat: typeof STATS[0]; started: boolean; delay: number; isLast?: boolean }) {
   const val = useCounter(stat.num, 1400, started);
   return (
     <div
-      className="flex flex-col gap-1.5 transition-all duration-700"
+      className="transition-all duration-700"
       style={{ transitionDelay: `${delay}ms`, opacity: started ? 1 : 0, transform: started ? "none" : "translateY(12px)" }}
     >
-      <div style={{ fontFamily: "'Abril Fatface', serif", fontSize: "clamp(2rem,4vw,2.8rem)", color: "var(--orange)", lineHeight: 1 }}>
-        {val}{stat.suffix}
+      <div className="flex items-baseline gap-1 mb-0.5">
+        <span style={{ fontFamily: "'Abril Fatface', serif", fontSize: "clamp(1.5rem,2.5vw,2rem)", color: "var(--orange)", lineHeight: 1 }}>
+          {val}{stat.suffix}
+        </span>
       </div>
-      <div className="font-semibold text-gray-900 text-sm leading-snug">{stat.title}</div>
-      <div className="text-gray-500 text-xs leading-relaxed">{stat.desc}</div>
+      <div className="font-semibold text-gray-900 text-xs leading-snug mb-0.5">{stat.title}</div>
+      <div className="text-gray-600 text-xs leading-relaxed" style={{ fontSize: "11px" }}>{stat.desc}</div>
+      {!isLast && <div className="mt-3 border-b border-gray-200" />}
     </div>
   );
 }
@@ -302,12 +317,14 @@ export default function Index() {
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
 
           {/* Logo + description */}
-          <div className="flex items-center gap-3 min-w-0 shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
             <img src={LOGO_URL} alt="EVRAZ STEEL BOX" className="h-10 w-auto object-contain shrink-0" />
-            {/* 3 строки строго: меньший шрифт + фиксированная ширина */}
-            <p className="hidden lg:block text-[10.5px] leading-[1.45] text-gray-500 whitespace-pre-line" style={{ width: "168px" }}>
-              {"Российский разработчик и поставщик\nбыстровозводимых зданий\nна металлическом каркасе"}
-            </p>
+            {/* 3 строки строго через nowrap — каждая строка отдельным span */}
+            <div className="hidden lg:block text-gray-500" style={{ fontSize: "9.5px", lineHeight: "1.55" }}>
+              <span className="block whitespace-nowrap">Российский разработчик и поставщик</span>
+              <span className="block whitespace-nowrap">быстровозводимых зданий</span>
+              <span className="block whitespace-nowrap">на металлическом каркасе</span>
+            </div>
           </div>
 
           {/* Schedule */}
@@ -398,7 +415,7 @@ export default function Index() {
             {/* Left */}
             <div className={`transition-all duration-700 ${heroRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
               <h1 className="font-bold leading-tight text-gray-900 mb-4" style={{ fontSize: "clamp(1.35rem,2.7vw,2.2rem)" }}>
-                <span className="block">Проектируем, изготавливаем и строим</span>
+                <span className="block">Спроектируем, изготовим и построим</span>
                 <span className="block" style={{ color: "var(--orange)" }}>
                   быстровозводимые&nbsp;
                   <span className="inline-block align-bottom" style={{ minWidth: "22ch" }}>
@@ -429,9 +446,9 @@ export default function Index() {
             </div>
 
             {/* Right: stats */}
-            <div ref={statsRef.ref} className="grid grid-cols-1 gap-5">
+            <div ref={statsRef.ref} className="flex flex-col justify-between" style={{ gap: "0" }}>
               {STATS.map((s, i) => (
-                <StatCard key={i} stat={s} started={statsRef.inView} delay={i * 120} />
+                <StatCard key={i} stat={s} started={statsRef.inView} delay={i * 120} isLast={i === STATS.length - 1} />
               ))}
             </div>
 
@@ -531,52 +548,49 @@ export default function Index() {
               </button>
             </div>
 
-            <div className="p-5 md:p-6">
+            <div className="p-4 md:p-6">
               <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Карточка проекта</div>
-              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-5">{activeProject.title}</h3>
+              <h3 className="text-base md:text-xl font-bold text-gray-900 mb-4">{activeProject.title}</h3>
 
-              <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-                {/* Характеристики */}
-                <div>
-                  <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Карточка проекта</div>
-                  <div className="space-y-2 text-sm">
-                    {[
-                      ["Назначение", activeProject.purpose],
-                      ["Длина", activeProject.length],
-                      ["Ширина", activeProject.width],
-                      ["Высота", activeProject.height],
-                      ["Площадь", activeProject.area],
-                      ["Расположение", activeProject.locationShort],
-                    ].map(([k, v]) => (
-                      <div key={k} className="flex justify-between gap-2">
-                        <span className="text-gray-400 shrink-0">{k}</span>
-                        <span className="font-semibold text-gray-900 text-right">{v}</span>
-                      </div>
-                    ))}
+              {/* Характеристики здания */}
+              <div className="mb-4">
+                <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Характеристики здания</div>
+                <div className="space-y-1.5 text-sm">
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-400 shrink-0">Назначение</span>
+                    <span className="font-semibold text-gray-900 text-right">{activeProject.purpose}</span>
                   </div>
-                </div>
-
-                {/* Детали */}
-                <div>
-                  <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Детали</div>
-                  <div className="space-y-2.5 text-sm">
-                    <div className="flex items-center gap-2 text-gray-700">
-                      <Icon name="CheckCircle" size={14} style={{ color: "var(--orange)" }} />
-                      Статус: Завершено
-                    </div>
-                    <div className="text-gray-700">{activeProject.series}</div>
-                    <div className="text-gray-700">
-                      <span className="text-gray-400 text-xs">Кровля:</span> {activeProject.roof}
-                    </div>
-                    <div className="text-gray-700">
-                      <span className="text-gray-400 text-xs">Стены:</span> {activeProject.walls}
-                    </div>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-400 shrink-0">Размеры</span>
+                    <span className="font-semibold text-gray-900 text-right">{activeProject.length.replace(" м","")}×{activeProject.width.replace(" м","")}×{activeProject.height}</span>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-400 shrink-0">Площадь</span>
+                    <span className="font-semibold text-gray-900 text-right">{activeProject.area}</span>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-400 shrink-0">Расположение</span>
+                    <span className="font-semibold text-gray-900 text-right">{activeProject.locationShort}</span>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-400 shrink-0">Кровля</span>
+                    <span className="font-semibold text-gray-900 text-right">{activeProject.roof}</span>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-400 shrink-0">Стены</span>
+                    <span className="font-semibold text-gray-900 text-right">{activeProject.walls}</span>
                   </div>
                 </div>
               </div>
 
+              {/* Детали */}
+              <div className="mb-5">
+                <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Детали</div>
+                <div className="text-sm text-gray-700">{activeProject.series}</div>
+              </div>
+
               <button onClick={() => { setActiveProject(null); openQuiz(); }}
-                className="btn-orange w-full mt-6 py-3.5 rounded text-sm">
+                className="btn-orange w-full py-3.5 rounded text-sm">
                 РАССЧИТАТЬ ПОХОЖЕЕ ЗДАНИЕ →
               </button>
             </div>
@@ -694,7 +708,8 @@ export default function Index() {
                   </div>
                   <div>
                     <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Телефон</label>
-                    <input type="tel" placeholder="+7 (___) ___-__-__" value={cbPhone} onChange={e => setCbPhone(e.target.value)} required
+                    <input type="tel" placeholder="+7 (___) ___-__-__" value={cbPhone}
+                      onChange={e => setCbPhone(phoneMask(e.target.value))} required
                       className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-orange-300 transition-colors" />
                   </div>
                   <button type="submit" className="btn-orange w-full py-3.5 rounded-lg text-sm">ПОЗВОНИТЕ МНЕ →</button>
