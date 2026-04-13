@@ -217,9 +217,9 @@ function StatCard({ stat, started, delay, isLast }: { stat: typeof STATS[0]; sta
           {val}{stat.suffix}
         </span>
       </div>
-      <div className="font-semibold text-gray-900 text-xs leading-snug mb-0.5">{stat.title}</div>
-      <div className="text-gray-600 text-xs leading-relaxed" style={{ fontSize: "11px" }}>{stat.desc}</div>
-      {!isLast && <div className="mt-3 border-b border-gray-200" />}
+      <div className="font-semibold text-white text-xs leading-snug mb-0.5">{stat.title}</div>
+      <div className="text-white/80 text-xs leading-relaxed" style={{ fontSize: "11px" }}>{stat.desc}</div>
+      {!isLast && <div className="mt-3 border-b border-white/20" />}
     </div>
   );
 }
@@ -403,10 +403,12 @@ export default function Index() {
       )}
 
       {/* ══ HERO ════════════════════════════════════════════════════════════ */}
-      <section id="hero" className="relative overflow-hidden" style={{ minHeight: "560px" }}>
+      <section id="hero" className="relative overflow-hidden">
         <div className="absolute inset-0">
-          <img src={HERO_BG} alt="bg" className="w-full h-full object-cover" />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(135deg,rgba(255,255,255,0.97) 0%,rgba(255,255,255,0.88) 42%,rgba(255,255,255,0.18) 100%)" }} />
+          {/* object-top чтобы обрезало снизу а не сверху */}
+          <img src={HERO_BG} alt="bg" className="w-full h-full object-cover object-top" />
+          {/* Левая часть — почти белая для заголовка; правая — тёмный оверлей для читаемости буллитов */}
+          <div className="absolute inset-0" style={{ background: "linear-gradient(100deg, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.92) 38%, rgba(20,20,20,0.55) 65%, rgba(10,10,10,0.70) 100%)" }} />
         </div>
 
         <div ref={heroRef.ref} className="relative max-w-7xl mx-auto px-4 py-10 md:py-16">
@@ -427,13 +429,10 @@ export default function Index() {
                 </span>
               </h1>
 
-              <p className="text-gray-700 mb-1 text-sm md:text-base leading-relaxed">
+              <p className="text-gray-700 mb-5 text-sm md:text-base leading-relaxed">
                 Пройдите тест за <strong>1 минуту</strong> и получите{" "}
                 <span className="font-bold" style={{ color: "var(--orange)" }}>реальную</span>{" "}
-                стоимость здания,
-              </p>
-              <p className="text-gray-700 mb-5 text-sm md:text-base leading-relaxed">
-                полноценный расчёт + эскиз в течение 1 часа
+                стоимость здания, полноценный расчёт + эскиз в течение 1 часа
               </p>
 
               <button onClick={openQuiz} className="btn-orange px-6 py-3.5 rounded text-sm inline-flex items-center gap-2">
@@ -555,38 +554,33 @@ export default function Index() {
               {/* Характеристики здания */}
               <div className="mb-4">
                 <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Характеристики здания</div>
-                <div className="space-y-1.5 text-sm">
-                  <div className="flex justify-between gap-2">
-                    <span className="text-gray-400 shrink-0">Назначение</span>
-                    <span className="font-semibold text-gray-900 text-right">{activeProject.purpose}</span>
-                  </div>
-                  <div className="flex justify-between gap-2">
-                    <span className="text-gray-400 shrink-0">Размеры</span>
-                    <span className="font-semibold text-gray-900 text-right">{activeProject.length.replace(" м","")}×{activeProject.width.replace(" м","")}×{activeProject.height}</span>
-                  </div>
-                  <div className="flex justify-between gap-2">
-                    <span className="text-gray-400 shrink-0">Площадь</span>
-                    <span className="font-semibold text-gray-900 text-right">{activeProject.area}</span>
-                  </div>
-                  <div className="flex justify-between gap-2">
-                    <span className="text-gray-400 shrink-0">Расположение</span>
-                    <span className="font-semibold text-gray-900 text-right">{activeProject.locationShort}</span>
-                  </div>
-                  <div className="flex justify-between gap-2">
-                    <span className="text-gray-400 shrink-0">Кровля</span>
-                    <span className="font-semibold text-gray-900 text-right">{activeProject.roof}</span>
-                  </div>
-                  <div className="flex justify-between gap-2">
-                    <span className="text-gray-400 shrink-0">Стены</span>
-                    <span className="font-semibold text-gray-900 text-right">{activeProject.walls}</span>
-                  </div>
+                <div className="space-y-2 text-sm">
+                  {[
+                    { icon: "Building2", label: "Назначение", value: activeProject.purpose },
+                    { icon: "Ruler",     label: "Размеры",    value: `${activeProject.length.replace(" м","")}×${activeProject.width.replace(" м","")}×${activeProject.height}` },
+                    { icon: "Maximize2", label: "Площадь",    value: activeProject.area },
+                    { icon: "MapPin",    label: "Расположение", value: activeProject.locationShort },
+                    { icon: "Layers",    label: "Кровля",     value: activeProject.roof },
+                    { icon: "PanelTop",  label: "Стены",      value: activeProject.walls },
+                  ].map(({ icon, label, value }) => (
+                    <div key={label} className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-1.5 text-gray-400 shrink-0">
+                        <Icon name={icon} size={12} style={{ color: "var(--orange)" }} />
+                        <span>{label}</span>
+                      </div>
+                      <span className="font-semibold text-gray-900 text-right">{value}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
               {/* Детали */}
-              <div className="mb-5">
-                <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Детали</div>
-                <div className="text-sm text-gray-700">{activeProject.series}</div>
+              <div className="mb-5 p-3 rounded-lg" style={{ background: "#f9f9f9" }}>
+                <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Детали</div>
+                <div className="flex items-center gap-1.5 text-sm text-gray-700">
+                  <Icon name="Info" size={13} style={{ color: "var(--orange)" }} />
+                  {activeProject.series}
+                </div>
               </div>
 
               <button onClick={() => { setActiveProject(null); openQuiz(); }}
