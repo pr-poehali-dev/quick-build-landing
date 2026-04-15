@@ -1,0 +1,20 @@
+{
+  "tests": [
+    {
+      "name": "Get price for default params",
+      "method": "GET",
+      "path": "/?wall_mm=100&roof_mm=100&span=12&length=24&panels=4&snow=I&wind=I&locality=A",
+      "expectedStatus": 200,
+      "expectedBody": {"price": 3688920.01},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get price snow III wind II",
+      "method": "GET",
+      "path": "/?wall_mm=100&roof_mm=100&span=12&length=24&panels=4&snow=III&wind=II&locality=B",
+      "expectedStatus": 200,
+      "expectedBody": {"price": 3762645.45},
+      "bodyMatcher": "partial"
+    }
+  ]
+}

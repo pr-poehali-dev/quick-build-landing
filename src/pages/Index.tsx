@@ -243,6 +243,28 @@ interface QuizState {
   agreePersonal: boolean; agreePromo: boolean;
 }
 
+const PRICE_API_URL = "https://functions.poehali.dev/88524db3-a08f-485b-b913-ae55621e6dc4";
+
+const HEIGHT_TO_PANELS: Record<number, number> = {
+  3.6: 4, 4.8: 5, 6.0: 6, 7.2: 7, 8.4: 8, 9.6: 9, 10.8: 10, 12.0: 11,
+};
+
+function quizToPriceParams(state: QuizState, zones: { snow: string; wind: string }) {
+  const wallMm  = state.cladding === "Сэндвич панели" ? 150 : 100;
+  const roofMm  = state.cladding === "Сэндвич панели" ? 150 : 100;
+  const panels  = HEIGHT_TO_PANELS[state.height] ?? 4;
+  return new URLSearchParams({
+    wall_mm:  String(wallMm),
+    roof_mm:  String(roofMm),
+    span:     String(state.width),
+    length:   String(state.length),
+    panels:   String(panels),
+    snow:     zones.snow,
+    wind:     zones.wind,
+    locality: "B",
+  }).toString();
+}
+
 function QuizFullscreen({ onClose }: { onClose: () => void }) {
   const [step, setStep] = useState(1);
   const TOTAL = 6;
@@ -255,6 +277,8 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({ name:"", phone:"", email:"" });
   const [touched, setTouched] = useState({ name:false, phone:false, email:false });
+  const [price, setPrice] = useState<number | null>(null);
+  const [priceLoading, setPriceLoading] = useState(false);
 
   // Вычисляем площадь — если заполнен customDims, парсим из него
   let length = state.length, width = state.width, height = state.height;
@@ -266,16 +290,21 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
   }
   const area = length * width;
   const zones = getCityZones(state.city);
-  const PRICE_TABLE: Record<string, Record<string, number>> = {
-    "I":   { "I": 15371, "II": 15499, "III": 15513, "IV": 15525 },
-    "II":  { "I": 15371, "II": 15499, "III": 15513, "IV": 15525 },
-    "III": { "I": 15547, "II": 15678, "III": 15691, "IV": 15703 },
-    "IV":  { "I": 16334, "II": 16463, "III": 16475, "IV": 16502 },
-  };
-  const basePricePerSqm = PRICE_TABLE[zones.snow]?.[zones.wind] ?? 15371;
-  const areaMultiplier = Math.pow(1.05, Math.floor(area / 200));
-  const pricePerSqm = Math.round(basePricePerSqm * areaMultiplier);
-  const price = area * pricePerSqm;
+  const pricePerSqm = price && area > 0 ? Math.round(price / area) : 0;
+
+  async function fetchPrice() {
+    setPriceLoading(true);
+    try {
+      const qs = quizToPriceParams(state, zones);
+      const res = await fetch(`${PRICE_API_URL}?${qs}`);
+      const data = await res.json();
+      if (data.price) setPrice(data.price);
+    } catch {
+      // оставляем price = null
+    } finally {
+      setPriceLoading(false);
+    }
+  }
 
   const validate = () => {
     const e = { name:validateName(state.name), phone:validatePhone(state.phone), email:validateEmail(state.email) };
@@ -497,16 +526,22 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                   <div className="mt-4 rounded-xl p-4 text-center relative overflow-hidden" style={{ background:"#fff3ee" }}>
                     <div className="text-xs text-gray-500 mb-1">Стоимость здания</div>
                     {submitted ? (
-                      <>
-                        <div style={{ fontFamily:"'Abril Fatface',serif", fontSize:"1.8rem", color:"var(--orange)" }}>
-                          {new Intl.NumberFormat("ru-RU").format(price)} ₽
-                        </div>
-                        <div className="text-xs text-gray-400 mt-1">{new Intl.NumberFormat("ru-RU").format(pricePerSqm)} ₽ / кв.м · {area} м²</div>
-                      </>
+                      priceLoading ? (
+                        <div className="text-sm text-gray-400 py-2">Считаем стоимость…</div>
+                      ) : price !== null ? (
+                        <>
+                          <div style={{ fontFamily:"'Abril Fatface',serif", fontSize:"1.8rem", color:"var(--orange)" }}>
+                            {new Intl.NumberFormat("ru-RU").format(Math.round(price))} ₽
+                          </div>
+                          <div className="text-xs text-gray-400 mt-1">{new Intl.NumberFormat("ru-RU").format(pricePerSqm)} ₽ / кв.м · {area} м²</div>
+                        </>
+                      ) : (
+                        <div className="text-sm text-gray-400 py-2">Уточним стоимость при звонке</div>
+                      )
                     ) : (
                       <>
                         <div className="font-bold text-2xl blur-sm select-none" style={{ color:"var(--orange)" }}>
-                          {new Intl.NumberFormat("ru-RU").format(price)} ₽
+                          — ₽
                         </div>
                         <div className="text-xs text-gray-400 mt-1 flex items-center justify-center gap-1">
                           <Icon name="Lock" size={11} /> Заполните форму, чтобы узнать стоимость
@@ -586,7 +621,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                         <span className="text-xs text-gray-500 leading-relaxed">Согласен на получение информационных и рекламных сообщений (необязательно)</span>
                       </label>
                       <button
-                        onClick={() => { if (validate()) setSubmitted(true); }}
+                        onClick={() => { if (validate()) { setSubmitted(true); fetchPrice(); } }}
                         className="btn-orange w-full py-4 rounded-xl text-sm mt-1">
                         УЗНАТЬ СТОИМОСТЬ →
                       </button>
@@ -614,7 +649,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
           </button>
         ) : (
           !submitted && (
-            <button onClick={() => { if (validate()) setSubmitted(true); }}
+            <button onClick={() => { if (validate()) { setSubmitted(true); fetchPrice(); } }}
               className="btn-orange px-6 py-2.5 rounded-xl text-sm">
               Узнать стоимость →
             </button>
