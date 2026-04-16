@@ -694,8 +694,8 @@ const PRICE_PER_SQM_SANDWICH = 15336;
 const PRICE_PER_SQM_PROFILE  = 13506;
 
 function quizToPriceParams(state: QuizState, zones: { snow: string; wind: string }, length: number, width: number, height: number) {
-  const wallMm  = state.cladding === "Сэндвич панели" ? 200 : 200;
-  const roofMm  = state.cladding === "Сэндвич панели" ? 200 : 150;
+  const wallMm  = 150;
+  const roofMm  = 150;
   const panels  = HEIGHT_TO_PANELS[height] ?? 4;
   return new URLSearchParams({
     wall_mm:  String(wallMm),
@@ -1024,10 +1024,16 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                       </div>
                       <div className="font-bold text-gray-900 mb-1">Благодарим за интерес к решениям EVRAZ STEEL BOX!</div>
                       <div className="text-sm text-gray-500 mb-3 leading-relaxed">Запрос успешно отправлен. В ближайшее время мы с вами свяжемся, чтобы обсудить все детали.</div>
-                      <div className="flex items-center justify-center gap-2 text-sm font-semibold mb-3" style={{ color:"var(--orange)" }}>
+                      <div className="flex items-center justify-center gap-2 text-sm font-semibold mb-4" style={{ color:"var(--orange)" }}>
                         <Icon name="Gift" size={16} />
                         Вам подарок — эскиз в течение 1 часа!
                       </div>
+                      <button
+                        onClick={() => { setSubmitted(false); setPrice(null); setStep(1); }}
+                        className="w-full py-3 rounded-xl text-sm font-semibold border-2 mb-3 transition-all"
+                        style={{ borderColor:"var(--orange)", color:"var(--orange)", background:"#fff" }}>
+                        ← Изменить параметры и пересчитать
+                      </button>
                       <a href="https://evrazsteelbox.ru" target="_blank" rel="noreferrer"
                         className="text-xs underline" style={{ color:"var(--orange)" }}>
                         Каталог готовых решений Evraz Steel Box →
