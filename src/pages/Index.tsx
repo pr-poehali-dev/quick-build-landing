@@ -693,16 +693,50 @@ const HEIGHT_TO_PANELS: Record<number, number> = {
 const PRICE_PER_SQM_SANDWICH = 15336;
 const PRICE_PER_SQM_PROFILE  = 13506;
 
+// ── Калькулятор сэндвич-панелей (фронтенд, без API) ─────────────────────────
+const FRAME_RATES: Record<number, Record<number, Record<number, number | null>>> = {
+  3.6: { 24:{12:3216,18:2572,24:2362}, 30:{12:1796,18:1389,24:2043}, 36:{12:1861,18:1586,24:1729}, 42:{12:957,18:1325,24:1502}, 48:{12:1132,18:1136,24:1334}, 54:{12:489,18:983,24:1202} },
+  4.8: { 24:{12:3214,18:2144,24:2550}, 30:{12:3778,18:1553,24:1365}, 36:{12:2403,18:1182,24:1698}, 42:{12:1651,18:929,24:1179},  48:{12:1399,18:720,24:679},  54:{12:1204,18:567,24:1224} },
+  6.0: { 24:{12:4337,18:2681,24:2439}, 30:{12:3014,18:1883,24:2251}, 36:{12:2128,18:1485,24:1324}, 42:{12:2155,18:1811,24:1734}, 48:{12:1513,18:3681,24:916},  54:{12:1800,18:4272,24:1254} },
+  7.2: { 24:{12:5431,18:3841,24:3694}, 30:{12:3610,18:2620,24:2321}, 36:{12:2896,18:2381,24:1968}, 42:{12:2709,18:1905,24:1620}, 48:{12:null,18:2159,24:null}, 54:{12:2204,18:1503,24:1319} },
+  8.4: { 24:{12:5575,18:5335,24:4701}, 30:{12:4702,18:3772,24:3071}, 36:{12:2792,18:3681,24:2848}, 42:{12:3987,18:2754,24:4278}, 48:{12:3330,18:3161,24:3330}, 54:{12:3280,18:2521,24:1747} },
+  9.6: { 24:{12:7021,18:6194,24:5357}, 30:{12:6207,18:4574,24:3667}, 36:{12:5405,18:4257,24:4688}, 42:{12:5242,18:4253,24:3750}, 48:{12:4943,18:3689,24:3833}, 54:{12:4664,18:3093,24:4491} },
+};
+const SNOW_COEFF: Record<string, number> = { "I":0.95,"II":0.95,"III":1.00,"IV":1.05,"V":1.12,"VI":1.18,"VII":1.25,"VIII":1.32 };
+const WIND_COEFF: Record<string, number> = { "I":1.000,"II":1.008,"III":1.015,"IV":1.025,"V":1.035,"VI":1.045,"VII":1.060 };
+const ROOF_RATE = 8750, WALL_BASE = 4800, WALL_SLOPE = 200, FIXED_COST = 180000;
+
+function interpolateSandwichRate(length: number, width: number, height: number): number {
+  const points: { length:number; width:number; height:number; rate:number }[] = [];
+  for (const h in FRAME_RATES) for (const l in FRAME_RATES[+h]) for (const w in FRAME_RATES[+h][+l]) {
+    const rate = FRAME_RATES[+h][+l][+w];
+    if (rate !== null) points.push({ length:+l, width:+w, height:+h, rate });
+  }
+  if (!points.length) return 3000;
+  const withDist = points.map(p => ({ ...p, d: Math.sqrt(Math.pow((p.length-length)/6,2)+Math.pow((p.width-width)/3,2)+Math.pow((p.height-height)/1.2,2)) })).sort((a,b)=>a.d-b.d);
+  const nearest = withDist.slice(0, Math.min(4, withDist.length));
+  let sw=0, wsum=0;
+  for (const p of nearest) { if (p.d<0.001) return p.rate; const w=1/(p.d*p.d); sw+=p.rate*w; wsum+=w; }
+  return Math.round(sw/wsum);
+}
+
+function calcSandwichPrice(length: number, width: number, height: number, snowZone: string, windZone: string): number {
+  const area = length * width;
+  const perimeter = (length + width) * 2;
+  const roofAndFloor = area * ROOF_RATE;
+  const walls = perimeter * height * (WALL_BASE - WALL_SLOPE * height);
+  let frame = area * (FRAME_RATES[height]?.[length]?.[width] ?? interpolateSandwichRate(length, width, height));
+  frame *= (SNOW_COEFF[snowZone] ?? 1.0) * (WIND_COEFF[windZone] ?? 1.0);
+  return Math.round(roofAndFloor + walls + frame + FIXED_COST);
+}
+
 function quizToPriceParams(state: QuizState, zones: { snow: string; wind: string }, length: number, width: number, height: number) {
-  const wallMm  = 150;
-  const roofMm  = 150;
-  const panels  = HEIGHT_TO_PANELS[height] ?? 4;
   return new URLSearchParams({
-    wall_mm:  String(wallMm),
-    roof_mm:  String(roofMm),
+    wall_mm:  "150",
+    roof_mm:  "150",
     span:     String(width),
     length:   String(length),
-    panels:   String(panels),
+    panels:   String(HEIGHT_TO_PANELS[height] ?? 4),
     snow:     zones.snow,
     wind:     zones.wind,
     locality: "B",
@@ -736,33 +770,44 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
   const zones = getCityZones(state.city);
   const pricePerSqm = price && area > 0 ? Math.round(price / area) : 0;
 
-  async function fetchPrice() {
+  async function fetchPrice(curState = state, curLength = length, curWidth = width, curHeight = height, curZones = zones) {
     setPriceLoading(true);
     // Если введён свой вариант — считаем по средней цене м²
-    if (state.customDims.trim()) {
-      const area = length * width;
-      if (area > 0) {
-        const pricePerSqm = state.cladding === "Сэндвич панели" ? PRICE_PER_SQM_SANDWICH : PRICE_PER_SQM_PROFILE;
-        setPrice(area * pricePerSqm);
+    if (curState.customDims.trim()) {
+      const a = curLength * curWidth;
+      if (a > 0) {
+        const ppsm = curState.cladding === "Сэндвич панели" ? PRICE_PER_SQM_SANDWICH : PRICE_PER_SQM_PROFILE;
+        setPrice(a * ppsm);
       }
       setPriceLoading(false);
       return;
     }
+    // Сэндвич — считаем локально по таблице
+    if (curState.cladding === "Сэндвич панели") {
+      const result = calcSandwichPrice(curLength, curWidth, curHeight, curZones.snow, curZones.wind);
+      setPrice(result);
+      setPriceLoading(false);
+      return;
+    }
+    // Профлист — API
     try {
-      const qs = quizToPriceParams(state, zones, length, width, height);
+      const qs = quizToPriceParams(curState, curZones, curLength, curWidth, curHeight);
       const res = await fetch(`${PRICE_API_URL}?${qs}`);
       const data = await res.json();
-      if (state.cladding === "Сэндвич панели" && data.price_sandwich) {
-        setPrice(data.price_sandwich);
-      } else if (state.cladding === "Профилированный лист" && data.price_profile) {
-        setPrice(data.price_profile);
-      }
+      if (data.price_profile) setPrice(data.price_profile);
     } catch {
       // оставляем price = null
     } finally {
       setPriceLoading(false);
     }
   }
+
+  // Автопересчёт при изменении параметров после отправки формы
+  useEffect(() => {
+    if (submitted) {
+      fetchPrice();
+    }
+  }, [submitted, state.length, state.width, state.height, state.cladding, state.customDims, state.city]);
 
   const validate = () => {
     const e = { name:validateName(state.name), phone:validatePhone(state.phone), email:validateEmail(state.email) };
@@ -844,7 +889,17 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
           {/* STEP 3 — Параметры */}
           {step===3 && (
             <div>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 text-center">Параметры здания</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 text-center">Параметры здания</h2>
+              {submitted && (
+                <div className="mb-4 rounded-xl px-4 py-3 flex items-center gap-3 text-sm" style={{ background:"#fff3ee" }}>
+                  {priceLoading
+                    ? <><div className="w-4 h-4 rounded-full border-2 border-orange-300 border-t-orange-500 animate-spin shrink-0" /><span style={{ color:"var(--orange)" }}>Пересчитываем стоимость…</span></>
+                    : price !== null
+                      ? <><Icon name="CheckCircle" size={16} style={{ color:"var(--orange)" }} /><span className="font-semibold" style={{ color:"var(--orange)" }}>{new Intl.NumberFormat("ru-RU").format(Math.round(price))} ₽</span><span className="text-gray-500">— стоимость обновлена. Нажмите «Далее» чтобы перейти к форме.</span></>
+                      : <><Icon name="RefreshCw" size={14} style={{ color:"var(--orange)" }} /><span style={{ color:"var(--orange)" }}>Измените параметры — стоимость пересчитается автоматически</span></>
+                  }
+                </div>
+              )}
 
               {/* Свой вариант — одно поле */}
               <div className="mb-5">
@@ -1029,7 +1084,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                         Вам подарок — эскиз в течение 1 часа!
                       </div>
                       <button
-                        onClick={() => { setSubmitted(false); setPrice(null); setStep(1); }}
+                        onClick={() => { setStep(3); }}
                         className="w-full py-3 rounded-xl text-sm font-semibold border-2 mb-3 transition-all"
                         style={{ borderColor:"var(--orange)", color:"var(--orange)", background:"#fff" }}>
                         ← Изменить параметры и пересчитать
@@ -1091,7 +1146,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                         <span className="text-xs text-gray-500 leading-relaxed">Согласен на получение информационных и рекламных сообщений (необязательно)</span>
                       </label>
                       <button
-                        onClick={() => { if (validate()) { setSubmitted(true); fetchPrice(); } }}
+                        onClick={() => { if (validate()) { setSubmitted(true); } }}
                         className="btn-orange w-full py-4 rounded-xl text-sm mt-1">
                         УЗНАТЬ СТОИМОСТЬ →
                       </button>
