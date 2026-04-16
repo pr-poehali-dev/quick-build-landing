@@ -1,19 +1,19 @@
 {
   "tests": [
     {
-      "name": "Get price for default params",
+      "name": "Get price sandwich and profile — snow I wind I locality B",
       "method": "GET",
-      "path": "/?wall_mm=100&roof_mm=100&span=12&length=24&panels=4&snow=I&wind=I&locality=A",
+      "path": "/?wall_mm=100&roof_mm=100&span=12&length=24&panels=4&snow=I&wind=I&locality=B",
       "expectedStatus": 200,
-      "expectedBody": {"price": 3688920.01},
+      "expectedBody": {"price_sandwich": 3836476.81, "price_profile": 3093932.91},
       "bodyMatcher": "partial"
     },
     {
-      "name": "Get price snow III wind II",
+      "name": "Get price sandwich and profile — snow III wind II locality B",
       "method": "GET",
       "path": "/?wall_mm=100&roof_mm=100&span=12&length=24&panels=4&snow=III&wind=II&locality=B",
       "expectedStatus": 200,
-      "expectedBody": {"price": 3762645.45},
+      "expectedBody": {"price_sandwich": 3913151.27, "price_profile": 3155767.15},
       "bodyMatcher": "partial"
     }
   ]

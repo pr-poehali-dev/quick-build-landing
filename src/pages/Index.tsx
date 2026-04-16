@@ -752,10 +752,10 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
       const qs = quizToPriceParams(state, zones, length, width, height);
       const res = await fetch(`${PRICE_API_URL}?${qs}`);
       const data = await res.json();
-      if (data.price) {
-        // Если профлист — делим на 1.24
-        const finalPrice = state.cladding === "Профилированный лист" ? data.price / 1.24 : data.price;
-        setPrice(finalPrice);
+      if (state.cladding === "Сэндвич панели" && data.price_sandwich) {
+        setPrice(data.price_sandwich);
+      } else if (state.cladding === "Профилированный лист" && data.price_profile) {
+        setPrice(data.price_profile);
       }
     } catch {
       // оставляем price = null

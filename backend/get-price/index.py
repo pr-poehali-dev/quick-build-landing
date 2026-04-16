@@ -6,8 +6,8 @@ import urllib.request
 
 SHEET_URL = "https://docs.google.com/spreadsheets/d/1OSqWDcBINlfd25rLZB3GoKyJb995tunDeXunIzjxT5M/export?format=csv&gid=1655703593"
 
-# Кеш загруженной таблицы — живёт пока контейнер функции не перезапустится
-_CACHE: dict | None = None  # { (wall,roof,span,length,panels,snow,wind,loc): price }
+# Кеш: { (wall,roof,span,length,panels,snow,wind,loc): (price_sandwich, price_profile) }
+_CACHE: dict | None = None
 
 
 def parse_price(raw: str) -> float:
@@ -24,7 +24,7 @@ def load_cache() -> dict:
         return _CACHE
 
     req = urllib.request.Request(SHEET_URL, headers={"User-Agent": "Mozilla/5.0"})
-    with urllib.request.urlopen(req, timeout=15) as resp:
+    with urllib.request.urlopen(req, timeout=8) as resp:
         content = resp.read().decode("utf-8")
 
     reader = csv.DictReader(io.StringIO(content))
@@ -41,7 +41,10 @@ def load_cache() -> dict:
                 row["Ветровой район (B13)"].strip(),
                 row["Тип местности (B14)"].strip(),
             )
-            cache[key] = parse_price(row["Результат (B33)"])
+            cache[key] = (
+                parse_price(row["Результат Сэндвич"]),
+                parse_price(row["Результат Профлист"]),
+            )
         except (KeyError, ValueError):
             continue
 
@@ -50,7 +53,7 @@ def load_cache() -> dict:
 
 
 def handler(event: dict, context) -> dict:
-    """Ищет цену здания в кешированной таблице Google Sheets по параметрам квиза."""
+    """Возвращает цену здания (сэндвич и профлист) из кешированной таблицы Google Sheets."""
 
     if event.get("httpMethod") == "OPTIONS":
         return {
@@ -83,17 +86,23 @@ def handler(event: dict, context) -> dict:
 
     cache = load_cache()
 
-    # Точное совпадение
     key = (wall_mm, roof_mm, span, length, panels, snow, wind, locality)
-    price = cache.get(key)
+    prices = cache.get(key)
 
-    # Если не нашли с нужным типом местности — берём другой
-    if price is None:
+    # Фолбэк: другой тип местности
+    if prices is None:
         alt_loc = "А" if locality == "B" else "B"
-        key_alt = (wall_mm, roof_mm, span, length, panels, snow, wind, alt_loc)
-        price = cache.get(key_alt)
+        prices = cache.get((wall_mm, roof_mm, span, length, panels, snow, wind, alt_loc))
 
-    if price is None:
+    # Фолбэк: ближайший ветровой район (I→II→III→...)
+    if prices is None:
+        wind_order = ["I", "II", "III", "IV", "V", "VI", "VII"]
+        for w in wind_order:
+            prices = cache.get((wall_mm, roof_mm, span, length, panels, snow, w, locality))
+            if prices:
+                break
+
+    if prices is None:
         return {
             "statusCode": 404,
             "headers": {"Access-Control-Allow-Origin": "*"},
@@ -104,6 +113,8 @@ def handler(event: dict, context) -> dict:
             }}),
         }
 
+    price_sandwich, price_profile = prices
+
     return {
         "statusCode": 200,
         "headers": {
@@ -111,7 +122,8 @@ def handler(event: dict, context) -> dict:
             "Content-Type": "application/json",
         },
         "body": json.dumps({
-            "price": price,
+            "price_sandwich": price_sandwich,
+            "price_profile": price_profile,
             "params": {
                 "wall_mm": wall_mm, "roof_mm": roof_mm,
                 "span": span, "length": length, "panels": panels,
