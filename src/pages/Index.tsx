@@ -23,7 +23,7 @@ const ROTATING_WORDS = ["здания","склады","ангары","цеха",
 const STATS = [
   { num:300, suffix:"+", title:"Реализованных проектов", desc:"Промышленных и коммерческих зданий по всей России" },
   { num:40, suffix:" дней", title:"Срок поставки и монтажа", desc:"Всего за 40 дней мы обеспечиваем поставку и монтаж быстровозводимых зданий SMALL BOX для малого и среднего бизнеса" },
-  { num:500, suffix:"+ тыс.кв.м", title:"Запроектировано", desc:"Запроектированных объектов в нашем портфеле и более 300 тыс.кв.м построенных объектов BIG BOX" },
+  { num:500, suffix:"+ тыс. м²", title:"Запроектировано", desc:"Запроектированных объектов в нашем портфеле и более 300 тыс. м² построенных объектов BIG BOX" },
   { num:60, suffix:"+", title:"Многоуровневых паркингов", desc:"Запроектировали паркингов на 50 000 машиномест и построили более 20 паркингов на 9 000 машиномест" },
 ];
 
@@ -37,157 +37,218 @@ const projects: Project[] = [
 
 // ── Snow/Wind zones by city — ветровые районы по таблице заказчика ───────────
 const CITY_ZONES: Record<string, { snow: string; wind: string }> = {
-  // Адыгея
   "Майкоп":{ snow:"II", wind:"IV" },
   "Адыгейск":{ snow:"II", wind:"IV" },
-  // Алтайский край, Республика Алтай
-  "Барнаул":{ snow:"IV", wind:"III" },
+  "Барнаул":{ snow:"III", wind:"III" },
   "Бийск":{ snow:"IV", wind:"III" },
   "Горно-Алтайск":{ snow:"IV", wind:"III" },
-  "Рубцовск":{ snow:"IV", wind:"III" },
-  "Алейск":{ snow:"IV", wind:"III" },
-  // Амурская область
-  "Благовещенск":{ snow:"II", wind:"III" },
-  "Белогорск":{ snow:"II", wind:"II" },
-  // Архангельская область
+  "Рубцовск":{ snow:"II", wind:"III" },
+  "Благовещенск":{ snow:"I", wind:"III" },
+  "Белогорск":{ snow:"I", wind:"II" },
+  "Свободный":{ snow:"I", wind:"II" },
+  "Тында":{ snow:"II", wind:"I" },
   "Архангельск":{ snow:"IV", wind:"II" },
-  "Северодвинск":{ snow:"IV", wind:"II" },
+  "Северодвинск":{ snow:"V", wind:"II" },
   "Котлас":{ snow:"IV", wind:"I" },
+  "Коряжма":{ snow:"IV", wind:"I" },
   "Новодвинск":{ snow:"IV", wind:"II" },
-  // Астраханская область
   "Астрахань":{ snow:"I", wind:"III" },
-  // Республика Башкортостан
+  "Ахтубинск":{ snow:"II", wind:"III" },
+  "Знаменск":{ snow:"II", wind:"III" },
   "Нефтекамск":{ snow:"IV", wind:"II" },
-  "Салават":{ snow:"IV", wind:"III" },
-  "Стерлитамак":{ snow:"IV", wind:"III" },
-  "Уфа":{ snow:"IV", wind:"II" },
-  "Ишимбай":{ snow:"IV", wind:"III" },
-  "Белорецк":{ snow:"IV", wind:"II" },
-  "Бугульма":{ snow:"III", wind:"II" },
-  // Белгородская область
+  "Октябрьский":{ snow:"IV", wind:"II" },
+  "Салават":{ snow:"V", wind:"III" },
+  "Стерлитамак":{ snow:"V", wind:"III" },
+  "Уфа":{ snow:"V", wind:"II" },
   "Белгород":{ snow:"III", wind:"II" },
   "Старый Оскол":{ snow:"III", wind:"II" },
   "Губкин":{ snow:"III", wind:"II" },
+  "Шебекино":{ snow:"III", wind:"II" },
   "Алексеевка":{ snow:"III", wind:"II" },
-  // Брянская область
   "Брянск":{ snow:"III", wind:"I" },
   "Клинцы":{ snow:"III", wind:"I" },
-  // Республика Бурятия
-  "Улан-Удэ":{ snow:"II", wind:"III" },
-  // Владимирская область
-  "Владимир":{ snow:"III", wind:"I" },
+  "Новозыбков":{ snow:"III", wind:"I" },
+  "Дятьково":{ snow:"III", wind:"I" },
+  "Унеча":{ snow:"III", wind:"I" },
+  "Улан-Удэ":{ snow:"I", wind:"III" },
+  "Гусиноозёрск":{ snow:"II", wind:"III" },
+  "Северобайкальск":{ snow:"IV", wind:"II" },
+  "Владимир":{ snow:"IV", wind:"I" },
+  "Ковров":{ snow:"III", wind:"I" },
   "Муром":{ snow:"III", wind:"I" },
-  "Александров":{ snow:"III", wind:"I" },
-  // Волгоградская область
+  "Александров":{ snow:"IV", wind:"I" },
+  "Гусь-Хрустальный":{ snow:"III", wind:"I" },
   "Волгоград":{ snow:"II", wind:"III" },
   "Волжский":{ snow:"II", wind:"III" },
-  "Камышин":{ snow:"II", wind:"III" },
-  "Волгодонск":{ snow:"II", wind:"III" },
-  "Новочеркасск":{ snow:"II", wind:"III" },
-  // Вологодская область
+  "Камышин":{ snow:"III", wind:"III" },
+  "Михайловка":{ snow:"III", wind:"III" },
+  "Урюпинск":{ snow:"III", wind:"II" },
   "Вологда":{ snow:"IV", wind:"I" },
   "Череповец":{ snow:"IV", wind:"I" },
+  "Сокол":{ snow:"IV", wind:"I" },
   "Великий Устюг":{ snow:"IV", wind:"I" },
-  // Воронежская область
   "Воронеж":{ snow:"III", wind:"II" },
+  "Россошь":{ snow:"III", wind:"II" },
   "Борисоглебск":{ snow:"III", wind:"II" },
-  // Республика Дагестан
+  "Лиски":{ snow:"III", wind:"II" },
+  "Острогожск":{ snow:"III", wind:"II" },
   "Каспийск":{ snow:"I", wind:"V" },
   "Махачкала":{ snow:"I", wind:"V" },
   "Хасавюрт":{ snow:"I", wind:"IV" },
-  "Дербент":{ snow:"I", wind:"IV" },
-  // Еврейская автономная область
   "Биробиджан":{ snow:"II", wind:"III" },
-  // Забайкальский край
-  "Чита":{ snow:"III", wind:"II" },
-  // Ивановская область
+  "Облучье":{ snow:"II", wind:"II" },
+  "Чита":{ snow:"I", wind:"II" },
+  "Краснокаменск":{ snow:"II", wind:"III" },
+  "Борзя":{ snow:"II", wind:"III" },
   "Иваново":{ snow:"III", wind:"I" },
   "Кинешма":{ snow:"III", wind:"I" },
-  // Иркутская область
+  "Шуя":{ snow:"III", wind:"I" },
+  "Тейково":{ snow:"III", wind:"I" },
+  "Кохма":{ snow:"III", wind:"I" },
+  "Назрань":{ snow:"II", wind:"IV" },
+  "Сунжа":{ snow:"II", wind:"IV" },
+  "Карабулак":{ snow:"II", wind:"IV" },
+  "Малгобек":{ snow:"II", wind:"IV" },
+  "Магас":{ snow:"II", wind:"IV" },
   "Ангарск":{ snow:"III", wind:"III" },
   "Братск":{ snow:"IV", wind:"II" },
   "Иркутск":{ snow:"III", wind:"III" },
-  // Кабардино-Балкарская Республика
+  "Усть-Илимск":{ snow:"IV", wind:"II" },
   "Нальчик":{ snow:"II", wind:"IV" },
-  // Калининградская область
+  "Прохладный":{ snow:"II", wind:"IV" },
+  "Баксан":{ snow:"II", wind:"IV" },
+  "Нарткала":{ snow:"II", wind:"IV" },
+  "Майский":{ snow:"II", wind:"IV" },
   "Калининград":{ snow:"II", wind:"II" },
+  "Советск":{ snow:"II", wind:"I" },
+  "Черняховск":{ snow:"II", wind:"II" },
+  "Гусев":{ snow:"II", wind:"I" },
   "Балтийск":{ snow:"II", wind:"III" },
-  // Республика Калмыкия
   "Элиста":{ snow:"II", wind:"III" },
-  // Калужская область
+  "Лагань":{ snow:"II", wind:"III" },
+  "Городовиковск":{ snow:"II", wind:"III" },
   "Калуга":{ snow:"III", wind:"I" },
   "Обнинск":{ snow:"III", wind:"I" },
-  // Камчатский край
-  "Петропавловск-Камчатский":{ snow:"V", wind:"VII" },
-  // Карачаево-Черкесская Республика
+  "Малоярославец":{ snow:"III", wind:"I" },
+  "Людиново":{ snow:"III", wind:"I" },
+  "Балабаново":{ snow:"III", wind:"I" },
+  "Козельск":{ snow:"III", wind:"I" },
+  "Петропавловск-Камчатский":{ snow:"VI", wind:"VII" },
   "Черкесск":{ snow:"II", wind:"IV" },
-  // Республика Карелия
   "Петрозаводск":{ snow:"IV", wind:"II" },
-  // Кемеровская область
+  "Костомукша":{ snow:"V", wind:"I" },
+  "Кондопога":{ snow:"IV", wind:"II" },
+  "Сегежа":{ snow:"IV", wind:"I" },
+  "Сортавала":{ snow:"IV", wind:"II" },
   "Кемерово":{ snow:"IV", wind:"III" },
+  "Киселёвск":{ snow:"IV", wind:"III" },
+  "Междуреченск":{ snow:"V", wind:"III" },
   "Новокузнецк":{ snow:"IV", wind:"III" },
   "Прокопьевск":{ snow:"IV", wind:"III" },
   "Ленинск-Кузнецкий":{ snow:"IV", wind:"III" },
-  "Анжеро-Судженск":{ snow:"IV", wind:"III" },
+  "Юрга":{ snow:"IV", wind:"III" },
   "Белово":{ snow:"IV", wind:"III" },
-  // Кировская область
+  "Анжеро-Судженск":{ snow:"IV", wind:"III" },
   "Киров":{ snow:"IV", wind:"I" },
   "Кирово-Чепецк":{ snow:"IV", wind:"I" },
-  // Республика Коми
+  "Вятские Поляны":{ snow:"IV", wind:"II" },
+  "Слободской":{ snow:"IV", wind:"I" },
+  "Котельнич":{ snow:"IV", wind:"I" },
   "Сыктывкар":{ snow:"IV", wind:"I" },
-  "Ухта":{ snow:"IV", wind:"II" },
+  "Ухта":{ snow:"V", wind:"II" },
   "Воркута":{ snow:"V", wind:"IV" },
-  // Костромская область
+  "Печора":{ snow:"V", wind:"II" },
+  "Усинск":{ snow:"V", wind:"II" },
   "Кострома":{ snow:"IV", wind:"I" },
-  // Краснодарский край
+  "Буй":{ snow:"IV", wind:"I" },
+  "Шарья":{ snow:"IV", wind:"I" },
+  "Нерехта":{ snow:"IV", wind:"I" },
+  "Волгореченск":{ snow:"IV", wind:"I" },
   "Армавир":{ snow:"II", wind:"IV" },
   "Краснодар":{ snow:"I", wind:"IV" },
   "Кропоткин":{ snow:"I", wind:"IV" },
   "Сочи":{ snow:"I", wind:"III" },
   "Новороссийск":{ snow:"I", wind:"VI" },
+  "Ейск":{ snow:"I", wind:"IV" },
   "Анапа":{ snow:"I", wind:"V" },
   "Геленджик":{ snow:"I", wind:"V" },
+  "Славянск-на-Кубани":{ snow:"I", wind:"IV" },
+  "Туапсе":{ snow:"I", wind:"IV" },
+  "Лабинск":{ snow:"II", wind:"IV" },
   "Белореченск":{ snow:"II", wind:"IV" },
+  "Тихорецк":{ snow:"I", wind:"IV" },
   "Крымск":{ snow:"I", wind:"IV" },
-  // Красноярский край
+  "Тимашёвск":{ snow:"I", wind:"IV" },
   "Ачинск":{ snow:"III", wind:"III" },
+  "Канск":{ snow:"III", wind:"III" },
   "Красноярск":{ snow:"III", wind:"III" },
   "Норильск":{ snow:"V", wind:"IV" },
   "Железногорск":{ snow:"III", wind:"III" },
   "Минусинск":{ snow:"III", wind:"III" },
-  // Республика Крым
+  "Лесосибирск":{ snow:"III", wind:"II" },
+  "Зеленогорск":{ snow:"III", wind:"III" },
+  "Назарово":{ snow:"III", wind:"III" },
+  "Евпатория":{ snow:"I", wind:"IV" },
+  "Ялта":{ snow:"I", wind:"III" },
   "Симферополь":{ snow:"I", wind:"II" },
   "Керчь":{ snow:"I", wind:"III" },
+  "Феодосия":{ snow:"I", wind:"II" },
+  "Джанкой":{ snow:"I", wind:"II" },
+  "Алушта":{ snow:"I", wind:"III" },
   "Севастополь":{ snow:"I", wind:"II" },
-  // Курганская область
   "Курган":{ snow:"IV", wind:"II" },
   "Шадринск":{ snow:"IV", wind:"II" },
-  // Курская область
+  "Шумиха":{ snow:"IV", wind:"II" },
+  "Куртамыш":{ snow:"IV", wind:"II" },
+  "Катайск":{ snow:"IV", wind:"II" },
   "Курск":{ snow:"III", wind:"II" },
-  // Ленинградская область
-  "Санкт-Петербург":{ snow:"III", wind:"II" },
+  "Курчатов":{ snow:"III", wind:"II" },
+  "Льгов":{ snow:"III", wind:"II" },
+  "Рыльск":{ snow:"III", wind:"II" },
   "Выборг":{ snow:"III", wind:"II" },
   "Гатчина":{ snow:"III", wind:"II" },
-  // Липецкая область
-  "Липецк":{ snow:"III", wind:"II" },
+  "Пушкин":{ snow:"III", wind:"II" },
+  "Санкт-Петербург":{ snow:"III", wind:"II" },
+  "Мурино":{ snow:"III", wind:"II" },
+  "Всеволжск":{ snow:"III", wind:"II" },
+  "Сертолово":{ snow:"III", wind:"II" },
+  "Сосновый Бор":{ snow:"III", wind:"II" },
+  "Кудрово":{ snow:"III", wind:"II" },
+  "Тихвин":{ snow:"III", wind:"I" },
+  "Кириши":{ snow:"III", wind:"II" },
+  "Кингисепп":{ snow:"III", wind:"II" },
+  "Волхов":{ snow:"III", wind:"I" },
   "Елец":{ snow:"III", wind:"II" },
-  // Магаданская область
+  "Липецк":{ snow:"III", wind:"II" },
+  "Грязи":{ snow:"III", wind:"II" },
+  "Лебедянь":{ snow:"III", wind:"II" },
+  "Данков":{ snow:"III", wind:"II" },
+  "Усмань":{ snow:"III", wind:"II" },
   "Магадан":{ snow:"V", wind:"V" },
-  // Республика Марий Эл
+  "Сусуман":{ snow:"II", wind:"I" },
   "Йошкар-Ола":{ snow:"IV", wind:"I" },
-  // Республика Мордовия
+  "Волжск":{ snow:"III", wind:"II" },
+  "Медведево":{ snow:"IV", wind:"I" },
+  "Козьмодемьянск":{ snow:"III", wind:"I" },
   "Саранск":{ snow:"III", wind:"II" },
-  // Московская область
-  "Москва":{ snow:"III", wind:"I" },
+  "Рузаевка":{ snow:"III", wind:"II" },
+  "Ковылкино":{ snow:"III", wind:"II" },
   "Дмитров":{ snow:"III", wind:"I" },
   "Клин":{ snow:"III", wind:"I" },
   "Коломна":{ snow:"III", wind:"I" },
+  "Москва":{ snow:"III", wind:"I" },
+  "Сергиев Посад":{ snow:"III", wind:"I" },
   "Серпухов":{ snow:"III", wind:"I" },
   "Подольск":{ snow:"III", wind:"I" },
   "Реутов":{ snow:"III", wind:"I" },
   "Балашиха":{ snow:"III", wind:"I" },
   "Ногинск":{ snow:"III", wind:"I" },
+  "Воскресенск":{ snow:"III", wind:"I" },
+  "Чехов":{ snow:"III", wind:"I" },
   "Химки":{ snow:"III", wind:"I" },
+  "Апрелевка":{ snow:"III", wind:"I" },
+  "Наро-Фоминск":{ snow:"III", wind:"I" },
+  "Белоозерский":{ snow:"III", wind:"I" },
   "Мытищи":{ snow:"III", wind:"I" },
   "Королёв":{ snow:"III", wind:"I" },
   "Люберцы":{ snow:"III", wind:"I" },
@@ -200,182 +261,243 @@ const CITY_ZONES: Record<string, { snow: string; wind: string }> = {
   "Раменское":{ snow:"III", wind:"I" },
   "Жуковский":{ snow:"III", wind:"I" },
   "Пушкино":{ snow:"III", wind:"I" },
+  "Орехово-Зуево":{ snow:"III", wind:"I" },
+  "Видное":{ snow:"III", wind:"I" },
+  "Ивантеевка":{ snow:"III", wind:"I" },
   "Лобня":{ snow:"III", wind:"I" },
   "Дубна":{ snow:"III", wind:"I" },
-  "Зеленоград":{ snow:"III", wind:"I" },
-  "Истра":{ snow:"III", wind:"I" },
-  // Мурманская область
+  "Егорьевск":{ snow:"III", wind:"I" },
+  "Лыткарино":{ snow:"III", wind:"I" },
+  "Павловский Посад":{ snow:"III", wind:"I" },
+  "Ступино":{ snow:"III", wind:"I" },
+  "Котельники":{ snow:"III", wind:"I" },
+  "Фрязино":{ snow:"III", wind:"I" },
   "Мурманск":{ snow:"IV", wind:"IV" },
+  "Североморск":{ snow:"IV", wind:"IV" },
   "Апатиты":{ snow:"V", wind:"II" },
-  // Нижегородская область
-  "Нижний Новгород":{ snow:"III", wind:"I" },
+  "Мончегорск":{ snow:"IV", wind:"II" },
+  "Кандалакша":{ snow:"V", wind:"II" },
+  "Кировск":{ snow:"VI", wind:"II" },
+  "Оленегорск":{ snow:"IV", wind:"II" },
+  "Ковдор":{ snow:"V", wind:"II" },
+  "Полярные Зори":{ snow:"V", wind:"II" },
+  "Заполярный":{ snow:"V", wind:"II" },
+  "Заозёрск":{ snow:"IV", wind:"IV" },
+  "Островной":{ snow:"V", wind:"VI" },
   "Арзамас":{ snow:"III", wind:"I" },
+  "Нижний Новгород":{ snow:"III", wind:"I" },
+  "Саров":{ snow:"III", wind:"I" },
   "Дзержинск":{ snow:"III", wind:"I" },
+  "Бор":{ snow:"III", wind:"I" },
   "Кстово":{ snow:"III", wind:"I" },
-  // Новгородская область
+  "Павлово":{ snow:"III", wind:"I" },
+  "Выкса":{ snow:"III", wind:"I" },
+  "Балахна":{ snow:"III", wind:"I" },
+  "Заволжье":{ snow:"III", wind:"I" },
   "Великий Новгород":{ snow:"III", wind:"I" },
-  // Новосибирская область
-  "Новосибирск":{ snow:"IV", wind:"III" },
+  "Боровичи":{ snow:"III", wind:"I" },
+  "Старая Русса":{ snow:"III", wind:"I" },
+  "Пестово":{ snow:"III", wind:"I" },
+  "Валдай":{ snow:"III", wind:"I" },
+  "Чудово":{ snow:"III", wind:"I" },
   "Бердск":{ snow:"IV", wind:"III" },
-  // Омская область
+  "Новосибирск":{ snow:"IV", wind:"III" },
+  "Искитим":{ snow:"IV", wind:"III" },
+  "Куйбышев":{ snow:"IV", wind:"III" },
+  "Барабинск":{ snow:"IV", wind:"III" },
   "Омск":{ snow:"III", wind:"II" },
-  // Оренбургская область
+  "Тара":{ snow:"III", wind:"I" },
+  "Калачинск":{ snow:"III", wind:"II" },
+  "Бузулук":{ snow:"III", wind:"III" },
   "Оренбург":{ snow:"III", wind:"III" },
   "Орск":{ snow:"III", wind:"III" },
-  "Бузулук":{ snow:"III", wind:"III" },
   "Новотроицк":{ snow:"III", wind:"III" },
-  // Орловская область
+  "Бугуруслан":{ snow:"III", wind:"III" },
+  "Гай":{ snow:"III", wind:"III" },
+  "Сорочинск":{ snow:"III", wind:"III" },
   "Орёл":{ snow:"III", wind:"II" },
-  // Пензенская область
+  "Ливны":{ snow:"III", wind:"II" },
+  "Мценск":{ snow:"III", wind:"I" },
+  "Болхов":{ snow:"III", wind:"I" },
+  "Кузнецк":{ snow:"III", wind:"II" },
   "Пенза":{ snow:"III", wind:"II" },
   "Заречный":{ snow:"III", wind:"II" },
-  // Пермский край
-  "Пермь":{ snow:"IV", wind:"I" },
+  "Каменка":{ snow:"III", wind:"II" },
+  "Сердобск":{ snow:"III", wind:"II" },
+  "Нижний Ломов":{ snow:"III", wind:"II" },
   "Березники":{ snow:"IV", wind:"I" },
+  "Пермь":{ snow:"IV", wind:"I" },
   "Соликамск":{ snow:"IV", wind:"I" },
-  // Приморский край
+  "Чайковский":{ snow:"IV", wind:"I" },
+  "Кунгур":{ snow:"IV", wind:"I" },
+  "Лысьва":{ snow:"IV", wind:"I" },
+  "Краснокамск":{ snow:"IV", wind:"I" },
+  "Чусовой":{ snow:"IV", wind:"I" },
+  "Чернушка":{ snow:"IV", wind:"II" },
+  "Добрянка":{ snow:"IV", wind:"I" },
+  "Кудымкар":{ snow:"IV", wind:"I" },
+  "Губаха":{ snow:"IV", wind:"I" },
   "Уссурийск":{ snow:"II", wind:"IV" },
   "Владивосток":{ snow:"II", wind:"IV" },
   "Находка":{ snow:"II", wind:"V" },
+  "Артём":{ snow:"II", wind:"IV" },
   "Арсеньев":{ snow:"III", wind:"III" },
-  // Псковская область
-  "Псков":{ snow:"III", wind:"I" },
+  "Спасск-Дальний":{ snow:"II", wind:"III" },
+  "Большой Камень":{ snow:"II", wind:"IV" },
+  "Партизанск":{ snow:"III", wind:"V" },
+  "Лесозаводск":{ snow:"II", wind:"III" },
   "Великие Луки":{ snow:"III", wind:"I" },
-  // Ростовская область
-  "Ростов-на-Дону":{ snow:"II", wind:"III" },
+  "Псков":{ snow:"III", wind:"I" },
+  "Остров":{ snow:"III", wind:"I" },
+  "Невель":{ snow:"III", wind:"I" },
+  "Волгодонск":{ snow:"II", wind:"III" },
   "Новочеркасск":{ snow:"II", wind:"III" },
+  "Новошахтинск":{ snow:"II", wind:"III" },
+  "Ростов-на-Дону":{ snow:"II", wind:"III" },
   "Таганрог":{ snow:"II", wind:"III" },
   "Шахты":{ snow:"II", wind:"III" },
-  "Волгодонск":{ snow:"II", wind:"III" },
-  "Новошахтинск":{ snow:"II", wind:"III" },
-  "Азов":{ snow:"II", wind:"III" },
-  "Батайск":{ snow:"II", wind:"III" },
-  // Рязанская область
   "Рязань":{ snow:"III", wind:"I" },
-  // Самарская область
-  "Самара":{ snow:"III", wind:"III" },
-  "Тольятти":{ snow:"III", wind:"III" },
+  "Касимов":{ snow:"III", wind:"I" },
+  "Скопин":{ snow:"III", wind:"I" },
+  "Сасово":{ snow:"III", wind:"I" },
+  "Рыбное":{ snow:"III", wind:"I" },
   "Новокуйбышевск":{ snow:"III", wind:"III" },
+  "Самара":{ snow:"III", wind:"III" },
   "Сызрань":{ snow:"III", wind:"III" },
-  // Саратовская область
+  "Тольятти":{ snow:"III", wind:"III" },
   "Саратов":{ snow:"III", wind:"III" },
   "Энгельс":{ snow:"III", wind:"III" },
   "Балаково":{ snow:"III", wind:"III" },
   "Балашов":{ snow:"III", wind:"II" },
-  // Республика Саха (Якутия)
-  "Якутск":{ snow:"III", wind:"I" },
-  // Сахалинская область
-  "Южно-Сахалинск":{ snow:"IV", wind:"VI" },
-  // Свердловская область
+  "Вольск":{ snow:"III", wind:"III" },
+  "Пугачёв":{ snow:"III", wind:"III" },
+  "Ртищево":{ snow:"III", wind:"II" },
+  "Якутск":{ snow:"II", wind:"I" },
+  "Нерюнгри":{ snow:"II", wind:"I" },
+  "Мирный":{ snow:"II", wind:"I" },
+  "Ленск":{ snow:"III", wind:"I" },
+  "Алдан":{ snow:"III", wind:"I" },
+  "Южно-Сахалинск":{ snow:"V", wind:"VI" },
   "Екатеринбург":{ snow:"III", wind:"II" },
   "Каменск-Уральский":{ snow:"III", wind:"I" },
   "Нижний Тагил":{ snow:"IV", wind:"I" },
   "Первоуральск":{ snow:"IV", wind:"I" },
-  "Алапаевск":{ snow:"IV", wind:"II" },
-  "Асбест":{ snow:"III", wind:"II" },
-  "Берёзовский":{ snow:"III", wind:"II" },
-  "Златоуст":{ snow:"IV", wind:"II" },
-  // Республика Северная Осетия-Алания
+  "Серов":{ snow:"IV", wind:"I" },
   "Владикавказ":{ snow:"II", wind:"IV" },
-  // Смоленская область
+  "Моздок":{ snow:"II", wind:"IV" },
+  "Беслан":{ snow:"II", wind:"IV" },
+  "Алагир":{ snow:"II", wind:"IV" },
   "Смоленск":{ snow:"III", wind:"I" },
-  // Ставропольский край
+  "Вязьма":{ snow:"III", wind:"I" },
+  "Рославль":{ snow:"III", wind:"I" },
+  "Ярцево":{ snow:"III", wind:"I" },
+  "Сафроново":{ snow:"III", wind:"I" },
+  "Гагарин":{ snow:"III", wind:"I" },
+  "Десногорск":{ snow:"III", wind:"I" },
   "Ессентуки":{ snow:"II", wind:"IV" },
   "Кисловодск":{ snow:"II", wind:"IV" },
   "Невинномысск":{ snow:"II", wind:"IV" },
   "Пятигорск":{ snow:"II", wind:"IV" },
   "Ставрополь":{ snow:"II", wind:"IV" },
-  "Минеральные Воды":{ snow:"II", wind:"IV" },
-  // Тамбовская область
+  "Мичуринск":{ snow:"III", wind:"II" },
   "Тамбов":{ snow:"III", wind:"II" },
-  // Республика Татарстан
+  "Рассказово":{ snow:"III", wind:"II" },
+  "Моршанск":{ snow:"III", wind:"II" },
+  "Котовск":{ snow:"III", wind:"II" },
+  "Уварово":{ snow:"III", wind:"II" },
+  "Альметьевск":{ snow:"III", wind:"II" },
+  "Бугульма":{ snow:"III", wind:"II" },
   "Казань":{ snow:"III", wind:"II" },
   "Набережные Челны":{ snow:"III", wind:"II" },
-  "Альметьевск":{ snow:"III", wind:"II" },
   "Нижнекамск":{ snow:"III", wind:"II" },
   "Зеленодольск":{ snow:"III", wind:"II" },
   "Елабуга":{ snow:"III", wind:"II" },
-  "Бугульма":{ snow:"III", wind:"II" },
-  // Тверская область
+  "Лениногорск":{ snow:"III", wind:"II" },
+  "Чистополь":{ snow:"III", wind:"II" },
+  "Заинск":{ snow:"III", wind:"II" },
+  "Азнакаево":{ snow:"III", wind:"II" },
+  "Нурлат":{ snow:"III", wind:"II" },
+  "Менделеевск":{ snow:"III", wind:"II" },
+  "Бавлы":{ snow:"III", wind:"II" },
+  "Арск":{ snow:"III", wind:"II" },
   "Тверь":{ snow:"III", wind:"I" },
   "Ржев":{ snow:"III", wind:"I" },
   "Вышний Волочёк":{ snow:"III", wind:"I" },
-  // Томская область
+  "Торжок":{ snow:"III", wind:"I" },
+  "Кимры":{ snow:"III", wind:"I" },
+  "Конаково":{ snow:"III", wind:"I" },
+  "Северск":{ snow:"IV", wind:"III" },
   "Томск":{ snow:"IV", wind:"III" },
-  // Республика Тыва
+  "Стрежевой":{ snow:"IV", wind:"I" },
+  "Асино":{ snow:"IV", wind:"II" },
+  "Колпашево":{ snow:"IV", wind:"I" },
   "Кызыл":{ snow:"III", wind:"III" },
-  // Тульская область
-  "Тула":{ snow:"III", wind:"I" },
+  "Каа-Хем":{ snow:"III", wind:"III" },
+  "Ак-Довурак":{ snow:"III", wind:"III" },
+  "Шагонар":{ snow:"III", wind:"III" },
   "Новомосковск":{ snow:"III", wind:"I" },
+  "Тула":{ snow:"III", wind:"I" },
+  "Донской":{ snow:"III", wind:"I" },
   "Алексин":{ snow:"III", wind:"I" },
-  // Тюменская область
-  "Тюмень":{ snow:"IV", wind:"I" },
+  "Щёкино":{ snow:"III", wind:"I" },
+  "Узловая":{ snow:"III", wind:"I" },
+  "Ефремов":{ snow:"III", wind:"I" },
   "Тобольск":{ snow:"IV", wind:"I" },
+  "Тюмень":{ snow:"IV", wind:"I" },
   "Ишим":{ snow:"IV", wind:"I" },
-  // ХМАО
-  "Сургут":{ snow:"IV", wind:"I" },
+  "Ялуторовск":{ snow:"IV", wind:"I" },
+  "Заводоуковск":{ snow:"IV", wind:"I" },
+  "Нефтеюганск":{ snow:"V", wind:"I" },
   "Нижневартовск":{ snow:"V", wind:"I" },
-  "Ханты-Мансийск":{ snow:"IV", wind:"I" },
-  "Нефтеюганск":{ snow:"IV", wind:"I" },
-  "Мегион":{ snow:"V", wind:"I" },
-  // ЯНАО
+  "Сургут":{ snow:"V", wind:"I" },
+  "Ханты-Мансийск":{ snow:"V", wind:"I" },
   "Новый Уренгой":{ snow:"V", wind:"III" },
-  "Ноябрьск":{ snow:"V", wind:"III" },
-  "Надым":{ snow:"V", wind:"IV" },
-  "Лабытнанги":{ snow:"V", wind:"IV" },
-  // Удмуртская Республика
-  "Ижевск":{ snow:"IV", wind:"I" },
+  "Воткинск":{ snow:"IV", wind:"I" },
   "Глазов":{ snow:"IV", wind:"I" },
-  // Ульяновская область
+  "Ижевск":{ snow:"IV", wind:"I" },
+  "Сарапул":{ snow:"IV", wind:"I" },
   "Ульяновск":{ snow:"III", wind:"II" },
   "Димитровград":{ snow:"III", wind:"II" },
-  // Хабаровский край
+  "Инза":{ snow:"III", wind:"II" },
+  "Барыш":{ snow:"III", wind:"II" },
+  "Новоульяновск":{ snow:"III", wind:"II" },
+  "Сенгилей":{ snow:"III", wind:"II" },
+  "Комсомольск-на-Амуре":{ snow:"II", wind:"III" },
   "Хабаровск":{ snow:"II", wind:"III" },
-  "Комсомольск-на-Амуре":{ snow:"IV", wind:"III" },
-  // Челябинская область
-  "Челябинск":{ snow:"IV", wind:"II" },
+  "Амурск":{ snow:"II", wind:"III" },
+  "Советская Гавань":{ snow:"IV", wind:"VI" },
+  "Николаевск-на-Амуре":{ snow:"III", wind:"VI" },
+  "Бикин":{ snow:"II", wind:"III" },
+  "Вяземский":{ snow:"II", wind:"III" },
+  "Златоуст":{ snow:"V", wind:"II" },
+  "Копейск":{ snow:"IV", wind:"II" },
   "Магнитогорск":{ snow:"IV", wind:"II" },
-  "Миасс":{ snow:"IV", wind:"II" },
-  // Чеченская Республика
+  "Миасс":{ snow:"V", wind:"II" },
+  "Челябинск":{ snow:"IV", wind:"II" },
   "Грозный":{ snow:"II", wind:"IV" },
+  "Урус-Мартан":{ snow:"II", wind:"IV" },
   "Гудермес":{ snow:"II", wind:"IV" },
-  // Чувашская Республика
-  "Чебоксары":{ snow:"III", wind:"I" },
+  "Шали":{ snow:"II", wind:"IV" },
+  "Аргун":{ snow:"II", wind:"IV" },
+  "Курчалой":{ snow:"II", wind:"IV" },
   "Новочебоксарск":{ snow:"III", wind:"I" },
-  // Ярославская область
-  "Ярославль":{ snow:"III", wind:"I" },
+  "Чебоксары":{ snow:"III", wind:"I" },
+  "Канаш":{ snow:"III", wind:"II" },
+  "Алатырь":{ snow:"III", wind:"II" },
+  "Шумерля":{ snow:"III", wind:"II" },
   "Рыбинск":{ snow:"III", wind:"I" },
+  "Ярославль":{ snow:"III", wind:"I" },
+  "Тутаев":{ snow:"III", wind:"I" },
+  "Переславль-Залесский":{ snow:"III", wind:"I" },
+  "Углич":{ snow:"III", wind:"I" },
+  "Ростов":{ snow:"III", wind:"I" },
 };
 function getCityZones(city: string) {
   return CITY_ZONES[city] ?? { snow: "III", wind: "II" };
 }
 
 // ── Cities ────────────────────────────────────────────────────────────────────
-const CITIES = [
-  "Абаза","Абакан","Абдулино","Абинск","Агидель","Агрыз","Адыгейск","Азнакаево","Азов","Аксай",
-  "Алагир","Алапаевск","Алатырь","Алдан","Алейск","Александров","Александровск","Алексеевка","Алексин","Альметьевск",
-  "Амурск","Анадырь","Анапа","Ангарск","Анжеро-Судженск","Апатиты","Апшеронск","Армавир","Арсеньев","Артём",
-  "Архангельск","Асбест","Астрахань","Ачинск","Аша","Балаково","Балашиха","Балашов","Балтийск","Барнаул",
-  "Батайск","Белгород","Белогорск","Белорецк","Белореченск","Бердск","Березники","Берёзовский","Бийск","Биробиджан",
-  "Благовещенск","Братск","Брянск","Бугульма","Бузулук","Великий Новгород","Великий Устюг","Владивосток","Владикавказ","Владимир",
-  "Волгоград","Волгодонск","Волжский","Вологда","Воркута","Воронеж","Выборг","Вышний Волочёк","Гатчина","Геленджик",
-  "Георгиевск","Глазов","Горно-Алтайск","Грозный","Губкин","Гудермес","Дербент","Дзержинск","Димитровград","Дмитров",
-  "Долгопрудный","Домодедово","Дубна","Екатеринбург","Елабуга","Елец","Ессентуки","Железногорск","Жуковский","Заречный",
-  "Зеленоград","Зеленодольск","Златоуст","Иваново","Ижевск","Иркутск","Истра","Ишим","Ишимбай","Йошкар-Ола",
-  "Казань","Калининград","Калуга","Каменск-Уральский","Каменск-Шахтинский","Камышин","Кемерово","Керчь","Киров","Кирово-Чепецк",
-  "Кисловодск","Клин","Коломна","Комсомольск-на-Амуре","Королёв","Кострома","Краснодар","Красногорск","Красноярск","Кропоткин",
-  "Крымск","Кстово","Курган","Курск","Кызыл","Лабытнанги","Ленинск-Кузнецкий","Липецк","Лобня","Люберцы",
-  "Магадан","Магнитогорск","Майкоп","Махачкала","Мегион","Миасс","Минеральные Воды","Минусинск","Москва","Мурманск",
-  "Муром","Мытищи","Набережные Челны","Надым","Нальчик","Находка","Невинномысск","Нефтекамск","Нефтеюганск","Нижневартовск",
-  "Нижнекамск","Нижний Новгород","Нижний Тагил","Новокузнецк","Новокуйбышевск","Новомосковск","Новороссийск","Новосибирск","Новотроицк","Новочебоксарск",
-  "Новочеркасск","Новый Уренгой","Ногинск","Норильск","Ноябрьск","Обнинск","Одинцово","Омск","Орёл","Оренбург",
-  "Орск","Пенза","Первоуральск","Петрозаводск","Петропавловск-Камчатский","Подольск","Прокопьевск","Псков","Пушкино","Пятигорск",
-  "Раменское","Реутов","Рубцовск","Рязань","Салават","Самара","Саранск","Саратов","Севастополь","Серпухов",
-  "Симферополь","Смоленск","Сочи","Ставрополь","Старый Оскол","Стерлитамак","Сургут","Сыктывкар","Таганрог","Тамбов",
-  "Тверь","Тольятти","Томск","Тула","Тюмень","Улан-Удэ","Ульяновск","Уссурийск","Уфа","Ухта",
-  "Хабаровск","Ханты-Мансийск","Хасавюрт","Химки","Чебоксары","Челябинск","Черкесск","Череповец","Чита","Шахты","Щёлково","Электросталь","Энгельс",
-  "Южно-Сахалинск","Якутск","Ярославль"
-];
+const CITIES = Object.keys(CITY_ZONES).sort((a, b) => a.localeCompare(b, "ru"));
 
 const STEP1_OPTIONS = [
   { label:"Производственные и промышленные здания", icon:"Factory" },
@@ -387,7 +509,7 @@ const STEP1_OPTIONS = [
 ];
 const LENGTHS = [24,30,36,42,48,54];
 const WIDTHS  = [12,18,24];
-const HEIGHTS = [3.6,4.8,6,7.2,8.4,9.6,10.8,12];
+const HEIGHTS = [3.6,4.8,6,7.2,8.4,9.6];
 const CLADDING_OPTIONS = ["Профилированный лист","Сэндвич панели"];
 const CRANE_OPTIONS    = ["Да","Нет"];
 const EXTRA_SERVICES   = ["Подбор земельного участка","Оценка пригодности участка для реализации проекта","Проектирование и получение разрешения на строительство","Поставка комплекта здания","Доставка комплекта здания до стройплощадки","Монтаж здания","Сдача в эксплуатацию"];
@@ -510,6 +632,7 @@ function CitySearch({ value, onChange }: { value: string; onChange: (v: string) 
   const [query, setQuery] = useState(value);
   const [open, setOpen] = useState(false);
   const filtered = query.length >= 2 ? CITIES.filter(c => c.toLowerCase().startsWith(query.toLowerCase())).slice(0,8) : [];
+  const zones = value ? getCityZones(value) : null;
   return (
     <div className="relative">
       <input type="text" placeholder="Начните вводить название города..." value={query}
@@ -522,6 +645,30 @@ function CitySearch({ value, onChange }: { value: string; onChange: (v: string) 
             <button key={c} className="w-full text-left px-4 py-2.5 text-sm hover:bg-orange-50 transition-colors border-b border-gray-50 last:border-0"
               onClick={() => { setQuery(c); onChange(c); setOpen(false); }}>{c}</button>
           ))}
+        </div>
+      )}
+      {value && zones && (
+        <div className="mt-3 rounded-xl p-3.5 border border-orange-100" style={{ background:"#fff8f5" }}>
+          <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+            <div>
+              <span className="text-gray-400 text-xs">Снеговой район: </span>
+              <span className="font-semibold" style={{ color:"var(--orange)" }}>{zones.snow}</span>
+            </div>
+            <div>
+              <span className="text-gray-400 text-xs">Ветровой район: </span>
+              <span className="font-semibold" style={{ color:"var(--orange)" }}>{zones.wind}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="text-gray-400 text-xs">Тип местности: </span>
+              <span className="font-semibold" style={{ color:"var(--orange)" }}>B</span>
+              <div className="relative group ml-1">
+                <span className="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 text-gray-400 text-xs cursor-help">?</span>
+                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-64 bg-gray-800 text-white text-xs rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
+                  Городские территории, лесные массивы и другие местности, равномерно покрытые препятствиями высотой более 10 м.
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -541,18 +688,20 @@ interface QuizState {
 const PRICE_API_URL = "https://functions.poehali.dev/88524db3-a08f-485b-b913-ae55621e6dc4";
 
 const HEIGHT_TO_PANELS: Record<number, number> = {
-  3.6: 4, 4.8: 5, 6.0: 6, 7.2: 7, 8.4: 8, 9.6: 9, 10.8: 10, 12.0: 11,
+  3.6: 4, 4.8: 5, 6.0: 6, 7.2: 7, 8.4: 8, 9.6: 9,
 };
+const PRICE_PER_SQM_SANDWICH = 15336;
+const PRICE_PER_SQM_PROFILE  = 13506;
 
-function quizToPriceParams(state: QuizState, zones: { snow: string; wind: string }) {
+function quizToPriceParams(state: QuizState, zones: { snow: string; wind: string }, length: number, width: number, height: number) {
   const wallMm  = state.cladding === "Сэндвич панели" ? 150 : 100;
   const roofMm  = state.cladding === "Сэндвич панели" ? 150 : 100;
-  const panels  = HEIGHT_TO_PANELS[state.height] ?? 4;
+  const panels  = HEIGHT_TO_PANELS[height] ?? 4;
   return new URLSearchParams({
     wall_mm:  String(wallMm),
     roof_mm:  String(roofMm),
-    span:     String(state.width),
-    length:   String(state.length),
+    span:     String(width),
+    length:   String(length),
     panels:   String(panels),
     snow:     zones.snow,
     wind:     zones.wind,
@@ -566,7 +715,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
   const [state, setState] = useState<QuizState>({
     purpose:"", city:"", length:24, width:12, height:3.6, customDims:"",
     cladding:"Профилированный лист", crane:"Нет",
-    extras:["Поставка комплекта здания"],
+    extras:[],
     name:"", phone:"", email:"", agreePersonal:true, agreePromo:false,
   });
   const [submitted, setSubmitted] = useState(false);
@@ -589,11 +738,25 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
 
   async function fetchPrice() {
     setPriceLoading(true);
+    // Если введён свой вариант — считаем по средней цене м²
+    if (state.customDims.trim()) {
+      const area = length * width;
+      if (area > 0) {
+        const pricePerSqm = state.cladding === "Сэндвич панели" ? PRICE_PER_SQM_SANDWICH : PRICE_PER_SQM_PROFILE;
+        setPrice(area * pricePerSqm);
+      }
+      setPriceLoading(false);
+      return;
+    }
     try {
-      const qs = quizToPriceParams(state, zones);
+      const qs = quizToPriceParams(state, zones, length, width, height);
       const res = await fetch(`${PRICE_API_URL}?${qs}`);
       const data = await res.json();
-      if (data.price) setPrice(data.price);
+      if (data.price) {
+        // Если профлист — делим на 1.24
+        const finalPrice = state.cladding === "Профилированный лист" ? data.price / 1.24 : data.price;
+        setPrice(finalPrice);
+      }
     } catch {
       // оставляем price = null
     } finally {
@@ -670,9 +833,9 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
               <p className="text-sm text-gray-400 text-center mb-6">Начните вводить название вашего города</p>
               <CitySearch value={state.city} onChange={v => setState(s => ({ ...s, city:v }))} />
               {state.city && (
-                <div className="mt-4 flex items-center gap-2 text-sm" style={{ color:"var(--orange)" }}>
-                  <Icon name="MapPin" size={14} />
-                  Выбран: <strong>{state.city}</strong>
+                <div className="mt-3 flex items-center gap-2 text-xs text-gray-400">
+                  <Icon name="MapPin" size={12} />
+                  Выбран: <strong className="text-gray-700">{state.city}</strong>
                 </div>
               )}
             </div>
@@ -706,20 +869,20 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
               {/* Таблицы */}
               <div className="grid grid-cols-3 gap-3 md:gap-6 mb-6">
                 <div>
-                  <div className="text-xs text-gray-400 text-center mb-2">Длина, м</div>
-                  <div className="grid grid-cols-2 gap-1.5">
-                    {LENGTHS.map(v => dimBtn(v, state.customDims?-1:state.length, () => setState(s => ({ ...s, length:v, customDims:"" }))))}
-                  </div>
-                </div>
-                <div>
                   <div className="text-xs text-gray-400 text-center mb-2">Ширина, м</div>
                   <div className="grid grid-cols-1 gap-1.5">
                     {WIDTHS.map(v => dimBtn(v, state.customDims?-1:state.width, () => setState(s => ({ ...s, width:v, customDims:"" }))))}
                   </div>
                 </div>
                 <div>
+                  <div className="text-xs text-gray-400 text-center mb-2">Длина, м</div>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {LENGTHS.map(v => dimBtn(v, state.customDims?-1:state.length, () => setState(s => ({ ...s, length:v, customDims:"" }))))}
+                  </div>
+                </div>
+                <div>
                   <div className="text-xs text-gray-400 text-center mb-2">Высота, м</div>
-                  <div className="grid grid-cols-3 gap-1.5">
+                  <div className="grid grid-cols-2 gap-1.5">
                     {HEIGHTS.map(v => dimBtn(v, state.customDims?-1:state.height, () => setState(s => ({ ...s, height:v, customDims:"" }))))}
                   </div>
                 </div>
@@ -1268,7 +1431,7 @@ export default function Index() {
                         <Icon name={icon} size={12} style={{ color:"var(--orange)" }} />
                         <span>{label}</span>
                       </div>
-                      <span className="font-semibold text-gray-900 text-right">{value}</span>
+                      <span className="text-gray-900 text-right">{value}</span>
                     </div>
                   ))}
                 </div>
