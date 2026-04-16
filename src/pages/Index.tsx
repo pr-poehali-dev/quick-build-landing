@@ -694,8 +694,8 @@ const PRICE_PER_SQM_SANDWICH = 15336;
 const PRICE_PER_SQM_PROFILE  = 13506;
 
 function quizToPriceParams(state: QuizState, zones: { snow: string; wind: string }, length: number, width: number, height: number) {
-  const wallMm  = state.cladding === "Сэндвич панели" ? 150 : 100;
-  const roofMm  = state.cladding === "Сэндвич панели" ? 150 : 100;
+  const wallMm  = state.cladding === "Сэндвич панели" ? 200 : 200;
+  const roofMm  = state.cladding === "Сэндвич панели" ? 200 : 150;
   const panels  = HEIGHT_TO_PANELS[height] ?? 4;
   return new URLSearchParams({
     wall_mm:  String(wallMm),
@@ -985,7 +985,13 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                     <div className="text-xs text-gray-500 mb-1">Стоимость здания</div>
                     {submitted ? (
                       priceLoading ? (
-                        <div className="text-sm text-gray-400 py-2">Считаем стоимость…</div>
+                        <div className="py-3">
+                          <div className="text-sm font-medium mb-2" style={{ color:"var(--orange)" }}>Считаем стоимость…</div>
+                          <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background:"#f5d5c0" }}>
+                            <div className="h-full rounded-full animate-price-bar" style={{ background:"var(--orange)" }} />
+                          </div>
+                          <div className="text-xs text-gray-400 mt-1.5">обычно занимает 3–5 секунд</div>
+                        </div>
                       ) : price !== null ? (
                         <>
                           <div style={{ fontFamily:"'Abril Fatface',serif", fontSize:"1.8rem", color:"var(--orange)" }}>

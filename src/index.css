@@ -109,6 +109,27 @@
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+@keyframes price-bar {
+  0% {
+    width: 0%;
+  }
+  40% {
+    width: 60%;
+  }
+  70% {
+    width: 80%;
+  }
+  90% {
+    width: 90%;
+  }
+  100% {
+    width: 95%;
+  }
+}
+.animate-price-bar {
+  animation: price-bar 5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
 .modal-backdrop {
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
