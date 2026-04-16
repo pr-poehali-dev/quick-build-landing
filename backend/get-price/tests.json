@@ -1,17 +1,17 @@
 {
   "tests": [
     {
-      "name": "Get price sandwich and profile — snow I wind I locality B",
+      "name": "Сэндвич и профлист — snow I wind I",
       "method": "GET",
-      "path": "/?wall_mm=100&roof_mm=100&span=12&length=24&panels=4&snow=I&wind=I&locality=B",
+      "path": "/?wall_mm=100&roof_mm=100&span=12&length=24&panels=4&snow=I&wind=I",
       "expectedStatus": 200,
       "expectedBody": {"price_sandwich": 3836476.81, "price_profile": 3093932.91},
       "bodyMatcher": "partial"
     },
     {
-      "name": "Get price sandwich and profile — snow III wind II locality B",
+      "name": "Сэндвич и профлист — snow III wind II",
       "method": "GET",
-      "path": "/?wall_mm=100&roof_mm=100&span=12&length=24&panels=4&snow=III&wind=II&locality=B",
+      "path": "/?wall_mm=100&roof_mm=100&span=12&length=24&panels=4&snow=III&wind=II",
       "expectedStatus": 200,
       "expectedBody": {"price_sandwich": 3913151.27, "price_profile": 3155767.15},
       "bodyMatcher": "partial"
