@@ -693,41 +693,65 @@ const HEIGHT_TO_PANELS: Record<number, number> = {
 const PRICE_PER_SQM_SANDWICH = 15336;
 const PRICE_PER_SQM_PROFILE  = 13506;
 
-// ── Калькулятор сэндвич-панелей (фронтенд, без API) ─────────────────────────
-const FRAME_RATES: Record<number, Record<number, Record<number, number | null>>> = {
-  3.6: { 24:{12:3216,18:2572,24:2362}, 30:{12:1796,18:1389,24:2043}, 36:{12:1861,18:1586,24:1729}, 42:{12:957,18:1325,24:1502}, 48:{12:1132,18:1136,24:1334}, 54:{12:489,18:983,24:1202} },
-  4.8: { 24:{12:3214,18:2144,24:2550}, 30:{12:3778,18:1553,24:1365}, 36:{12:2403,18:1182,24:1698}, 42:{12:1651,18:929,24:1179},  48:{12:1399,18:720,24:679},  54:{12:1204,18:567,24:1224} },
-  6.0: { 24:{12:4337,18:2681,24:2439}, 30:{12:3014,18:1883,24:2251}, 36:{12:2128,18:1485,24:1324}, 42:{12:2155,18:1811,24:1734}, 48:{12:1513,18:3681,24:916},  54:{12:1800,18:4272,24:1254} },
-  7.2: { 24:{12:5431,18:3841,24:3694}, 30:{12:3610,18:2620,24:2321}, 36:{12:2896,18:2381,24:1968}, 42:{12:2709,18:1905,24:1620}, 48:{12:null,18:2159,24:null}, 54:{12:2204,18:1503,24:1319} },
-  8.4: { 24:{12:5575,18:5335,24:4701}, 30:{12:4702,18:3772,24:3071}, 36:{12:2792,18:3681,24:2848}, 42:{12:3987,18:2754,24:4278}, 48:{12:3330,18:3161,24:3330}, 54:{12:3280,18:2521,24:1747} },
-  9.6: { 24:{12:7021,18:6194,24:5357}, 30:{12:6207,18:4574,24:3667}, 36:{12:5405,18:4257,24:4688}, 42:{12:5242,18:4253,24:3750}, 48:{12:4943,18:3689,24:3833}, 54:{12:4664,18:3093,24:4491} },
+// ── Калькулятор (фронтенд) ────────────────────────────────────────────────────
+const FRAME_RATES: Record<number, Record<number, Record<number, number>>> = {
+  3.6: { 24:{12:3216,18:2572,24:1980}, 30:{12:1796,18:1389,24:1488}, 36:{12:1861,18:1008,24:1158}, 42:{12:957,18:734,24:914},   48:{12:695,18:534,24:738},   54:{12:493,18:375,24:598} },
+  4.8: { 24:{12:3214,18:2144,24:2550}, 30:{12:2493,18:1576,24:1376}, 36:{12:2020,18:1199,24:1070}, 42:{12:1676,18:929,24:848},  48:{12:1420,18:731,24:679},  54:{12:1222,18:576,24:1224} },
+  6.0: { 24:{12:4337,18:2681,24:2439}, 30:{12:3014,18:1883,24:1648}, 36:{12:2145,18:1485,24:1324}, 42:{12:2155,18:1811,24:1089},48:{12:1513,18:995,24:916},  54:{12:1307,18:832,24:781} },
+  7.2: { 24:{12:5431,18:3841,24:3694}, 30:{12:3466,18:2641,24:2354}, 36:{12:2931,18:2212,24:1968}, 42:{12:2561,18:1905,24:1620},48:{12:2236,18:1542,24:1567},54:{12:2030,18:1503,24:1319} },
+  8.4: { 24:{12:5575,18:5335,24:4701}, 30:{12:4466,18:3565,24:3445}, 36:{12:2871,18:3681,24:2531}, 42:{12:3474,18:2754,24:2710},48:{12:3164,18:2480,24:2287},54:{12:3016,18:2314,24:2379} },
+  9.6: { 24:{12:4689,18:4070,24:3746}, 30:{12:6065,18:4732,24:3894}, 36:{12:5405,18:3880,24:3207}, 42:{12:5007,18:3541,24:3185},48:{12:4698,18:3488,24:3179},54:{12:4456,18:3093,24:2792} },
 };
 const SNOW_COEFF: Record<string, number> = { "I":0.95,"II":0.95,"III":1.00,"IV":1.05,"V":1.12,"VI":1.18,"VII":1.25,"VIII":1.32 };
 const WIND_COEFF: Record<string, number> = { "I":1.000,"II":1.008,"III":1.015,"IV":1.025,"V":1.035,"VI":1.045,"VII":1.060 };
 const ROOF_RATE = 8750, WALL_BASE = 4800, WALL_SLOPE = 200, FIXED_COST = 180000;
 
-function interpolateSandwichRate(length: number, width: number, height: number): number {
+const CRANE_5T_DATA = [
+  { length:24, width:12, height:4.8, area:288,  extra:923484 },
+  { length:24, width:24, height:6.0, area:576,  extra:1068070 },
+  { length:30, width:24, height:7.2, area:720,  extra:1851633 },
+  { length:30, width:24, height:6.0, area:720,  extra:1632422 },
+  { length:36, width:18, height:6.0, area:648,  extra:1607547 },
+  { length:42, width:18, height:6.0, area:756,  extra:1239086 },
+  { length:54, width:24, height:9.6, area:1296, extra:2470398 },
+];
+
+function interpolateRate(length: number, width: number, height: number): number {
   const points: { length:number; width:number; height:number; rate:number }[] = [];
-  for (const h in FRAME_RATES) for (const l in FRAME_RATES[+h]) for (const w in FRAME_RATES[+h][+l]) {
-    const rate = FRAME_RATES[+h][+l][+w];
-    if (rate !== null) points.push({ length:+l, width:+w, height:+h, rate });
-  }
-  if (!points.length) return 3000;
+  for (const h in FRAME_RATES) for (const l in FRAME_RATES[+h]) for (const w in FRAME_RATES[+h][+l])
+    points.push({ length:+l, width:+w, height:+h, rate:FRAME_RATES[+h][+l][+w] });
   const withDist = points.map(p => ({ ...p, d: Math.sqrt(Math.pow((p.length-length)/6,2)+Math.pow((p.width-width)/3,2)+Math.pow((p.height-height)/1.2,2)) })).sort((a,b)=>a.d-b.d);
-  const nearest = withDist.slice(0, Math.min(4, withDist.length));
+  const nearest = withDist.slice(0, 4);
   let sw=0, wsum=0;
   for (const p of nearest) { if (p.d<0.001) return p.rate; const w=1/(p.d*p.d); sw+=p.rate*w; wsum+=w; }
   return Math.round(sw/wsum);
 }
 
-function calcSandwichPrice(length: number, width: number, height: number, snowZone: string, windZone: string): number {
+function getCrane5TExtra(length: number, width: number, height: number): number {
+  const area = length * width;
+  const exact = CRANE_5T_DATA.find(p => p.length===length && p.width===width && p.height===height);
+  if (exact) return exact.extra;
+  const withDist = CRANE_5T_DATA.map(p => ({ ...p, d: Math.sqrt(Math.pow((p.length-length)/6,2)+Math.pow((p.area-area)/200,2)) })).sort((a,b)=>a.d-b.d);
+  const nearest = withDist.slice(0, 3);
+  let sw=0, wsum=0;
+  for (const p of nearest) { if (p.d<0.001) return p.extra; const w=1/(p.d*p.d); sw+=p.extra*w; wsum+=w; }
+  return Math.round(sw/wsum);
+}
+
+function calcSandwichPrice(length: number, width: number, height: number, snowZone: string, windZone: string, crane: string): number {
   const area = length * width;
   const perimeter = (length + width) * 2;
   const roofAndFloor = area * ROOF_RATE;
   const walls = perimeter * height * (WALL_BASE - WALL_SLOPE * height);
-  let frame = area * (FRAME_RATES[height]?.[length]?.[width] ?? interpolateSandwichRate(length, width, height));
+  const baseRate = FRAME_RATES[height]?.[length]?.[width] ?? interpolateRate(length, width, height);
+  let frame = area * baseRate;
   frame *= (SNOW_COEFF[snowZone] ?? 1.0) * (WIND_COEFF[windZone] ?? 1.0);
-  return Math.round(roofAndFloor + walls + frame + FIXED_COST);
+  const craneExtra = crane === "Да, 5т" ? getCrane5TExtra(length, width, height) : 0;
+  return Math.round(roofAndFloor + walls + frame + FIXED_COST + craneExtra);
+}
+
+function calcProfilePrice(length: number, width: number, height: number, snowZone: string, windZone: string, crane: string): number {
+  return Math.round(calcSandwichPrice(length, width, height, snowZone, windZone, crane) / 1.23);
 }
 
 function quizToPriceParams(state: QuizState, zones: { snow: string; wind: string }, length: number, width: number, height: number) {
@@ -770,36 +794,23 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
   const zones = getCityZones(state.city);
   const pricePerSqm = price && area > 0 ? Math.round(price / area) : 0;
 
-  async function fetchPrice(curState = state, curLength = length, curWidth = width, curHeight = height, curZones = zones) {
+  function fetchPrice() {
     setPriceLoading(true);
-    // Если введён свой вариант — считаем по средней цене м²
-    if (curState.customDims.trim()) {
-      const a = curLength * curWidth;
+    if (state.customDims.trim()) {
+      const a = length * width;
       if (a > 0) {
-        const ppsm = curState.cladding === "Сэндвич панели" ? PRICE_PER_SQM_SANDWICH : PRICE_PER_SQM_PROFILE;
+        const ppsm = state.cladding === "Сэндвич панели" ? PRICE_PER_SQM_SANDWICH : PRICE_PER_SQM_PROFILE;
         setPrice(a * ppsm);
       }
       setPriceLoading(false);
       return;
     }
-    // Сэндвич — считаем локально по таблице
-    if (curState.cladding === "Сэндвич панели") {
-      const result = calcSandwichPrice(curLength, curWidth, curHeight, curZones.snow, curZones.wind);
-      setPrice(result);
-      setPriceLoading(false);
-      return;
+    if (state.cladding === "Сэндвич панели") {
+      setPrice(calcSandwichPrice(length, width, height, zones.snow, zones.wind, state.crane));
+    } else {
+      setPrice(calcProfilePrice(length, width, height, zones.snow, zones.wind, state.crane));
     }
-    // Профлист — API
-    try {
-      const qs = quizToPriceParams(curState, curZones, curLength, curWidth, curHeight);
-      const res = await fetch(`${PRICE_API_URL}?${qs}`);
-      const data = await res.json();
-      if (data.price_profile) setPrice(data.price_profile);
-    } catch {
-      // оставляем price = null
-    } finally {
-      setPriceLoading(false);
-    }
+    setPriceLoading(false);
   }
 
   // Автопересчёт при изменении параметров после отправки формы
@@ -807,7 +818,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
     if (submitted) {
       fetchPrice();
     }
-  }, [submitted, state.length, state.width, state.height, state.cladding, state.customDims, state.city]);
+  }, [submitted, state.length, state.width, state.height, state.cladding, state.customDims, state.city, state.crane]);
 
   const validate = () => {
     const e = { name:validateName(state.name), phone:validatePhone(state.phone), email:validateEmail(state.email) };
@@ -890,16 +901,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
           {step===3 && (
             <div>
               <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 text-center">Параметры здания</h2>
-              {submitted && (
-                <div className="mb-4 rounded-xl px-4 py-3 flex items-center gap-3 text-sm" style={{ background:"#fff3ee" }}>
-                  {priceLoading
-                    ? <><div className="w-4 h-4 rounded-full border-2 border-orange-300 border-t-orange-500 animate-spin shrink-0" /><span style={{ color:"var(--orange)" }}>Пересчитываем стоимость…</span></>
-                    : price !== null
-                      ? <><Icon name="CheckCircle" size={16} style={{ color:"var(--orange)" }} /><span className="font-semibold" style={{ color:"var(--orange)" }}>{new Intl.NumberFormat("ru-RU").format(Math.round(price))} ₽</span><span className="text-gray-500">— стоимость обновлена. Нажмите «Далее» чтобы перейти к форме.</span></>
-                      : <><Icon name="RefreshCw" size={14} style={{ color:"var(--orange)" }} /><span style={{ color:"var(--orange)" }}>Измените параметры — стоимость пересчитается автоматически</span></>
-                  }
-                </div>
-              )}
+
 
               {/* Свой вариант — одно поле */}
               <div className="mb-5">
@@ -1079,20 +1081,15 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                       </div>
                       <div className="font-bold text-gray-900 mb-1">Благодарим за интерес к решениям EVRAZ STEEL BOX!</div>
                       <div className="text-sm text-gray-500 mb-3 leading-relaxed">Запрос успешно отправлен. В ближайшее время мы с вами свяжемся, чтобы обсудить все детали.</div>
-                      <div className="flex items-center justify-center gap-2 text-sm font-semibold mb-4" style={{ color:"var(--orange)" }}>
-                        <Icon name="Gift" size={16} />
+                      <div className="text-sm font-semibold mb-4" style={{ color:"var(--orange)" }}>
                         Вам подарок — эскиз в течение 1 часа!
                       </div>
                       <button
                         onClick={() => { setStep(3); }}
-                        className="w-full py-3 rounded-xl text-sm font-semibold border-2 mb-3 transition-all"
+                        className="w-full py-3 rounded-xl text-sm font-semibold border-2 transition-all"
                         style={{ borderColor:"var(--orange)", color:"var(--orange)", background:"#fff" }}>
                         ← Изменить параметры и пересчитать
                       </button>
-                      <a href="https://evrazsteelbox.ru" target="_blank" rel="noreferrer"
-                        className="text-xs underline" style={{ color:"var(--orange)" }}>
-                        Каталог готовых решений Evraz Steel Box →
-                      </a>
                     </div>
                   ) : (
                     <div className="space-y-3">
