@@ -747,11 +747,13 @@ function calcSandwichPrice(length: number, width: number, height: number, snowZo
   let frame = area * baseRate;
   frame *= (SNOW_COEFF[snowZone] ?? 1.0) * (WIND_COEFF[windZone] ?? 1.0);
   const craneExtra = (crane === "Да" && height > 3.6) ? getCrane5TExtra(length, width, height) : 0;
-  return Math.round(roofAndFloor + walls + frame + FIXED_COST + craneExtra);
+  const base = Math.round(roofAndFloor + walls + frame + FIXED_COST + craneExtra);
+  return crane === "Да" && height > 3.6 ? Math.round(base * 1.02) : base;
 }
 
 function calcProfilePrice(length: number, width: number, height: number, snowZone: string, windZone: string, crane: string): number {
-  return Math.round(calcSandwichPrice(length, width, height, snowZone, windZone, crane) / 1.23);
+  const base = Math.round(calcSandwichPrice(length, width, height, snowZone, windZone, crane) / 1.02 / 1.23);
+  return crane === "Да" && height > 3.6 ? Math.round(base * 1.04) : base;
 }
 
 function quizToPriceParams(state: QuizState, zones: { snow: string; wind: string }, length: number, width: number, height: number) {
