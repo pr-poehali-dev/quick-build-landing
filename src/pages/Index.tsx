@@ -746,7 +746,7 @@ function calcSandwichPrice(length: number, width: number, height: number, snowZo
   const baseRate = FRAME_RATES[height]?.[length]?.[width] ?? interpolateRate(length, width, height);
   let frame = area * baseRate;
   frame *= (SNOW_COEFF[snowZone] ?? 1.0) * (WIND_COEFF[windZone] ?? 1.0);
-  const craneExtra = crane === "Да, 5т" ? getCrane5TExtra(length, width, height) : 0;
+  const craneExtra = (crane === "Да" && height > 3.6) ? getCrane5TExtra(length, width, height) : 0;
   return Math.round(roofAndFloor + walls + frame + FIXED_COST + craneExtra);
 }
 
