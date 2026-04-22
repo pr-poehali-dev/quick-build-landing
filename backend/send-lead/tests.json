@@ -1,0 +1,19 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS preflight",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    },
+    {
+      "name": "Send lead without SMTP (returns ok:false)",
+      "method": "POST",
+      "path": "/",
+      "body": {"source":"Тест","name":"Иван","phone":"+7 999 000-00-00","email":"test@test.ru"},
+      "expectedStatus": 200,
+      "expectedBody": {},
+      "bodyMatcher": "partial"
+    }
+  ]
+}

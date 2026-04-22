@@ -21,10 +21,9 @@ const P4_C = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965
 const ROTATING_WORDS = ["здания","склады","ангары","цеха","офисы","медицинские здания","магазины","кафе и рестораны","торговые здания","административные здания","автомойки","здания для транспорта","автосервисы","автосалоны","сельхоз здания","фермы","спортивные сооружения"];
 
 const STATS = [
-  { num:300, suffix:"+", title:"Реализованных проектов", desc:"Промышленных и коммерческих зданий по всей России" },
-  { num:40, suffix:" дней", title:"Срок поставки и монтажа", desc:"Всего за 40 дней мы обеспечиваем поставку и монтаж быстровозводимых зданий SMALL BOX для малого и среднего бизнеса" },
-  { num:500, suffix:"+ тыс. м²", title:"Запроектировано", desc:"Запроектированных объектов в нашем портфеле и более 300 тыс. м² построенных объектов BIG BOX" },
-  { num:60, suffix:"+", title:"Многоуровневых паркингов", desc:"Запроектировали паркингов на 50 000 машиномест и построили более 20 паркингов на 9 000 машиномест" },
+  { num:400, suffix:"+", title:"Реализованных проектов", desc:"Промышленных и коммерческих зданий по всей России" },
+  { num:45, suffix:" дней", title:"Срок поставки и монтажа", desc:"Всего за 45 дней мы обеспечиваем поставку и монтаж быстровозводимых зданий SMALL BOX для малого и среднего бизнеса" },
+  { num:150, suffix:"+", title:"Партнеров-строителей и проектировщиков", desc:"Сертифицированные проектно-строительные компании по всей России" },
 ];
 
 interface Project { id:number; photos:string[]; title:string; dims:string; area:string; locationShort:string; locationFull:string; purpose:string; series:string; roof:string; walls:string; length:string; width:string; height:string; category:string; }
@@ -788,31 +787,56 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
   let length = state.length, width = state.width, height = state.height;
   if (state.customDims.trim()) {
     const parts = state.customDims.replace(/[хx×*\s]+/gi," ").trim().split(/\s+/);
-    if (parts.length >= 1 && !isNaN(+parts[0])) length = +parts[0];
-    if (parts.length >= 2 && !isNaN(+parts[1])) width = +parts[1];
+    if (parts.length >= 1 && !isNaN(+parts[0])) width = +parts[0];
+    if (parts.length >= 2 && !isNaN(+parts[1])) length = +parts[1];
     if (parts.length >= 3 && !isNaN(+parts[2])) height = +parts[2];
   }
   const area = length * width;
   const zones = getCityZones(state.city);
   const pricePerSqm = price && area > 0 ? Math.round(price / area) : 0;
 
+  const isCustomDims = !!state.customDims.trim();
+
   function fetchPrice() {
+    if (isCustomDims) { setPrice(null); return; }
     setPriceLoading(true);
-    if (state.customDims.trim()) {
-      const a = length * width;
-      if (a > 0) {
-        const ppsm = state.cladding === "Сэндвич панели" ? PRICE_PER_SQM_SANDWICH : PRICE_PER_SQM_PROFILE;
-        setPrice(a * ppsm);
-      }
-      setPriceLoading(false);
-      return;
-    }
     if (state.cladding === "Сэндвич панели") {
       setPrice(calcSandwichPrice(length, width, height, zones.snow, zones.wind, state.crane));
     } else {
       setPrice(calcProfilePrice(length, width, height, zones.snow, zones.wind, state.crane));
     }
     setPriceLoading(false);
+  }
+
+  async function sendLead(source: string, extraData?: Record<string, string>) {
+    const quizPayload = source === "Квиз" ? {
+      purpose: state.purpose,
+      city: state.city,
+      dims: `${width} × ${length} × ${height} м`,
+      area: `${area} м²`,
+      cladding: state.cladding,
+      crane: state.crane,
+      extras: state.extras,
+      snow: zones.snow,
+      wind: zones.wind,
+    } : undefined;
+    try {
+      await fetch("https://functions.poehali.dev/688d49c8-bb02-4447-8348-7f1bd933e91e", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          source,
+          name: state.name || extraData?.name || "",
+          phone: state.phone || extraData?.phone || "",
+          email: state.email || extraData?.email || "",
+          message: extraData?.message || "",
+          quiz: quizPayload,
+        }),
+      });
+      if (typeof window !== "undefined" && (window as unknown as { ym?: (id: number, action: string, goal: string) => void }).ym) {
+        (window as unknown as { ym: (id: number, action: string, goal: string) => void }).ym(87107319, "reachGoal", "ALL_FORM_LP_Kviz");
+      }
+    } catch (_) { /* тихо */ }
   }
 
   // Автопересчёт при изменении параметров после отправки формы
@@ -907,14 +931,14 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
 
               {/* Свой вариант — одно поле */}
               <div className="mb-5">
-                <label className="text-xs font-semibold text-gray-500 mb-1.5 block">Свой вариант (Длина × Ширина × Высота, м)</label>
-                <input type="text" placeholder="Например: 36 × 18 × 6"
+                <label className="text-xs font-semibold text-gray-500 mb-1.5 block">Свой вариант (Ширина × Длина × Высота, м)</label>
+                <input type="text" placeholder="Например: 18 × 36 × 6"
                   value={state.customDims}
                   onChange={e => setState(s => ({ ...s, customDims:e.target.value }))}
                   className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-orange-300 transition-colors" />
                 {state.customDims && (
                   <p className="text-xs mt-1" style={{ color:"var(--orange)" }}>
-                    Распознано: {length} × {width} × {height} м
+                    Распознано: {width} × {length} × {height} м
                   </p>
                 )}
               </div>
@@ -950,7 +974,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
               <div className="rounded-2xl p-5 text-center" style={{ background:"#fff3ee" }}>
                 <div className="text-sm text-gray-500 mb-1">Площадь здания</div>
                 <div style={{ fontFamily:"'Abril Fatface',serif", fontSize:"2.2rem", color:"var(--orange)" }}>{area} м²</div>
-                <div className="text-xs text-gray-400 mt-1">{length} × {width} м</div>
+                <div className="text-xs text-gray-400 mt-1">{width} × {length} м</div>
               </div>
             </div>
           )}
@@ -1027,8 +1051,8 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                     {[
                       ["Назначение", state.purpose||"—"],
                       ["Площадь", `${area} м²`],
-                      ["Длина × Ширина × Высота", `${length} × ${width} × ${height} м`],
-                      ["Тип стен", state.cladding],
+                      ["Ширина × Длина × Высота", `${width} × ${length} × ${height} м`],
+                      ["Тип стен/кровли", state.cladding],
                       ["Кран-балка", state.crane],
                       ...(state.city ? [["Снеговой район", `${zones.snow}`], ["Ветровой район", `${zones.wind}`]] : []),
                     ].map(([k,v]) => (
@@ -1043,7 +1067,12 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                   <div className="mt-4 rounded-xl p-4 text-center relative overflow-hidden" style={{ background:"#fff3ee" }}>
                     <div className="text-xs text-gray-500 mb-1">Стоимость здания</div>
                     {submitted ? (
-                      priceLoading ? (
+                      isCustomDims ? (
+                        <div className="py-2">
+                          <div className="text-base font-bold mb-1" style={{ color:"var(--orange)" }}>Расчёт индивидуальный</div>
+                          <div className="text-xs text-gray-500 leading-relaxed">При выборе своих размеров стоимость рассчитывается персонально — наш менеджер перезвонит и предоставит точное коммерческое предложение</div>
+                        </div>
+                      ) : priceLoading ? (
                         <div className="py-3">
                           <div className="text-sm font-medium mb-2" style={{ color:"var(--orange)" }}>Считаем стоимость…</div>
                           <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background:"#f5d5c0" }}>
@@ -1057,6 +1086,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                             {new Intl.NumberFormat("ru-RU").format(Math.round(price))} ₽
                           </div>
                           <div className="text-xs text-gray-400 mt-1">{new Intl.NumberFormat("ru-RU").format(pricePerSqm)} ₽ / кв.м · {area} м²</div>
+                          <div className="text-xs text-gray-400 mt-2 leading-relaxed">* Расчёт является предварительным, стоимость дополнительных услуг будет рассчитана и учтена в коммерческом предложении</div>
                         </>
                       ) : (
                         <div className="text-sm text-gray-400 py-2">Уточним стоимость при звонке</div>
@@ -1084,7 +1114,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                       <div className="font-bold text-gray-900 mb-1">Благодарим за интерес к решениям EVRAZ STEEL BOX!</div>
                       <div className="text-sm text-gray-500 mb-3 leading-relaxed">Запрос успешно отправлен. В ближайшее время мы с вами свяжемся, чтобы обсудить все детали.</div>
                       <div className="text-sm font-semibold mb-4" style={{ color:"var(--orange)" }}>
-                        Вам подарок — эскиз в течение 1 часа!
+                        Вам подарок — эскиз в течение<br />1 часа!
                       </div>
                       <button
                         onClick={() => { setStep(3); }}
@@ -1145,7 +1175,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                         <span className="text-xs text-gray-500 leading-relaxed">Согласен на получение информационных и рекламных сообщений (необязательно)</span>
                       </label>
                       <button
-                        onClick={() => { if (validate()) { setSubmitted(true); } }}
+                        onClick={() => { if (validate()) { setSubmitted(true); sendLead("Квиз"); } }}
                         className="btn-orange w-full py-4 rounded-xl text-sm mt-1">
                         УЗНАТЬ СТОИМОСТЬ →
                       </button>
@@ -1173,7 +1203,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
           </button>
         ) : (
           !submitted && (
-            <button onClick={() => { if (validate()) { setSubmitted(true); fetchPrice(); } }}
+            <button onClick={() => { if (validate()) { setSubmitted(true); fetchPrice(); sendLead("Квиз"); } }}
               className="btn-orange px-6 py-2.5 rounded-xl text-sm">
               Узнать стоимость →
             </button>
@@ -1203,7 +1233,7 @@ function ThankYouPage({ onBack }: { onBack: () => void }) {
             </div>
             <div>
               <div className="font-bold text-gray-900 text-sm">Вам подарок!</div>
-              <div className="text-xs text-gray-500">Эскиз вашего здания — в течение 1 часа, бесплатно</div>
+              <div className="text-xs text-gray-500">Эскиз вашего здания — в течение<br />1 часа, бесплатно</div>
             </div>
           </div>
           <p className="text-sm text-gray-600 leading-relaxed">
@@ -1236,7 +1266,7 @@ export default function Index() {
   const [showThankYou, setShowThankYou] = useState(false);
   const [wordIdx, setWordIdx] = useState(0); const [wordKey, setWordKey] = useState(0);
   const [heroStarted, setHeroStarted] = useState(false);
-  const heroVal = useCounter(40, 1600, heroStarted);
+  const heroVal = useCounter(45, 1600, heroStarted);
 
   // Contact form
   const [cfName, setCfName] = useState(""); const [cfPhone, setCfPhone] = useState("");
@@ -1261,21 +1291,38 @@ export default function Index() {
 
   const openCallback = () => { setCallbackOpen(true); setCbSent(false); setCbName(""); setCbPhone(""); setCbErrors({ name:"", phone:"" }); setCbTouched({ name:false, phone:false }); };
 
+  const fireGoal = () => {
+    if (typeof window !== "undefined" && (window as unknown as { ym?: (id: number, a: string, g: string) => void }).ym) {
+      (window as unknown as { ym: (id: number, a: string, g: string) => void }).ym(87107319, "reachGoal", "ALL_FORM_LP_Kviz");
+    }
+  };
+
+  const sendSimpleLead = async (source: string, name: string, phone: string, email = "", message = "") => {
+    try {
+      await fetch("https://functions.poehali.dev/688d49c8-bb02-4447-8348-7f1bd933e91e", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ source, name, phone, email, message }),
+      });
+      fireGoal();
+    } catch (_) { /* тихо */ }
+  };
+
   const submitCallback = () => {
     const e = { name:validateName(cbName), phone:validatePhone(cbPhone) };
     setCbErrors(e); setCbTouched({ name:true, phone:true });
-    if (!e.name && !e.phone) setCbSent(true);
+    if (!e.name && !e.phone) { setCbSent(true); sendSimpleLead("Обратный звонок", cbName, cbPhone); }
   };
 
   const submitContactForm = (ev: React.FormEvent) => {
     ev.preventDefault();
     const e = { name:validateName(cfName), phone:validatePhone(cfPhone), email:validateEmail(cfEmail) };
     setCfErrors(e); setCfTouched({ name:true, phone:true, email:true });
-    if (!e.name && !e.phone && !e.email) { setShowThankYou(true); }
+    if (!e.name && !e.phone && !e.email) { setShowThankYou(true); sendSimpleLead("Контактная форма", cfName, cfPhone, cfEmail, cfMsg); }
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900" style={{ fontFamily:"'Golos Text',sans-serif" }}>
+    <div className="min-h-screen bg-white text-gray-900" style={{ fontFamily:"Arial,sans-serif" }}>
 
       {showThankYou && <ThankYouPage onBack={() => setShowThankYou(false)} />}
       {quizOpen && <QuizFullscreen onClose={() => setQuizOpen(false)} />}
@@ -1297,14 +1344,10 @@ export default function Index() {
           </div>
           <div className="hidden md:block text-right shrink-0">
             <div className="font-bold text-base text-gray-900 leading-tight">+7 (800) 302-65-29</div>
-            <div className="text-xs" style={{ color:"var(--orange)" }}>sales.box2@evrazsteel.ru</div>
+            <div className="text-xs" style={{ color:"var(--orange)" }}>sales.box@evrazsteel.ru</div>
           </div>
           <a href="tel:+78003026529" className="md:hidden font-bold text-sm text-gray-900 leading-tight truncate">+7 (800) 302-65-29</a>
           <div className="hidden md:flex items-center gap-2 shrink-0">
-            <a href="https://t.me/EvrazSmallBox_bot" target="_blank" rel="noreferrer"
-              className="flex items-center gap-1.5 px-3 py-2 rounded text-white text-sm font-semibold" style={{ background:"#2AABEE" }}>
-              <Icon name="Send" size={14} /> Telegram
-            </a>
             <button onClick={openCallback} className="px-3 py-2 rounded border border-gray-300 text-sm font-semibold text-gray-700 hover:border-gray-500 transition-colors whitespace-nowrap">
               Обратный звонок
             </button>
@@ -1333,14 +1376,10 @@ export default function Index() {
             </div>
             <div className="px-5 py-4 border-b border-gray-100">
               <a href="tel:+78003026529" className="font-bold text-lg text-gray-900 block">+7 (800) 302-65-29</a>
-              <div className="text-xs mt-0.5" style={{ color:"var(--orange)" }}>sales.box2@evrazsteel.ru</div>
+              <div className="text-xs mt-0.5" style={{ color:"var(--orange)" }}>sales.box@evrazsteel.ru</div>
             </div>
             <div className="px-5 py-5 flex flex-col gap-3">
               <button onClick={() => { setMobileMenuOpen(false); openCallback(); }} className="btn-orange w-full py-3 rounded text-sm">Обратный звонок</button>
-              <a href="https://t.me/EvrazSmallBox_bot" target="_blank" rel="noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-3 rounded text-white text-sm font-semibold" style={{ background:"#2AABEE" }}>
-                <Icon name="Send" size={14} /> Написать в Telegram
-              </a>
             </div>
           </div>
         </div>
@@ -1406,7 +1445,7 @@ export default function Index() {
               <div className="space-y-5">
                 {[
                   { icon:"Phone", label:"+7 (800) 302-65-29", sub:"Бесплатно по России, Пн–Пт 9:30–18:00" },
-                  { icon:"Mail",  label:"sales.box2@evrazsteel.ru", sub:"Ответим в течение часа" },
+                  { icon:"Mail",  label:"sales.box@evrazsteel.ru", sub:"Ответим в течение часа" },
                   { icon:"MapPin",label:"Москва, Пресненская наб., 12", sub:"Московский офис" },
                 ].map((c,i) => (
                   <div key={i} className="flex items-center gap-4">
