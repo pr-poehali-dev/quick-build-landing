@@ -39,6 +39,7 @@ def handler(event: dict, context) -> dict:
             "city": "Город",
             "dims": "Размеры (Ш × Д × В)",
             "area": "Площадь",
+            "price": "Расчётная стоимость",
             "cladding": "Тип стен/кровли",
             "crane": "Кран-балка",
             "extras": "Доп. услуги",

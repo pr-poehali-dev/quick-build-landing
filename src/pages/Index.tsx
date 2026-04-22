@@ -809,6 +809,16 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
   }
 
   async function sendLead(source: string, extraData?: Record<string, string>) {
+    let priceStr: string | undefined;
+    if (source === "Квиз" && !isCustomDims) {
+      const calcedPrice = state.cladding === "Сэндвич панели"
+        ? calcSandwichPrice(length, width, height, zones.snow, zones.wind, state.crane)
+        : calcProfilePrice(length, width, height, zones.snow, zones.wind, state.crane);
+      if (calcedPrice) {
+        const ppsm = Math.round(calcedPrice / area);
+        priceStr = `${new Intl.NumberFormat("ru-RU").format(Math.round(calcedPrice))} ₽ (${new Intl.NumberFormat("ru-RU").format(ppsm)} ₽/м²)`;
+      }
+    }
     const quizPayload = source === "Квиз" ? {
       purpose: state.purpose,
       city: state.city,
@@ -819,6 +829,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
       extras: state.extras,
       snow: zones.snow,
       wind: zones.wind,
+      ...(priceStr ? { price: priceStr } : { price: "Индивидуальный расчёт" }),
     } : undefined;
     try {
       await fetch("https://functions.poehali.dev/688d49c8-bb02-4447-8348-7f1bd933e91e", {

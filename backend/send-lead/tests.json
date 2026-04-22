@@ -10,7 +10,7 @@
       "name": "Send real lead email",
       "method": "POST",
       "path": "/",
-      "body": {"source":"Тест с лендинга","name":"Тест Тестов","phone":"+7 999 000-00-00","email":"test@test.ru","message":"Тестовая заявка"},
+      "body": {"source":"Квиз","name":"Тест Тестов","phone":"+7 999 000-00-00","email":"test@test.ru","quiz":{"purpose":"Склад","city":"Москва","dims":"12 × 24 × 4.8 м","area":"288 м²","price":"4 320 000 ₽ (15 000 ₽/м²)","cladding":"Профилированный лист","crane":"Нет","extras":["Поставка комплекта здания"],"snow":"III","wind":"I"}},
       "expectedStatus": 200,
       "expectedBody": {"ok": true},
       "bodyMatcher": "partial"
