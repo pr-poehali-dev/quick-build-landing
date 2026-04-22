@@ -774,7 +774,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
   const [state, setState] = useState<QuizState>({
     purpose:"", city:"", length:24, width:12, height:3.6, customDims:"",
     cladding:"Профилированный лист", crane:"Нет",
-    extras:[],
+    extras:["Поставка комплекта здания"],
     name:"", phone:"", email:"", agreePersonal:true, agreePromo:false,
   });
   const [submitted, setSubmitted] = useState(false);
@@ -871,10 +871,10 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
     <div className="fixed inset-0 z-50 bg-white flex flex-col animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between px-4 md:px-8 py-4 border-b border-gray-100 shrink-0">
-        <div className="flex items-center gap-3">
+        <button onClick={onClose} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <img src={LOGO_URL} alt="logo" className="h-8 w-auto object-contain" />
           <span className="text-xs text-gray-400 hidden sm:block">Расчёт стоимости здания</span>
-        </div>
+        </button>
         <div className="flex items-center gap-4">
           <span className="text-xs font-semibold" style={{ color:"var(--orange)" }}>Шаг {step} из {TOTAL}</span>
           <button onClick={onClose} className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50">
@@ -1070,7 +1070,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                       isCustomDims ? (
                         <div className="py-2">
                           <div className="text-base font-bold mb-1" style={{ color:"var(--orange)" }}>Расчёт индивидуальный</div>
-                          <div className="text-xs text-gray-500 leading-relaxed">При выборе своих размеров стоимость рассчитывается персонально — наш менеджер перезвонит и предоставит точное коммерческое предложение</div>
+                          <div className="text-xs text-gray-500 leading-relaxed">При выборе <strong>своих размеров</strong> в Параметрах здания стоимость рассчитывается персонально — наш менеджер перезвонит и предоставит точное коммерческое предложение</div>
                         </div>
                       ) : priceLoading ? (
                         <div className="py-3">
@@ -1233,11 +1233,11 @@ function ThankYouPage({ onBack }: { onBack: () => void }) {
             </div>
             <div>
               <div className="font-bold text-gray-900 text-sm">Вам подарок!</div>
-              <div className="text-xs text-gray-500">Эскиз вашего здания — в течение<br />1 часа, бесплатно</div>
+              <div className="text-xs text-gray-500">Эскиз вашего здания — в течение 1 часа,<br />совершенно бесплатно</div>
             </div>
           </div>
           <p className="text-sm text-gray-600 leading-relaxed">
-            Пока вы ждёте звонка, загляните на наш сайт — там более <strong>300 реализованных проектов</strong> со всей России.
+            Пока вы ждёте звонка, загляните на наш сайт — там более <strong>400 реализованных проектов</strong> со всей России.
           </p>
         </div>
         <a href="https://evrazsteelbox.ru" target="_blank" rel="noreferrer"
