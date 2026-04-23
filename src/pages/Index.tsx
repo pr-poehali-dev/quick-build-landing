@@ -5,9 +5,10 @@ import Icon from "@/components/ui/icon";
 const HERO_BG  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/e04968b8-999e-4c94-812a-66bd0ded90d1.jpg";
 const LOGO_URL = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/528f5996-8edc-44d4-8206-5de1a1c38adf.png";
 const QUIZ_IMG = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/b804bc76-6c00-4b45-a412-fd6862c13609.png";
-const P1_A = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/67305f47-00a1-4a07-983d-4f915afe13fd.png";
-const P1_B = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/16bd85b5-ba1b-4bcf-818e-20d141de7209.png";
-const P1_C = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/b804bc76-6c00-4b45-a412-fd6862c13609.png";
+const P1_BG = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/e1a9068c-0fa9-4ee2-98c3-92aab9720cde.jpg";
+const P1_A  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/868f877f-5a8c-4234-b012-56f5afabc70f.jpg";
+const P1_B  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/b673d28c-0402-485d-b53c-fab15f364032.jpg";
+const P1_C  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/fdc865d6-22e7-47f6-9a40-a16e799391bf.jpg";
 const P2_A = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/files/ea209454-b909-4daa-af92-c0da34240618.jpg";
 const P2_B = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/b804bc76-6c00-4b45-a412-fd6862c13609.png";
 const P2_C = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/67305f47-00a1-4a07-983d-4f915afe13fd.png";
@@ -26,12 +27,12 @@ const STATS = [
   { num:150, suffix:"+", title:"Партнеров-строителей и проектировщиков", desc:"Сертифицированные проектно-строительные компании по всей России" },
 ];
 
-interface Project { id:number; photos:string[]; title:string; dims:string; area:string; locationShort:string; locationFull:string; purpose:string; series:string; roof:string; walls:string; length:string; width:string; height:string; category:string; }
+interface Project { id:number; photos:string[]; title:string; dims:string; area:string; locationShort:string; locationFull:string; purpose:string; details:string[]; length:string; width:string; height:string; category:string; }
 const projects: Project[] = [
-  { id:1, photos:[P1_C,P1_A,P1_B], title:"Склад для хранения металлоизделий", dims:"18×30×6 м", area:"540 м²", locationShort:"Ярославская обл., г. Рыбинск", locationFull:"Россия, Ярославская обл., г. Рыбинск", purpose:"Склад и ангар", series:"Здание по серии Р4-1", roof:"Сэндвич-панели — 200 мм", walls:"Сэндвич-панели — 150 мм", length:"30 м", width:"18 м", height:"6 м", category:"Склады и ангары" },
-  { id:2, photos:[P2_A,P2_B,P2_C], title:"Производственный цех", dims:"24×48×8 м", area:"1152 м²", locationShort:"Московская обл., г. Подольск", locationFull:"Россия, Московская обл., г. Подольск", purpose:"Производственное здание", series:"Здание по серии П3-2", roof:"Профлист — 150 мм", walls:"Профлист — 120 мм", length:"48 м", width:"24 м", height:"8 м", category:"Производственные здания" },
-  { id:3, photos:[P3_A,P3_B,P3_C], title:"Торговый центр", dims:"30×60×6 м", area:"1800 м²", locationShort:"Краснодарский край, г. Сочи", locationFull:"Россия, Краснодарский край, г. Сочи", purpose:"Торговое здание", series:"Здание по серии Т2-1", roof:"Сэндвич-панели — 200 мм", walls:"Сэндвич-панели — 150 мм", length:"60 м", width:"30 м", height:"6 м", category:"Магазины и торговые здания" },
-  { id:4, photos:[P4_A,P4_B,P4_C], title:"Автосервис с автомойкой", dims:"12×24×4.8 м", area:"288 м²", locationShort:"Свердловская обл., г. Екатеринбург", locationFull:"Россия, Свердловская обл., г. Екатеринбург", purpose:"Автосервис", series:"Здание по серии А1-1", roof:"Профлист — 120 мм", walls:"Профлист — 100 мм", length:"24 м", width:"12 м", height:"4.8 м", category:"Здания для транспорта" },
+  { id:1, photos:[P1_BG,P1_A,P1_B,P1_C], title:"Производственное здание №1", dims:"12×36×5 м", area:"432 м²", locationShort:"Владимирская обл., с. Лемешки", locationFull:"Россия, Владимирская обл., с. Лемешки", purpose:"Производственные и промышленные здания", details:["Наличие кранов: нет","Наличие антресолей: нет"], length:"36 м", width:"12 м", height:"5 м", category:"Производственные и промышленные здания" },
+  { id:2, photos:[P2_A,P2_B,P2_C], title:"Склад", dims:"28×35×10 м", area:"980 м²", locationShort:"Ярославская обл., г. Ярославль", locationFull:"Россия, Ярославская обл., г. Ярославль", purpose:"Склады и ангары", details:["Наличие кранов: нет","Наличие антресолей: нет"], length:"35 м", width:"28 м", height:"10 м", category:"Склады и ангары" },
+  { id:3, photos:[P3_A,P3_B,P3_C], title:"СТО с АБК", dims:"17,7×52,8×7,2 м", area:"934 м²", locationShort:"Ярославская обл., г. Ярославль", locationFull:"Россия, Ярославская обл., г. Ярославль", purpose:"Здания для транспорта", details:["Наличие кранов: да, 5т","Наличие антресолей: нет","Размеры АБК: 6×18×6 м"], length:"52,8 м", width:"17,7 м", height:"7,2 м", category:"Здания для транспорта" },
+  { id:4, photos:[P4_A,P4_B,P4_C], title:"Производственное здание №2", dims:"36×40×6 м", area:"1440 м²", locationShort:"Владимирская обл., с. Лемешки", locationFull:"Россия, Владимирская обл., с. Лемешки", purpose:"Производственные и промышленные здания", details:["Наличие кранов: нет","Наличие антресолей: нет"], length:"40 м", width:"36 м", height:"6 м", category:"Производственные и промышленные здания" },
 ];
 
 // ── Snow/Wind zones by city — ветровые районы по таблице заказчика ───────────
@@ -1080,8 +1081,8 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                     {submitted ? (
                       isCustomDims ? (
                         <div className="py-2">
-                          <div className="text-base font-bold mb-1" style={{ color:"var(--orange)" }}>Расчёт индивидуальный</div>
-                          <div className="text-xs text-gray-500 leading-relaxed">При выборе <strong>своих размеров</strong> в Параметрах здания стоимость рассчитывается персонально — наш менеджер перезвонит и предоставит точное коммерческое предложение</div>
+                          <div className="text-base font-bold mb-1" style={{ color:"var(--orange)" }}>Индивидуальный расчёт</div>
+                          <div className="text-xs text-gray-500 leading-relaxed">Выбраны индивидуальные размеры, поэтому стоимость мы посчитаем отдельно и направим вам персональное коммерческое предложение</div>
                         </div>
                       ) : priceLoading ? (
                         <div className="py-3">
@@ -1097,7 +1098,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                             {new Intl.NumberFormat("ru-RU").format(Math.round(price))} ₽
                           </div>
                           <div className="text-xs text-gray-400 mt-1">{new Intl.NumberFormat("ru-RU").format(pricePerSqm)} ₽ / кв.м · {area} м²</div>
-                          <div className="text-xs text-gray-400 mt-2 leading-relaxed">* Расчёт является предварительным, стоимость дополнительных услуг будет рассчитана и учтена в коммерческом предложении</div>
+                          <div className="text-xs text-gray-400 mt-2 leading-relaxed">* Расчёт является предварительным. Стоимость дополнительных услуг подготовим и отправим в коммерческом предложении</div>
                         </>
                       ) : (
                         <div className="text-sm text-gray-400 py-2">Уточним стоимость при звонке</div>
@@ -1536,11 +1537,9 @@ export default function Index() {
                 <div className="space-y-2 text-sm">
                   {[
                     { icon:"Building2", label:"Назначение",   value:activeProject.purpose },
-                    { icon:"Ruler",     label:"Размеры",      value:`${activeProject.length.replace(" м","")}×${activeProject.width.replace(" м","")}×${activeProject.height}` },
+                    { icon:"Ruler",     label:"Размеры",      value:`${activeProject.width.replace(" м","")}×${activeProject.length.replace(" м","")}×${activeProject.height}` },
                     { icon:"Maximize2", label:"Площадь",      value:activeProject.area },
                     { icon:"MapPin",    label:"Расположение", value:activeProject.locationShort },
-                    { icon:"Layers",    label:"Кровля",       value:activeProject.roof },
-                    { icon:"PanelTop",  label:"Стены",        value:activeProject.walls },
                   ].map(({ icon, label, value }) => (
                     <div key={label} className="flex items-start justify-between gap-2">
                       <div className="flex items-center gap-1.5 text-gray-400 shrink-0">
@@ -1554,9 +1553,13 @@ export default function Index() {
               </div>
               <div className="mb-5 p-3 rounded-lg" style={{ background:"#f9f9f9" }}>
                 <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Детали</div>
-                <div className="flex items-center gap-1.5 text-sm text-gray-700">
-                  <Icon name="Info" size={13} style={{ color:"var(--orange)" }} />
-                  {activeProject.series}
+                <div className="space-y-1">
+                  {activeProject.details.map((d,i) => (
+                    <div key={i} className="flex items-center gap-1.5 text-sm text-gray-700">
+                      <Icon name="Info" size={13} style={{ color:"var(--orange)" }} />
+                      {d}
+                    </div>
+                  ))}
                 </div>
               </div>
               <button onClick={() => { setActiveProject(null); setQuizOpen(true); }} className="btn-orange w-full py-3.5 rounded text-sm">
