@@ -14,9 +14,11 @@ const P2_A  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e783496
 const P2_B  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/6d8d6ffc-8f49-43f5-a0fc-252327cab4c1.jpg";
 const P2_C  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/b9d1f4a5-057c-47e7-87d8-317a4ac3d755.jpg";
 const P2_D  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/9ae9f557-6ee3-4dbe-a769-8f5e278f327a.jpg";
-const P3_A = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/files/8e5eb3d6-5c31-48ea-8143-dc4a7452062f.jpg";
-const P3_B = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/16bd85b5-ba1b-4bcf-818e-20d141de7209.png";
-const P3_C = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/b804bc76-6c00-4b45-a412-fd6862c13609.png";
+const P3_BG = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/318d9f37-7a48-4c1c-b319-7bc031883c48.jpg";
+const P3_A  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/48f09a84-33ec-49a9-a9bd-9344dc25e070.jpg";
+const P3_B  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/482e9e72-b127-4817-9826-00dff28516d2.jpg";
+const P3_C  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/ac6b6035-a914-4302-9dda-055c4af3fcc1.jpg";
+const P3_D  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/24ba8bf9-254d-43bf-b1a7-ccb02feb8fb1.jpg";
 const P4_A = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/files/ac8a4f07-7780-4883-83be-5083ef582f7b.jpg";
 const P4_B = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/67305f47-00a1-4a07-983d-4f915afe13fd.png";
 const P4_C = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/16bd85b5-ba1b-4bcf-818e-20d141de7209.png";
@@ -33,7 +35,7 @@ interface Project { id:number; photos:string[]; title:string; dims:string; area:
 const projects: Project[] = [
   { id:1, photos:[P1_BG,P1_A,P1_B,P1_C], title:"Производственное здание №1", dims:"12×36×5 м", area:"432 м²", locationShort:"Владимирская обл., с. Лемешки", locationFull:"Россия, Владимирская обл., с. Лемешки", purpose:"Производственные и промышленные здания", details:["Наличие кранов: нет","Наличие антресолей: нет"], length:"36 м", width:"12 м", height:"5 м", category:"Производственные и промышленные здания" },
   { id:2, photos:[P2_BG,P2_A,P2_B,P2_C,P2_D], title:"Склад", dims:"28×35×10 м", area:"980 м²", locationShort:"Ярославская обл., г. Ярославль", locationFull:"Россия, Ярославская обл., г. Ярославль", purpose:"Склады и ангары", details:["Наличие кранов: нет","Наличие антресолей: нет"], length:"35 м", width:"28 м", height:"10 м", category:"Склады и ангары" },
-  { id:3, photos:[P3_A,P3_B,P3_C], title:"СТО с АБК", dims:"17,7×52,8×7,2 м", area:"934 м²", locationShort:"Ярославская обл., г. Ярославль", locationFull:"Россия, Ярославская обл., г. Ярославль", purpose:"Здания для транспорта", details:["Наличие кранов: да, 5т","Наличие антресолей: нет","Размеры АБК: 6×18×6 м"], length:"52,8 м", width:"17,7 м", height:"7,2 м", category:"Здания для транспорта" },
+  { id:3, photos:[P3_BG,P3_A,P3_B,P3_C,P3_D], title:"СТО с АБК", dims:"17,7×52,8×7,2 м", area:"934 м²", locationShort:"Ярославская обл., г. Ярославль", locationFull:"Россия, Ярославская обл., г. Ярославль", purpose:"Здания для транспорта", details:["Наличие кранов: да, 5т","Наличие антресолей: нет","Размеры АБК: 6×18×6 м"], length:"52,8 м", width:"17,7 м", height:"7,2 м", category:"Здания для транспорта" },
   { id:4, photos:[P4_A,P4_B,P4_C], title:"Производственное здание №2", dims:"36×40×6 м", area:"1440 м²", locationShort:"Владимирская обл., с. Лемешки", locationFull:"Россия, Владимирская обл., с. Лемешки", purpose:"Производственные и промышленные здания", details:["Наличие кранов: нет","Наличие антресолей: нет"], length:"40 м", width:"36 м", height:"6 м", category:"Производственные и промышленные здания" },
 ];
 
