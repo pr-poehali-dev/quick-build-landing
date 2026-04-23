@@ -584,7 +584,7 @@ function StatCard({ stat, started, delay, isLast }: { stat: typeof STATS[0]; sta
   return (
     <div className="transition-all duration-700" style={{ transitionDelay:`${delay}ms`, opacity:started?1:0, transform:started?"none":"translateY(12px)" }}>
       <div className="flex items-baseline gap-1 mb-0.5">
-        <span style={{ fontFamily:"'Abril Fatface',serif", fontSize:"clamp(1.5rem,2.5vw,2rem)", color:"var(--orange)", lineHeight:1 }}>{val}{stat.suffix}</span>
+        <span style={{ fontFamily:"Arial,sans-serif", fontWeight:900, fontSize:"clamp(1.5rem,2.5vw,2rem)", color:"var(--orange)", lineHeight:1 }}>{val}{stat.suffix}</span>
       </div>
       <div className="font-semibold text-gray-900 text-xs leading-snug mb-0.5">{stat.title}</div>
       <div className="text-gray-600 text-xs leading-relaxed" style={{ fontSize:"11px" }}>{stat.desc}</div>
@@ -990,7 +990,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
 
               <div className="rounded-2xl p-5 text-center" style={{ background:"#fff3ee" }}>
                 <div className="text-sm text-gray-500 mb-1">Площадь здания</div>
-                <div style={{ fontFamily:"'Abril Fatface',serif", fontSize:"2.2rem", color:"var(--orange)" }}>{area} м²</div>
+                <div style={{ fontFamily:"Arial,sans-serif", fontWeight:900, fontSize:"2.2rem", color:"var(--orange)" }}>{area} м²</div>
                 <div className="text-xs text-gray-400 mt-1">{width} × {length} м</div>
               </div>
             </div>
@@ -1099,7 +1099,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                         </div>
                       ) : price !== null ? (
                         <>
-                          <div style={{ fontFamily:"'Abril Fatface',serif", fontSize:"1.8rem", color:"var(--orange)" }}>
+                          <div style={{ fontFamily:"Arial,sans-serif", fontWeight:900, fontSize:"1.8rem", color:"var(--orange)" }}>
                             {new Intl.NumberFormat("ru-RU").format(Math.round(price))} ₽
                           </div>
                           <div className="text-xs text-gray-400 mt-1">{new Intl.NumberFormat("ru-RU").format(pricePerSqm)} ₽ / кв.м · {area} м²</div>
