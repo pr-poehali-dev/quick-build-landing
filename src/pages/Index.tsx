@@ -19,9 +19,10 @@ const P3_A  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e783496
 const P3_B  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/482e9e72-b127-4817-9826-00dff28516d2.jpg";
 const P3_C  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/ac6b6035-a914-4302-9dda-055c4af3fcc1.jpg";
 const P3_D  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/24ba8bf9-254d-43bf-b1a7-ccb02feb8fb1.jpg";
-const P4_A = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/files/ac8a4f07-7780-4883-83be-5083ef582f7b.jpg";
-const P4_B = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/67305f47-00a1-4a07-983d-4f915afe13fd.png";
-const P4_C = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/16bd85b5-ba1b-4bcf-818e-20d141de7209.png";
+const P4_BG = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/4db6e212-be27-4300-8773-3779093718e1.jpg";
+const P4_A  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/c36e3cad-cf0d-4f8a-80b7-fd9cf1eb6880.jpg";
+const P4_B  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/c90eb535-5e47-4b1e-be95-f4f6ad0c7a9b.jpg";
+const P4_C  = "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/5ff144ae-935f-4a71-b127-8383421de158.jpg";
 
 const ROTATING_WORDS = ["здания","склады","ангары","цеха","офисы","медицинские здания","магазины","кафе и рестораны","торговые здания","административные здания","автомойки","здания для транспорта","автосервисы","автосалоны","сельхоз здания","фермы","спортивные сооружения"];
 
@@ -36,7 +37,7 @@ const projects: Project[] = [
   { id:1, photos:[P1_BG,P1_A,P1_B,P1_C], title:"Производственное здание №1", dims:"12×36×5 м", area:"432 м²", locationShort:"Владимирская обл., с. Лемешки", locationFull:"Россия, Владимирская обл., с. Лемешки", purpose:"Производственные и промышленные здания", details:["Наличие кранов: нет","Наличие антресолей: нет"], length:"36 м", width:"12 м", height:"5 м", category:"Производственные и промышленные здания" },
   { id:2, photos:[P2_BG,P2_A,P2_B,P2_C,P2_D], title:"Склад", dims:"28×35×10 м", area:"980 м²", locationShort:"Ярославская обл., г. Ярославль", locationFull:"Россия, Ярославская обл., г. Ярославль", purpose:"Склады и ангары", details:["Наличие кранов: нет","Наличие антресолей: нет"], length:"35 м", width:"28 м", height:"10 м", category:"Склады и ангары" },
   { id:3, photos:[P3_BG,P3_A,P3_B,P3_C,P3_D], title:"СТО с АБК", dims:"17,7×52,8×7,2 м", area:"934 м²", locationShort:"Ярославская обл., г. Ярославль", locationFull:"Россия, Ярославская обл., г. Ярославль", purpose:"Здания для транспорта", details:["Наличие кранов: да, 5т","Наличие антресолей: нет","Размеры АБК: 6×18×6 м"], length:"52,8 м", width:"17,7 м", height:"7,2 м", category:"Здания для транспорта" },
-  { id:4, photos:[P4_A,P4_B,P4_C], title:"Производственное здание №2", dims:"36×40×6 м", area:"1440 м²", locationShort:"Владимирская обл., с. Лемешки", locationFull:"Россия, Владимирская обл., с. Лемешки", purpose:"Производственные и промышленные здания", details:["Наличие кранов: нет","Наличие антресолей: нет"], length:"40 м", width:"36 м", height:"6 м", category:"Производственные и промышленные здания" },
+  { id:4, photos:[P4_BG,P4_A,P4_B,P4_C], title:"Производственное здание №2", dims:"36×40×6 м", area:"1440 м²", locationShort:"Владимирская обл., с. Лемешки", locationFull:"Россия, Владимирская обл., с. Лемешки", purpose:"Производственные и промышленные здания", details:["Наличие кранов: нет","Наличие антресолей: нет"], length:"40 м", width:"36 м", height:"6 м", category:"Производственные и промышленные здания" },
 ];
 
 // ── Snow/Wind zones by city — ветровые районы по таблице заказчика ───────────
