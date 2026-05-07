@@ -17,15 +17,13 @@ const P1_B =
 const P1_C =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/1359336a-aa8d-46e2-ad61-8397109c3978.jpg";
 const P2_BG =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/f95b9404-acca-4e10-81d6-4aba89031c09.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/7f6efaf7-569a-4b2a-832d-06a699e9229f.jpg";
 const P2_A =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/e3861dbe-7a1c-4526-b3d3-0a0717ca8567.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/7f6efaf7-569a-4b2a-832d-06a699e9229f.jpg";
 const P2_B =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/6d8d6ffc-8f49-43f5-a0fc-252327cab4c1.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/2cd1c189-1ced-462b-b958-0b4192be83dc.jpg";
 const P2_C =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/b9d1f4a5-057c-47e7-87d8-317a4ac3d755.jpg";
-const P2_D =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/9ae9f557-6ee3-4dbe-a769-8f5e278f327a.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/88dbb56e-0d3b-4496-b88d-b6b06f9e9266.jpg";
 const P3_BG =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/318d9f37-7a48-4c1c-b319-7bc031883c48.jpg";
 const P3_A =
@@ -120,17 +118,17 @@ const projects: Project[] = [
   {
     id: 2,
     photos: [P2_BG, P2_A, P2_B, P2_C, P2_D],
-    title: "Склад",
-    dims: "28×35×10 м",
-    area: "980 м²",
-    locationShort: "Ярославская обл., г. Ярославль",
-    locationFull: "Россия, Ярославская обл., г. Ярославль",
-    purpose: "Склады и ангары",
+    title: "Производственное здание",
+    dims: "18×24×6 м",
+    area: "432 м²",
+    locationShort: "Московская обл., г. Одинцово",
+    locationFull: "Россия, Московская обл., г. Одинцово",
+    purpose: "Производственные и промышленные здания",
     details: ["Наличие кранов: нет", "Наличие антресолей: нет"],
-    length: "35 м",
-    width: "28 м",
-    height: "10 м",
-    category: "Склады и ангары",
+    length: "24 м",
+    width: "18 м",
+    height: "6 м",
+    category: "Производственные и промышленные здания",
   },
   {
     id: 3,
