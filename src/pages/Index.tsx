@@ -7,7 +7,7 @@ const HERO_BG =
 const LOGO_URL =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/528f5996-8edc-44d4-8206-5de1a1c38adf.png";
 const QUIZ_IMG =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/b804bc76-6c00-4b45-a412-fd6862c13609.png";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/3d3baadb-9088-44d8-b5c3-1f83f8c84ecf.jpg";
 const P1_BG =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/2c468105-45af-4c1f-b8b3-9b8a0344525a.jpg";
 const P1_A =
