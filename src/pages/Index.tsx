@@ -117,7 +117,7 @@ const projects: Project[] = [
   },
   {
     id: 2,
-    photos: [P2_BG, P2_A, P2_B, P2_C, P2_D],
+    photos: [P2_BG, P2_A, P2_B, P2_C],
     title: "Производственное здание",
     dims: "18×24×6 м",
     area: "432 м²",
