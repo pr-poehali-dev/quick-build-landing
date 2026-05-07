@@ -25,15 +25,15 @@ const P2_B =
 const P2_C =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/88dbb56e-0d3b-4496-b88d-b6b06f9e9266.jpg";
 const P3_BG =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/318d9f37-7a48-4c1c-b319-7bc031883c48.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/20974fcd-d088-4bad-b865-6100c75100f0.jpg";
 const P3_A =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/48f09a84-33ec-49a9-a9bd-9344dc25e070.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/130b00ac-7f2d-4889-bc1d-e3385392e0ee.jpg";
 const P3_B =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/482e9e72-b127-4817-9826-00dff28516d2.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/cd8f7707-4ea2-4ab9-9b1d-35e49c5ce11a.jpg";
 const P3_C =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/ac6b6035-a914-4302-9dda-055c4af3fcc1.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/f75a8b17-ecf2-4c67-bc70-0870c4359bf9.jpg";
 const P3_D =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/24ba8bf9-254d-43bf-b1a7-ccb02feb8fb1.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/3e78c886-0bee-44a2-8973-4e29ee332fac.jpg";
 const P4_BG =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/4db6e212-be27-4300-8773-3779093718e1.jpg";
 const P4_A =
