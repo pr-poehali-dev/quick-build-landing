@@ -35,13 +35,17 @@ const P3_C =
 const P3_D =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/3e78c886-0bee-44a2-8973-4e29ee332fac.jpg";
 const P4_BG =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/4db6e212-be27-4300-8773-3779093718e1.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/7e684be1-0307-465d-981e-eab7082944b0.jpg";
 const P4_A =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/c36e3cad-cf0d-4f8a-80b7-fd9cf1eb6880.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/6c5b623c-44ca-49a5-a3a5-ff707b2122f7.jpg";
 const P4_B =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/c90eb535-5e47-4b1e-be95-f4f6ad0c7a9b.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/9ab7741b-5749-4861-8068-f14317ba1ebe.jpg";
 const P4_C =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/5ff144ae-935f-4a71-b127-8383421de158.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/f79defa9-1fac-4671-a354-f979f704808e.jpg";
+const P4_D =
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/1973cc88-213b-4417-9d67-88ba5621f3fe.jpg";
+const P4_E =
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/f37c447b-50e9-4de1-a519-7d9740155de9.jpg";
 
 const ROTATING_WORDS = [
   "здания",
@@ -147,18 +151,18 @@ const projects: Project[] = [
   },
   {
     id: 4,
-    photos: [P4_BG, P4_A, P4_B, P4_C],
-    title: "Производственное здание №2",
-    dims: "36×40×6 м",
+    photos: [P4_BG, P4_A, P4_B, P4_C, P4_D, P4_E],
+    title: "Склад",
+    dims: "24×60×7,5 м",
     area: "1440 м²",
-    locationShort: "Владимирская обл., с. Лемешки",
-    locationFull: "Россия, Владимирская обл., с. Лемешки",
-    purpose: "Производственные и промышленные здания",
-    details: ["Наличие кранов: нет", "Наличие антресолей: нет"],
-    length: "40 м",
-    width: "36 м",
-    height: "6 м",
-    category: "Производственные и промышленные здания",
+    locationShort: "Московская обл., г. Химки",
+    locationFull: "Россия, Московская обл., г. Химки",
+    purpose: "Склады и Ангары",
+    details: ["Наличие кранов: да, 3.2т", "Наличие антресолей: нет"],
+    length: "60 м",
+    width: "24 м",
+    height: "7,5 м",
+    category: "Склады и Ангары",
   },
 ];
 
