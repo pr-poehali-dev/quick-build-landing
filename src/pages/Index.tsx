@@ -2502,7 +2502,7 @@ export default function Index() {
                   </span>
                 </span>
                 <span className="block text-gray-900">
-                  <span style={{ color: "var(--orange)" }}>от 200 м²</span> под ключ за{" "}
+                  от <span style={{ color: "var(--orange)" }}>200 м²</span> под ключ за{" "}
                   <span style={{ color: "var(--orange)" }}>{heroVal}</span> дней
                 </span>
               </h1>
