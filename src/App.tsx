@@ -10,6 +10,9 @@ import NotFound from "./pages/NotFound";
 import ProizvodstvennyeZdaniya from "./pages/ProizvodstvennyeZdaniya";
 import ZdaniyaDlyaTransporta from "./pages/ZdaniyaDlyaTransporta";
 import TorgovyeZdaniya from "./pages/TorgovyeZdaniya";
+import ProizvodstvennyeZdaniyaDark from "./pages/ProizvodstvennyeZdaniyaDark";
+import ZdaniyaDlyaTransportaDark from "./pages/ZdaniyaDlyaTransportaDark";
+import TorgovyeZdaniyaDark from "./pages/TorgovyeZdaniyaDark";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +25,9 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/v2" element={<IndexDark />} />
+          <Route path="/v2/proizvodstvennye-zdaniya" element={<ProizvodstvennyeZdaniyaDark />} />
+          <Route path="/v2/zdaniya-dlya-transporta" element={<ZdaniyaDlyaTransportaDark />} />
+          <Route path="/v2/torgovye-zdaniya" element={<TorgovyeZdaniyaDark />} />
           <Route path="/proizvodstvennye-zdaniya" element={<ProizvodstvennyeZdaniya />} />
           <Route path="/zdaniya-dlya-transporta" element={<ZdaniyaDlyaTransporta />} />
           <Route path="/torgovye-zdaniya" element={<TorgovyeZdaniya />} />

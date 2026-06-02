@@ -1195,7 +1195,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
     name: "",
     phone: "",
     email: "",
-    agreePersonal: true,
+    agreePersonal: false,
     agreePromo: false,
   });
   const [submitted, setSubmitted] = useState(false);
@@ -1493,13 +1493,13 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
           {step === 3 && (
             <div>
               <h2 className="text-xl md:text-2xl font-bold mb-3 text-center" style={{ color: "var(--dm-text)" }}>
-                Параметры здания
+                Параметры здания (от 200 м²)
               </h2>
 
               {/* Свой вариант — одно поле */}
               <div className="mb-5">
                 <label className="text-xs font-semibold mb-1.5 block" style={{ color: "var(--dm-text-muted)" }}>
-                  Свой вариант (Ширина × Длина × Высота, м)
+                  Свой вариант (Ширина × Длина × Высота, м) — строим от 200 м²
                 </label>
                 <input
                   type="text"
@@ -2758,7 +2758,7 @@ export default function Index({
                 >
                   ОТПРАВИТЬ ЗАЯВКУ →
                 </button>
-                <p className="text-center text-xs text-gray-400">
+                <p className="text-center text-xs" style={{ color: "var(--dm-text-faint)" }}>
                   Нажимая кнопку, вы соглашаетесь с{" "}
                   <a
                     href="https://evrazsteelbox.ru/politika_v_oblasti_obrabotki_personalnyh_dannyh/"
@@ -2812,7 +2812,7 @@ export default function Index({
                   setModalImgIdx((i) => (i + 1) % activeProject.photos.length)
                 }
               >
-                <Icon name="ChevronRight" size={18} className="text-gray-700" />
+                <Icon name="ChevronRight" size={18} className="text-gray-700 dark:text-gray-200" />
               </button>
               <button
                 className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center shadow"
@@ -3029,7 +3029,7 @@ export default function Index({
                   >
                     ПОЗВОНИТЕ МНЕ →
                   </button>
-                  <p className="text-center text-xs text-gray-400">
+                  <p className="text-center text-xs" style={{ color: "var(--dm-text-faint)" }}>
                     Нажимая кнопку, вы соглашаетесь с{" "}
                     <a
                       href="https://evrazsteelbox.ru/politika_v_oblasti_obrabotki_personalnyh_dannyh/"
