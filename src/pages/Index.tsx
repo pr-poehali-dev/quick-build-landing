@@ -2209,12 +2209,10 @@ function ThankYouPage({ onBack }: { onBack: () => void }) {
 
 // ════════════════════════════════════════════════════════════════════════════
 export default function Index({
-  categoryTitle,
   pageTitle,
   pageDescription,
   rotatingWords,
 }: {
-  categoryTitle?: string;
   pageTitle?: string;
   pageDescription?: string;
   rotatingWords?: string[];
@@ -2514,21 +2512,15 @@ export default function Index({
                   Спроектируем, изготовим и построим
                 </span>
                 <span className="block" style={{ color: "var(--orange)" }}>
-                  {categoryTitle ? (
-                    <span>{categoryTitle}</span>
-                  ) : (
-                    <>
-                      <span>быстровозводимые&nbsp;</span>
-                      <span className="inline-block" style={{ minWidth: "20ch" }}>
-                        <span
-                          key={wordKey}
-                          className="animate-word-flip inline-block"
-                        >
-                          {activeWords[wordIdx]}
-                        </span>
-                      </span>
-                    </>
-                  )}
+                  <span>быстровозводимые&nbsp;</span>
+                  <span className="inline-block" style={{ minWidth: "20ch" }}>
+                    <span
+                      key={wordKey}
+                      className="animate-word-flip inline-block"
+                    >
+                      {activeWords[wordIdx]}
+                    </span>
+                  </span>
                 </span>
                 <span className="block text-gray-900">
                   от <span style={{ color: "var(--orange)" }}>200 м²</span> под ключ за{" "}
