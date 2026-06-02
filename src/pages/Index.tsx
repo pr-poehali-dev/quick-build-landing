@@ -1189,7 +1189,7 @@ function quizToPriceParams(
   }).toString();
 }
 
-function QuizFullscreen({ onClose, step1Options }: { onClose: () => void; step1Options?: { label: string; icon: string }[] }) {
+function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => void; step1Options?: { label: string; icon: string }[]; quizImg?: string }) {
   const [step, setStep] = useState(1);
   const TOTAL = 6;
   const [state, setState] = useState<QuizState>({
@@ -1726,7 +1726,7 @@ function QuizFullscreen({ onClose, step1Options }: { onClose: () => void; step1O
                     style={{ height: "150px" }}
                   >
                     <img
-                      src={QUIZ_IMG}
+                      src={quizImg ?? QUIZ_IMG}
                       alt="здание"
                       className="w-full h-full object-cover"
                     />
@@ -2215,11 +2215,13 @@ export default function Index({
   pageDescription,
   rotatingWords,
   quizOptions,
+  quizImg,
 }: {
   pageTitle?: string;
   pageDescription?: string;
   rotatingWords?: string[];
   quizOptions?: { label: string; icon: string }[];
+  quizImg?: string;
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [callbackOpen, setCallbackOpen] = useState(false);
@@ -2358,7 +2360,7 @@ export default function Index({
       style={{ fontFamily: "Arial,sans-serif" }}
     >
       {showThankYou && <ThankYouPage onBack={() => setShowThankYou(false)} />}
-      {quizOpen && <QuizFullscreen onClose={() => setQuizOpen(false)} step1Options={quizOptions} />}
+      {quizOpen && <QuizFullscreen onClose={() => setQuizOpen(false)} step1Options={quizOptions} quizImg={quizImg} />}
 
       {/* ══ HEADER ══════════════════════════════════════════════════════════ */}
       <header className="border-b border-gray-200 bg-white sticky top-0 z-40 shadow-sm">
