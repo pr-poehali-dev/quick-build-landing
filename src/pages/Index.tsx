@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-
 import Icon from "@/components/ui/icon";
 import Footer from "@/components/Footer";
 
