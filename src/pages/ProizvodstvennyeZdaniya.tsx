@@ -15,13 +15,22 @@ const WORDS = [
   "производственные корпусы",
 ];
 
+const QUIZ_OPTIONS = [
+  { label: "Промышленный цех", icon: "Factory" },
+  { label: "Производственный корпус", icon: "Building2" },
+  { label: "Здание для энергетики/ТЭЦ/ГРЭС", icon: "Zap" },
+  { label: "Цементный/Бетонный завод", icon: "Layers" },
+  { label: "Здание для очистных сооружений", icon: "Droplets" },
+  { label: "Другое", icon: "MoreHorizontal" },
+];
+
 export default function ProizvodstvennyeZdaniya() {
   return (
     <Index
-      categoryTitle="быстровозводимые производственные здания"
       pageTitle="Быстровозводимые производственные здания под ключ"
       pageDescription="Проектирование, изготовление и строительство быстровозводимых производственных зданий из металлоконструкций под ключ за 45 дней по всей России"
       rotatingWords={WORDS}
+      quizOptions={QUIZ_OPTIONS}
     />
   );
 }

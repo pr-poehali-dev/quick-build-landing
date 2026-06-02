@@ -14,13 +14,22 @@ const WORDS = [
   "гаражи",
 ];
 
+const QUIZ_OPTIONS = [
+  { label: "Автомойка", icon: "Droplets" },
+  { label: "Автосервис", icon: "Wrench" },
+  { label: "Ангар для техники", icon: "Truck" },
+  { label: "Автосалон", icon: "Car" },
+  { label: "Гараж", icon: "ParkingSquare" },
+  { label: "Другое", icon: "MoreHorizontal" },
+];
+
 export default function ZdaniyaDlyaTransporta() {
   return (
     <Index
-      categoryTitle="быстровозводимые здания для транспорта"
       pageTitle="Быстровозводимые здания для транспорта под ключ"
       pageDescription="Проектирование, изготовление и строительство быстровозводимых ангаров для транспорта из металлоконструкций под ключ за 45 дней по всей России"
       rotatingWords={WORDS}
+      quizOptions={QUIZ_OPTIONS}
     />
   );
 }

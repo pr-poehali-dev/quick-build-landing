@@ -639,6 +639,8 @@ const STEP1_OPTIONS = [
   { label: "Сельскохозяйственные здания", icon: "Leaf" },
   { label: "Другое", icon: "MoreHorizontal" },
 ];
+
+
 const LENGTHS = [24, 30, 36, 42, 48, 54];
 const WIDTHS = [12, 18, 24];
 const HEIGHTS = [3.6, 4.8, 6, 7.2, 8.4, 9.6];
@@ -1187,7 +1189,7 @@ function quizToPriceParams(
   }).toString();
 }
 
-function QuizFullscreen({ onClose }: { onClose: () => void }) {
+function QuizFullscreen({ onClose, step1Options }: { onClose: () => void; step1Options?: { label: string; icon: string }[] }) {
   const [step, setStep] = useState(1);
   const TOTAL = 6;
   const [state, setState] = useState<QuizState>({
@@ -1442,7 +1444,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                 Выберите назначение здания
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {STEP1_OPTIONS.map((opt) => (
+                {(step1Options ?? STEP1_OPTIONS).map((opt) => (
                   <button
                     key={opt.label}
                     onClick={() =>
@@ -2212,10 +2214,12 @@ export default function Index({
   pageTitle,
   pageDescription,
   rotatingWords,
+  quizOptions,
 }: {
   pageTitle?: string;
   pageDescription?: string;
   rotatingWords?: string[];
+  quizOptions?: { label: string; icon: string }[];
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [callbackOpen, setCallbackOpen] = useState(false);
@@ -2354,7 +2358,7 @@ export default function Index({
       style={{ fontFamily: "Arial,sans-serif" }}
     >
       {showThankYou && <ThankYouPage onBack={() => setShowThankYou(false)} />}
-      {quizOpen && <QuizFullscreen onClose={() => setQuizOpen(false)} />}
+      {quizOpen && <QuizFullscreen onClose={() => setQuizOpen(false)} step1Options={quizOptions} />}
 
       {/* ══ HEADER ══════════════════════════════════════════════════════════ */}
       <header className="border-b border-gray-200 bg-white sticky top-0 z-40 shadow-sm">
