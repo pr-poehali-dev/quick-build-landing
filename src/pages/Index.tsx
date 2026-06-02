@@ -2207,18 +2207,22 @@ export default function Index({
   rotatingWords,
   quizOptions,
   quizImg,
+  forceTheme,
 }: {
   pageTitle?: string;
   pageDescription?: string;
   rotatingWords?: string[];
   quizOptions?: { label: string; icon: string }[];
   quizImg?: string;
+  forceTheme?: "dark" | "light";
 }) {
-  const [darkMode, setDarkMode] = useState(() => localStorage.getItem("theme") === "dark");
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", darkMode ? "dark" : "light");
-    localStorage.setItem("theme", darkMode ? "dark" : "light");
-  }, [darkMode]);
+    if (forceTheme) {
+      document.documentElement.setAttribute("data-theme", forceTheme);
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+  }, [forceTheme]);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [callbackOpen, setCallbackOpen] = useState(false);
@@ -2408,11 +2412,6 @@ export default function Index({
           </a>
           <div className="hidden md:flex items-center gap-2 shrink-0">
             <button
-              className="theme-toggle"
-              onClick={() => setDarkMode(v => !v)}
-              title={darkMode ? "Светлая тема" : "Тёмная тема"}
-            />
-            <button
               onClick={openCallback}
               className="px-3 py-2 rounded border text-sm font-semibold transition-colors whitespace-nowrap"
               style={{ borderColor: "var(--dm-border)", color: "var(--dm-text)" }}
@@ -2457,12 +2456,6 @@ export default function Index({
                 Российский разработчик и поставщик быстровозводимых зданий на
                 металлическом каркасе
               </p>
-            </div>
-            <div className="px-5 py-3 border-b flex items-center justify-between" style={{ borderColor: "var(--dm-border)" }}>
-              <span className="text-sm font-semibold" style={{ color: "var(--dm-text)" }}>
-                {darkMode ? "Тёмная тема" : "Светлая тема"}
-              </span>
-              <button className="theme-toggle" onClick={() => setDarkMode(v => !v)} />
             </div>
             <div className="px-5 py-4 border-b" style={{ borderColor: "var(--dm-border)" }}>
               <div className="text-xs font-semibold mb-1" style={{ color: "var(--dm-text-muted)" }}>
