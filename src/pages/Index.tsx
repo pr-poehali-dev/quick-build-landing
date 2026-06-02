@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+
 import Icon from "@/components/ui/icon";
 import Footer from "@/components/Footer";
 
@@ -2208,15 +2208,18 @@ function ThankYouPage({ onBack }: { onBack: () => void }) {
   );
 }
 
-const NAV_CATEGORIES = [
-  { label: "Производственные здания", href: "/proizvodstvennye-zdaniya" },
-  { label: "Здания для транспорта", href: "/zdaniya-dlya-transporta" },
-  { label: "Торговые здания", href: "/torgovye-zdaniya" },
-];
-
 // ════════════════════════════════════════════════════════════════════════════
-export default function Index({ categoryTitle }: { categoryTitle?: string }) {
-  const location = useLocation();
+export default function Index({
+  categoryTitle,
+  pageTitle,
+  pageDescription,
+  rotatingWords,
+}: {
+  categoryTitle?: string;
+  pageTitle?: string;
+  pageDescription?: string;
+  rotatingWords?: string[];
+}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [callbackOpen, setCallbackOpen] = useState(false);
   const [cbName, setCbName] = useState("");
@@ -2248,13 +2251,19 @@ export default function Index({ categoryTitle }: { categoryTitle?: string }) {
   useEffect(() => {
     setTimeout(() => setHeroStarted(true), 300);
   }, []);
+  const activeWords = rotatingWords ?? ROTATING_WORDS;
+  useEffect(() => {
+    if (pageTitle) document.title = pageTitle;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (pageDescription && metaDesc) metaDesc.setAttribute("content", pageDescription);
+  }, [pageTitle, pageDescription]);
   useEffect(() => {
     const t = setInterval(() => {
-      setWordIdx((i) => (i + 1) % ROTATING_WORDS.length);
+      setWordIdx((i) => (i + 1) % activeWords.length);
       setWordKey((k) => k + 1);
     }, 2000);
     return () => clearInterval(t);
-  }, []);
+  }, [activeWords.length]);
   useEffect(() => {
     document.body.style.overflow =
       activeProject ||
@@ -2413,27 +2422,6 @@ export default function Index({ categoryTitle }: { categoryTitle?: string }) {
         </div>
       </header>
 
-      {/* ══ CATEGORY NAV ══════════════════════════════════════════════════════ */}
-      <nav className="bg-gray-50 border-b border-gray-200 hidden md:block">
-        <div className="max-w-7xl mx-auto px-4 flex items-center gap-1">
-          <Link
-            to="/"
-            className={`px-4 py-2.5 text-sm font-medium transition-colors whitespace-nowrap ${location.pathname === "/" ? "text-orange-500 border-b-2 border-orange-500" : "text-gray-600 hover:text-gray-900"}`}
-          >
-            Главная
-          </Link>
-          {NAV_CATEGORIES.map((cat) => (
-            <Link
-              key={cat.href}
-              to={cat.href}
-              className={`px-4 py-2.5 text-sm font-medium transition-colors whitespace-nowrap ${location.pathname === cat.href ? "text-orange-500 border-b-2 border-orange-500" : "text-gray-600 hover:text-gray-900"}`}
-            >
-              {cat.label}
-            </Link>
-          ))}
-        </div>
-      </nav>
-
       {/* Mobile drawer */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 flex">
@@ -2537,7 +2525,7 @@ export default function Index({ categoryTitle }: { categoryTitle?: string }) {
                           key={wordKey}
                           className="animate-word-flip inline-block"
                         >
-                          {ROTATING_WORDS[wordIdx]}
+                          {activeWords[wordIdx]}
                         </span>
                       </span>
                     </>

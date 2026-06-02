@@ -25,17 +25,18 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Логотип и описание */}
           <div>
-            <img
-              src={LOGO_URL}
-              alt="EVRAZ STEEL BOX"
-              className="h-10 w-auto object-contain mb-3 brightness-0 invert"
-            />
-            <p className="text-xs text-gray-400 leading-relaxed">
-              Российский разработчик и поставщик<br />
-              быстровозводимых зданий<br />
-              на металлическом каркасе
-            </p>
-            <p className="text-xs text-gray-500 mt-2">Пн – Пт &nbsp;09:30 – 18:00</p>
+            <div className="flex items-center gap-2 mb-3">
+              <img
+                src={LOGO_URL}
+                alt="EVRAZ STEEL BOX"
+                className="h-10 w-auto object-contain"
+              />
+              <div style={{ fontSize: "9.5px", lineHeight: "1.55" }} className="text-gray-400">
+                <span className="block whitespace-nowrap">Российский разработчик и поставщик</span>
+                <span className="block whitespace-nowrap">быстровозводимых зданий</span>
+                <span className="block whitespace-nowrap">на металлическом каркасе</span>
+              </div>
+            </div>
           </div>
 
           {/* Категории зданий */}
@@ -58,6 +59,7 @@ export default function Footer() {
           {/* Контакты */}
           <div>
             <h4 className="text-sm font-semibold text-white mb-3">Контакты</h4>
+            <p className="text-xs text-gray-400 mb-2">Пн – Пт &nbsp;09:30 – 18:00</p>
             <a
               href="tel:+78003026529"
               className="block text-base font-bold text-white hover:text-orange-400 transition-colors mb-1"
