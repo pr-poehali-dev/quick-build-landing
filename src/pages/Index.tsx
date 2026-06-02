@@ -1374,6 +1374,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
   const canNext = () => {
     if (step === 1) return !!state.purpose;
     if (step === 2) return !!state.city;
+    if (step === 3 && state.customDims.trim()) return area >= 200;
     return true;
   };
 
@@ -1525,6 +1526,11 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
                     style={{ color: "var(--orange)" }}
                   >
                     Распознано: {width} × {length} × {height} м
+                  </p>
+                )}
+                {state.customDims.trim() && area > 0 && area < 200 && (
+                  <p className="text-xs mt-1.5 text-red-500 font-medium">
+                    Минимальная площадь — 200 м². Сейчас: {area} м². Увеличьте размеры здания.
                   </p>
                 )}
               </div>
