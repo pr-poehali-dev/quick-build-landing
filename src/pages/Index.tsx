@@ -756,16 +756,16 @@ function StatCard({
           {stat.suffix}
         </span>
       </div>
-      <div className="font-semibold text-gray-900 text-xs leading-snug mb-0.5">
+      <div className="font-semibold text-xs leading-snug mb-0.5" style={{ color: "var(--dm-text)" }}>
         {stat.title}
       </div>
       <div
-        className="text-gray-600 text-xs leading-relaxed"
-        style={{ fontSize: "11px" }}
+        className="text-xs leading-relaxed"
+        style={{ fontSize: "11px", color: "var(--dm-text-muted)" }}
       >
         {stat.desc}
       </div>
-      {!isLast && <div className="mt-3 border-b border-gray-200" />}
+      {!isLast && <div className="mt-3 border-b" style={{ borderColor: "var(--dm-stat-border)" }} />}
     </div>
   );
 }
@@ -774,7 +774,8 @@ function ProjectCard({ p, onClick }: { p: Project; onClick: () => void }) {
   const [imgIdx, setImgIdx] = useState(0);
   return (
     <div
-      className="project-card bg-white rounded-xl overflow-hidden border border-gray-200"
+      className="project-card rounded-xl overflow-hidden border"
+      style={{ background: "var(--dm-bg-card)", borderColor: "var(--dm-border)" }}
       onClick={onClick}
     >
       <div className="relative" style={{ height: "160px" }}>
@@ -800,10 +801,10 @@ function ProjectCard({ p, onClick }: { p: Project; onClick: () => void }) {
         </div>
       </div>
       <div className="p-4 flex flex-col gap-1.5">
-        <div className="font-bold text-gray-900 text-sm leading-snug">
+        <div className="font-bold text-sm leading-snug" style={{ color: "var(--dm-text)" }}>
           {p.title}
         </div>
-        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+        <div className="flex items-center gap-1.5 text-xs" style={{ color: "var(--dm-text-muted)" }}>
           <Icon
             name="Ruler"
             size={11}
@@ -814,7 +815,7 @@ function ProjectCard({ p, onClick }: { p: Project; onClick: () => void }) {
             Размеры: {p.dims} / {p.area}
           </span>
         </div>
-        <div className="flex items-start gap-1.5 text-xs text-gray-400">
+        <div className="flex items-start gap-1.5 text-xs" style={{ color: "var(--dm-text-faint)" }}>
           <Icon
             name="MapPin"
             size={11}
@@ -874,14 +875,18 @@ function CitySearch({
           setOpen(true);
         }}
         onFocus={() => setOpen(true)}
-        className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:border-orange-300 transition-colors"
+        className="w-full border rounded-xl px-4 py-3.5 text-sm outline-none focus:border-orange-300 transition-colors"
+        style={{ background: "var(--dm-bg-input)", borderColor: "var(--dm-border)", color: "var(--dm-text)" }}
       />
       {open && filtered.length > 0 && (
-        <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg z-10 mt-1 overflow-hidden">
+        <div className="absolute top-full left-0 right-0 border rounded-xl shadow-lg z-10 mt-1 overflow-hidden" style={{ background: "var(--dm-bg-card)", borderColor: "var(--dm-border)" }}>
           {filtered.map((c) => (
             <button
               key={c}
-              className="w-full text-left px-4 py-2.5 text-sm hover:bg-orange-50 transition-colors border-b border-gray-50 last:border-0"
+              className="w-full text-left px-4 py-2.5 text-sm transition-colors border-b last:border-0"
+              style={{ color: "var(--dm-text)", borderColor: "var(--dm-border)" }}
+              onMouseEnter={e => (e.currentTarget.style.background = "var(--dm-quiz-hover)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
               onClick={() => {
                 setQuery(c);
                 onChange(c);
@@ -895,41 +900,26 @@ function CitySearch({
       )}
       {value && zones && (
         <div
-          className="mt-3 rounded-xl p-3.5 border border-orange-100"
-          style={{ background: "#fff8f5" }}
+          className="mt-3 rounded-xl p-3.5 border"
+          style={{ background: "var(--dm-price-bg)", borderColor: "var(--dm-border)" }}
         >
           <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
             <div>
-              <span className="text-gray-400 text-xs">Снеговой район: </span>
-              <span
-                className="font-semibold"
-                style={{ color: "var(--orange)" }}
-              >
-                {zones.snow}
-              </span>
+              <span className="text-xs" style={{ color: "var(--dm-text-faint)" }}>Снеговой район: </span>
+              <span className="font-semibold" style={{ color: "var(--orange)" }}>{zones.snow}</span>
             </div>
             <div>
-              <span className="text-gray-400 text-xs">Ветровой район: </span>
-              <span
-                className="font-semibold"
-                style={{ color: "var(--orange)" }}
-              >
-                {zones.wind}
-              </span>
+              <span className="text-xs" style={{ color: "var(--dm-text-faint)" }}>Ветровой район: </span>
+              <span className="font-semibold" style={{ color: "var(--orange)" }}>{zones.wind}</span>
             </div>
             <div className="flex items-center gap-1">
-              <span className="text-gray-400 text-xs">Тип местности: </span>
-              <span
-                className="font-semibold"
-                style={{ color: "var(--orange)" }}
-              >
-                B
-              </span>
+              <span className="text-xs" style={{ color: "var(--dm-text-faint)" }}>Тип местности: </span>
+              <span className="font-semibold" style={{ color: "var(--orange)" }}>B</span>
               <div className="relative group ml-1">
-                <span className="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 text-gray-400 text-xs cursor-help">
+                <span className="inline-flex items-center justify-center w-4 h-4 rounded-full border text-xs cursor-help" style={{ borderColor: "var(--dm-border)", color: "var(--dm-text-faint)" }}>
                   ?
                 </span>
-                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-64 bg-gray-800 text-white text-xs rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
+                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-64 bg-gray-900 text-white text-xs rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
                   Городские территории, лесные массивы и другие местности,
                   равномерно покрытые препятствиями высотой более 10 м.
                 </div>
@@ -1387,9 +1377,9 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
       onClick={onClick}
       className="rounded-xl py-2.5 text-sm font-medium transition-all border"
       style={{
-        borderColor: selected === val ? "var(--orange)" : "#e5e5e5",
-        background: selected === val ? "#fff3ee" : "#fff",
-        color: selected === val ? "var(--orange)" : "#374151",
+        borderColor: selected === val ? "var(--orange)" : "var(--dm-border)",
+        background: selected === val ? "var(--dm-price-bg)" : "var(--dm-surface)",
+        color: selected === val ? "var(--orange)" : "var(--dm-text)",
       }}
     >
       {val}
@@ -1397,9 +1387,9 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
   );
 
   return (
-    <div className="fixed inset-0 z-50 bg-white flex flex-col animate-fade-in">
+    <div className="fixed inset-0 z-50 flex flex-col animate-fade-in" style={{ background: "var(--dm-quiz-bg)" }}>
       {/* Header */}
-      <div className="flex items-center justify-between px-4 md:px-8 py-4 border-b border-gray-100 shrink-0">
+      <div className="flex items-center justify-between px-4 md:px-8 py-4 border-b shrink-0" style={{ borderColor: "var(--dm-border)" }}>
         <button
           onClick={onClose}
           className="flex items-center gap-3 hover:opacity-80 transition-opacity"
@@ -1409,7 +1399,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
             alt="logo"
             className="h-8 w-auto object-contain"
           />
-          <span className="text-xs text-gray-400 hidden sm:block">
+          <span className="text-xs hidden sm:block" style={{ color: "var(--dm-text-faint)" }}>
             Расчёт стоимости здания
           </span>
         </button>
@@ -1422,13 +1412,14 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
           </span>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50"
+            className="w-8 h-8 rounded-full border flex items-center justify-center"
+            style={{ borderColor: "var(--dm-border)", color: "var(--dm-text-muted)" }}
           >
-            <Icon name="X" size={16} className="text-gray-500" />
+            <Icon name="X" size={16} />
           </button>
         </div>
       </div>
-      <div className="h-1 bg-gray-100 shrink-0">
+      <div className="h-1 shrink-0" style={{ background: "var(--dm-border)" }}>
         <div
           className="quiz-bar h-full"
           style={{ width: `${Math.round((step / TOTAL) * 100)}%` }}
@@ -1440,7 +1431,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
           {/* STEP 1 */}
           {step === 1 && (
             <div>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 text-center">
+              <h2 className="text-xl md:text-2xl font-bold mb-6 text-center" style={{ color: "var(--dm-text)" }}>
                 Выберите назначение здания
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1452,17 +1443,13 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                     }
                     className="rounded-xl p-4 text-left flex items-center gap-3 border-2 transition-all"
                     style={{
-                      borderColor:
-                        state.purpose === opt.label
-                          ? "var(--orange)"
-                          : "#e5e5e5",
-                      background:
-                        state.purpose === opt.label ? "#fff3ee" : "#fff",
+                      borderColor: state.purpose === opt.label ? "var(--orange)" : "var(--dm-border)",
+                      background: state.purpose === opt.label ? "var(--dm-price-bg)" : "var(--dm-surface)",
                     }}
                   >
                     <div
                       className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
-                      style={{ background: "#fff3ee" }}
+                      style={{ background: "var(--dm-icon-bg)" }}
                     >
                       <Icon
                         name={opt.icon}
@@ -1470,7 +1457,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                         style={{ color: "var(--orange)" }}
                       />
                     </div>
-                    <span className="text-sm font-medium text-gray-800">
+                    <span className="text-sm font-medium" style={{ color: "var(--dm-text)" }}>
                       {opt.label}
                     </span>
                   </button>
@@ -1482,10 +1469,10 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
           {/* STEP 2 */}
           {step === 2 && (
             <div>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 text-center">
+              <h2 className="text-xl md:text-2xl font-bold mb-2 text-center" style={{ color: "var(--dm-text)" }}>
                 Регион строительства
               </h2>
-              <p className="text-sm text-gray-400 text-center mb-6">
+              <p className="text-sm text-center mb-6" style={{ color: "var(--dm-text-faint)" }}>
                 Начните вводить название вашего города
               </p>
               <CitySearch
@@ -1493,10 +1480,10 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                 onChange={(v) => setState((s) => ({ ...s, city: v }))}
               />
               {state.city && (
-                <div className="mt-3 flex items-center gap-2 text-xs text-gray-400">
+                <div className="mt-3 flex items-center gap-2 text-xs" style={{ color: "var(--dm-text-faint)" }}>
                   <Icon name="MapPin" size={12} />
                   Выбран:{" "}
-                  <strong className="text-gray-700">{state.city}</strong>
+                  <strong style={{ color: "var(--dm-text)" }}>{state.city}</strong>
                 </div>
               )}
             </div>
@@ -1505,13 +1492,13 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
           {/* STEP 3 — Параметры */}
           {step === 3 && (
             <div>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 text-center">
+              <h2 className="text-xl md:text-2xl font-bold mb-3 text-center" style={{ color: "var(--dm-text)" }}>
                 Параметры здания
               </h2>
 
               {/* Свой вариант — одно поле */}
               <div className="mb-5">
-                <label className="text-xs font-semibold text-gray-500 mb-1.5 block">
+                <label className="text-xs font-semibold mb-1.5 block" style={{ color: "var(--dm-text-muted)" }}>
                   Свой вариант (Ширина × Длина × Высота, м)
                 </label>
                 <input
@@ -1521,7 +1508,8 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                   onChange={(e) =>
                     setState((s) => ({ ...s, customDims: e.target.value }))
                   }
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-orange-300 transition-colors"
+                  className="w-full border rounded-xl px-4 py-3 text-sm outline-none focus:border-orange-300 transition-colors"
+                  style={{ background: "var(--dm-bg-input)", borderColor: "var(--dm-border)", color: "var(--dm-text)" }}
                 />
                 {state.customDims && (
                   <p
@@ -1539,17 +1527,17 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
               </div>
 
               <div className="flex items-center gap-3 mb-5">
-                <div className="flex-1 border-b border-gray-200" />
-                <span className="text-xs text-gray-400 shrink-0">
+                <div className="flex-1 border-b" style={{ borderColor: "var(--dm-border)" }} />
+                <span className="text-xs shrink-0" style={{ color: "var(--dm-text-faint)" }}>
                   или выберите из списка
                 </span>
-                <div className="flex-1 border-b border-gray-200" />
+                <div className="flex-1 border-b" style={{ borderColor: "var(--dm-border)" }} />
               </div>
 
               {/* Таблицы */}
               <div className="grid grid-cols-3 gap-3 md:gap-6 mb-6">
                 <div>
-                  <div className="text-xs text-gray-400 text-center mb-2">
+                  <div className="text-xs text-center mb-2" style={{ color: "var(--dm-text-faint)" }}>
                     Ширина, м
                   </div>
                   <div className="grid grid-cols-1 gap-1.5">
@@ -1561,7 +1549,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-gray-400 text-center mb-2">
+                  <div className="text-xs text-center mb-2" style={{ color: "var(--dm-text-faint)" }}>
                     Длина, м
                   </div>
                   <div className="grid grid-cols-2 gap-1.5">
@@ -1573,7 +1561,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-gray-400 text-center mb-2">
+                  <div className="text-xs text-center mb-2" style={{ color: "var(--dm-text-faint)" }}>
                     Высота, м
                   </div>
                   <div className="grid grid-cols-2 gap-1.5">
@@ -1588,9 +1576,9 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
 
               <div
                 className="rounded-2xl p-5 text-center"
-                style={{ background: "#fff3ee" }}
+                style={{ background: "var(--dm-price-bg)" }}
               >
-                <div className="text-sm text-gray-500 mb-1">Площадь здания</div>
+                <div className="text-sm mb-1" style={{ color: "var(--dm-text-muted)" }}>Площадь здания</div>
                 <div
                   style={{
                     fontFamily: "Arial,sans-serif",
@@ -1601,7 +1589,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                 >
                   {area} м²
                 </div>
-                <div className="text-xs text-gray-400 mt-1">
+                <div className="text-xs mt-1" style={{ color: "var(--dm-text-faint)" }}>
                   {width} × {length} м
                 </div>
               </div>
@@ -1611,11 +1599,11 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
           {/* STEP 4 */}
           {step === 4 && (
             <div>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 text-center">
+              <h2 className="text-xl md:text-2xl font-bold mb-6 text-center" style={{ color: "var(--dm-text)" }}>
                 Варианты комплектаций
               </h2>
               <div className="mb-6">
-                <div className="text-sm font-bold text-gray-700 mb-3">
+                <div className="text-sm font-bold mb-3" style={{ color: "var(--dm-text)" }}>
                   Тип стен и кровли:
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -1625,11 +1613,9 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                       onClick={() => setState((s) => ({ ...s, cladding: opt }))}
                       className="rounded-xl py-3.5 text-sm font-medium border-2 transition-all"
                       style={{
-                        borderColor:
-                          state.cladding === opt ? "var(--orange)" : "#e5e5e5",
-                        background: state.cladding === opt ? "#fff3ee" : "#fff",
-                        color:
-                          state.cladding === opt ? "var(--orange)" : "#374151",
+                        borderColor: state.cladding === opt ? "var(--orange)" : "var(--dm-border)",
+                        background: state.cladding === opt ? "var(--dm-price-bg)" : "var(--dm-surface)",
+                        color: state.cladding === opt ? "var(--orange)" : "var(--dm-text)",
                       }}
                     >
                       {opt}
@@ -1638,7 +1624,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                 </div>
               </div>
               <div>
-                <div className="text-sm font-bold text-gray-700 mb-3">
+                <div className="text-sm font-bold mb-3" style={{ color: "var(--dm-text)" }}>
                   Наличие кран-балки 5 тонн:
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -1648,11 +1634,9 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                       onClick={() => setState((s) => ({ ...s, crane: opt }))}
                       className="rounded-xl py-3.5 text-sm font-medium border-2 transition-all"
                       style={{
-                        borderColor:
-                          state.crane === opt ? "var(--orange)" : "#e5e5e5",
-                        background: state.crane === opt ? "#fff3ee" : "#fff",
-                        color:
-                          state.crane === opt ? "var(--orange)" : "#374151",
+                        borderColor: state.crane === opt ? "var(--orange)" : "var(--dm-border)",
+                        background: state.crane === opt ? "var(--dm-price-bg)" : "var(--dm-surface)",
+                        color: state.crane === opt ? "var(--orange)" : "var(--dm-text)",
                       }}
                     >
                       {opt}
@@ -1666,7 +1650,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
           {/* STEP 5 */}
           {step === 5 && (
             <div>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 text-center">
+              <h2 className="text-xl md:text-2xl font-bold mb-6 text-center" style={{ color: "var(--dm-text)" }}>
                 Дополнительные услуги
               </h2>
               <div className="space-y-2">
@@ -1683,13 +1667,14 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                             : [...s.extras, svc],
                         }))
                       }
-                      className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-left text-sm transition-colors"
+                      style={{ color: "var(--dm-text)" }}
                     >
                       <div
                         className="w-5 h-5 rounded flex items-center justify-center shrink-0 transition-all"
                         style={{
                           background: checked ? "var(--orange)" : "transparent",
-                          border: checked ? "none" : "2px solid #d1d5db",
+                          border: checked ? "none" : `2px solid var(--dm-border)`,
                         }}
                       >
                         {checked && (
@@ -1707,14 +1692,14 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
           {/* STEP 6 */}
           {step === 6 && (
             <div>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 text-center">
+              <h2 className="text-xl md:text-2xl font-bold mb-2 text-center" style={{ color: "var(--dm-text)" }}>
                 Узнать стоимость здания
               </h2>
-              <p className="text-sm text-gray-500 text-center mb-6 leading-relaxed">
+              <p className="text-sm text-center mb-6 leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
                 Заполните форму и получите предварительный расчёт стоимости
                 здания прямо сейчас
                 <br className="hidden md:block" />+ эскиз в течение 1 часа.{" "}
-                <span className="font-semibold text-gray-700">
+                <span className="font-semibold" style={{ color: "var(--dm-text)" }}>
                   Это бесплатно и ни к чему не обязывает.
                 </span>
               </p>
@@ -1722,8 +1707,8 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                 {/* Left */}
                 <div>
                   <div
-                    className="rounded-xl overflow-hidden border border-gray-200 mb-4"
-                    style={{ height: "150px" }}
+                    className="rounded-xl overflow-hidden border mb-4"
+                    style={{ height: "150px", borderColor: "var(--dm-border)" }}
                   >
                     <img
                       src={quizImg ?? QUIZ_IMG}
@@ -1731,7 +1716,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
+                  <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "var(--dm-text-faint)" }}>
                     Характеристики
                   </div>
                   <div className="space-y-1.5 text-sm">
@@ -1752,10 +1737,10 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                         : []),
                     ].map(([k, v]) => (
                       <div key={k} className="flex justify-between gap-2">
-                        <span className="text-gray-400 text-xs shrink-0">
+                        <span className="text-xs shrink-0" style={{ color: "var(--dm-text-faint)" }}>
                           {k}
                         </span>
-                        <span className="font-semibold text-gray-900 text-right text-xs">
+                        <span className="font-semibold text-right text-xs" style={{ color: "var(--dm-text)" }}>
                           {v}
                         </span>
                       </div>
@@ -1765,9 +1750,9 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                   {/* Price block */}
                   <div
                     className="mt-4 rounded-xl p-4 text-center relative overflow-hidden"
-                    style={{ background: "#fff3ee" }}
+                    style={{ background: "var(--dm-price-bg)" }}
                   >
-                    <div className="text-xs text-gray-500 mb-1">
+                    <div className="text-xs mb-1" style={{ color: "var(--dm-text-muted)" }}>
                       Стоимость здания
                     </div>
                     {submitted ? (
@@ -1779,7 +1764,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                           >
                             Индивидуальный расчёт
                           </div>
-                          <div className="text-xs text-gray-500 leading-relaxed">
+                          <div className="text-xs leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
                             Выбраны индивидуальные размеры, поэтому стоимость мы
                             посчитаем отдельно и направим вам персональное
                             коммерческое предложение
@@ -1795,14 +1780,14 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                           </div>
                           <div
                             className="w-full h-1.5 rounded-full overflow-hidden"
-                            style={{ background: "#f5d5c0" }}
+                            style={{ background: "var(--dm-border)" }}
                           >
                             <div
                               className="h-full rounded-full animate-price-bar"
                               style={{ background: "var(--orange)" }}
                             />
                           </div>
-                          <div className="text-xs text-gray-400 mt-1.5">
+                          <div className="text-xs mt-1.5" style={{ color: "var(--dm-text-faint)" }}>
                             обычно занимает 3–5 секунд
                           </div>
                         </div>
@@ -1821,18 +1806,18 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                             )}{" "}
                             ₽
                           </div>
-                          <div className="text-xs text-gray-400 mt-1">
+                          <div className="text-xs mt-1" style={{ color: "var(--dm-text-faint)" }}>
                             {new Intl.NumberFormat("ru-RU").format(pricePerSqm)}{" "}
                             ₽ / кв.м · {area} м²
                           </div>
-                          <div className="text-xs text-gray-400 mt-2 leading-relaxed">
+                          <div className="text-xs mt-2 leading-relaxed" style={{ color: "var(--dm-text-faint)" }}>
                             * Расчёт является предварительным. Стоимость
                             дополнительных услуг подготовим и отправим в
                             коммерческом предложении
                           </div>
                         </>
                       ) : (
-                        <div className="text-sm text-gray-400 py-2">
+                        <div className="text-sm py-2" style={{ color: "var(--dm-text-faint)" }}>
                           Уточним стоимость при звонке
                         </div>
                       )
@@ -1844,7 +1829,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                         >
                           — ₽
                         </div>
-                        <div className="text-xs text-gray-400 mt-1 flex items-center justify-center gap-1">
+                        <div className="text-xs mt-1 flex items-center justify-center gap-1" style={{ color: "var(--dm-text-faint)" }}>
                           <Icon name="Lock" size={11} /> Заполните форму, чтобы
                           узнать стоимость
                         </div>
@@ -1857,15 +1842,12 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                 <div>
                   {submitted ? (
                     <div
-                      className="rounded-2xl p-6 text-center"
-                      style={{
-                        background: "#f9f9f9",
-                        border: "1px solid #e5e5e5",
-                      }}
+                      className="rounded-2xl p-6 text-center border"
+                      style={{ background: "var(--dm-surface2)", borderColor: "var(--dm-border)" }}
                     >
                       <div
                         className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3"
-                        style={{ background: "#fff3ee" }}
+                        style={{ background: "var(--dm-icon-bg)" }}
                       >
                         <Icon
                           name="Gift"
@@ -1873,10 +1855,10 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                           style={{ color: "var(--orange)" }}
                         />
                       </div>
-                      <div className="font-bold text-gray-900 mb-1">
+                      <div className="font-bold mb-1" style={{ color: "var(--dm-text)" }}>
                         Благодарим за интерес к решениям EVRAZ STEEL BOX!
                       </div>
-                      <div className="text-sm text-gray-500 mb-3 leading-relaxed">
+                      <div className="text-sm mb-3 leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
                         Запрос успешно отправлен. В ближайшее время мы с вами
                         свяжемся, чтобы обсудить все детали.
                       </div>
@@ -1888,14 +1870,12 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                         <br />1 часа!
                       </div>
                       <button
-                        onClick={() => {
-                          setStep(3);
-                        }}
+                        onClick={() => { setStep(3); }}
                         className="w-full py-3 rounded-xl text-sm font-semibold border-2 transition-all"
                         style={{
                           borderColor: "var(--orange)",
                           color: "var(--orange)",
-                          background: "#fff",
+                          background: "var(--dm-surface)",
                         }}
                       >
                         ← Изменить параметры и пересчитать
@@ -1905,12 +1885,14 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                     <div className="space-y-3">
                       <div>
                         <div
-                          className={`flex items-center gap-2 border-b pb-2 transition-colors ${touched.name && errors.name ? "border-red-400" : "border-gray-200"}`}
+                          className={`flex items-center gap-2 border-b pb-2 transition-colors ${touched.name && errors.name ? "border-red-400" : ""}`}
+                          style={{ borderColor: touched.name && errors.name ? undefined : "var(--dm-border)" }}
                         >
                           <Icon
                             name="User"
                             size={16}
-                            className="text-gray-300 shrink-0"
+                            className="shrink-0"
+                            style={{ color: "var(--dm-text-faint)" }}
                           />
                           <input
                             type="text"
@@ -1931,19 +1913,22 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                                 name: validateName(state.name),
                               }));
                             }}
-                            className="flex-1 text-sm outline-none text-gray-800 placeholder-gray-300"
+                            className="flex-1 text-sm outline-none bg-transparent"
+                            style={{ color: "var(--dm-text)" }}
                           />
                         </div>
                         <FieldError msg={touched.name ? errors.name : ""} />
                       </div>
                       <div>
                         <div
-                          className={`flex items-center gap-2 border-b pb-2 transition-colors ${touched.phone && errors.phone ? "border-red-400" : "border-gray-200"}`}
+                          className={`flex items-center gap-2 border-b pb-2 transition-colors ${touched.phone && errors.phone ? "border-red-400" : ""}`}
+                          style={{ borderColor: touched.phone && errors.phone ? undefined : "var(--dm-border)" }}
                         >
                           <Icon
                             name="Phone"
                             size={16}
-                            className="text-gray-300 shrink-0"
+                            className="shrink-0"
+                            style={{ color: "var(--dm-text-faint)" }}
                           />
                           <input
                             type="tel"
@@ -1965,19 +1950,22 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                                 phone: validatePhone(state.phone),
                               }));
                             }}
-                            className="flex-1 text-sm outline-none text-gray-800 placeholder-gray-300"
+                            className="flex-1 text-sm outline-none bg-transparent"
+                            style={{ color: "var(--dm-text)" }}
                           />
                         </div>
                         <FieldError msg={touched.phone ? errors.phone : ""} />
                       </div>
                       <div>
                         <div
-                          className={`flex items-center gap-2 border-b pb-2 transition-colors ${touched.email && errors.email ? "border-red-400" : "border-gray-200"}`}
+                          className={`flex items-center gap-2 border-b pb-2 transition-colors ${touched.email && errors.email ? "border-red-400" : ""}`}
+                          style={{ borderColor: touched.email && errors.email ? undefined : "var(--dm-border)" }}
                         >
                           <Icon
                             name="Mail"
                             size={16}
-                            className="text-gray-300 shrink-0"
+                            className="shrink-0"
+                            style={{ color: "var(--dm-text-faint)" }}
                           />
                           <input
                             type="email"
@@ -2001,7 +1989,8 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                                 email: validateEmail(state.email),
                               }));
                             }}
-                            className="flex-1 text-sm outline-none text-gray-800 placeholder-gray-300"
+                            className="flex-1 text-sm outline-none bg-transparent"
+                            style={{ color: "var(--dm-text)" }}
                           />
                         </div>
                         <FieldError msg={touched.email ? errors.email : ""} />
@@ -2021,7 +2010,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                               : "transparent",
                             border: state.agreePersonal
                               ? "none"
-                              : "2px solid #d1d5db",
+                              : `2px solid var(--dm-border)`,
                           }}
                         >
                           {state.agreePersonal && (
@@ -2032,7 +2021,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                             />
                           )}
                         </div>
-                        <span className="text-xs text-gray-500 leading-relaxed">
+                        <span className="text-xs leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
                           Я согласен на{" "}
                           <a
                             href="https://evrazsteelbox.ru/politika_v_oblasti_obrabotki_personalnyh_dannyh/"
@@ -2060,7 +2049,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                               : "transparent",
                             border: state.agreePromo
                               ? "none"
-                              : "2px solid #d1d5db",
+                              : `2px solid var(--dm-border)`,
                           }}
                         >
                           {state.agreePromo && (
@@ -2071,7 +2060,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
                             />
                           )}
                         </div>
-                        <span className="text-xs text-gray-500 leading-relaxed">
+                        <span className="text-xs leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
                           Согласен на получение информационных и рекламных
                           сообщений (необязательно)
                         </span>
@@ -2097,11 +2086,12 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
       </div>
 
       {/* Footer nav */}
-      <div className="border-t border-gray-100 px-4 md:px-8 py-4 flex items-center justify-between shrink-0 bg-white">
+      <div className="border-t px-4 md:px-8 py-4 flex items-center justify-between shrink-0" style={{ borderColor: "var(--dm-border)", background: "var(--dm-quiz-bg)" }}>
         {step > 1 ? (
           <button
             onClick={() => setStep((s) => s - 1)}
-            className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-600 transition-colors"
+            className="flex items-center gap-2 text-sm transition-colors"
+            style={{ color: "var(--dm-text-faint)" }}
           >
             <Icon name="ArrowLeft" size={16} /> Назад
           </button>
@@ -2142,11 +2132,11 @@ function QuizFullscreen({ onClose, step1Options, quizImg }: { onClose: () => voi
 // ── Thank You page ────────────────────────────────────────────────────────────
 function ThankYouPage({ onBack }: { onBack: () => void }) {
   return (
-    <div className="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center px-4 animate-fade-in">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center px-4 animate-fade-in" style={{ background: "var(--dm-bg)" }}>
       <div className="max-w-lg w-full text-center">
         <div
           className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
-          style={{ background: "#fff3ee" }}
+          style={{ background: "var(--dm-icon-bg)" }}
         >
           <Icon
             name="CheckCircle"
@@ -2154,17 +2144,17 @@ function ThankYouPage({ onBack }: { onBack: () => void }) {
             style={{ color: "var(--orange)" }}
           />
         </div>
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+        <h1 className="text-2xl md:text-3xl font-bold mb-3" style={{ color: "var(--dm-text)" }}>
           Спасибо за заявку!
         </h1>
-        <p className="text-gray-500 text-base leading-relaxed mb-6">
+        <p className="text-base leading-relaxed mb-6" style={{ color: "var(--dm-text-muted)" }}>
           Ваш запрос успешно принят. Наш менеджер свяжется с вами в течение{" "}
-          <strong className="text-gray-700">15 минут</strong> в рабочее время и
+          <strong style={{ color: "var(--dm-text)" }}>15 минут</strong> в рабочее время и
           ответит на все вопросы.
         </p>
         <div
-          className="rounded-2xl p-5 mb-6 text-left"
-          style={{ background: "#fff3ee", border: "1px solid #ffe0d0" }}
+          className="rounded-2xl p-5 mb-6 text-left border"
+          style={{ background: "var(--dm-price-bg)", borderColor: "var(--dm-border)" }}
         >
           <div className="flex items-center gap-3 mb-3">
             <div
@@ -2174,17 +2164,17 @@ function ThankYouPage({ onBack }: { onBack: () => void }) {
               <Icon name="Gift" size={20} className="text-white" />
             </div>
             <div>
-              <div className="font-bold text-gray-900 text-sm">
+              <div className="font-bold text-sm" style={{ color: "var(--dm-text)" }}>
                 Вам подарок!
               </div>
-              <div className="text-xs text-gray-500">
+              <div className="text-xs" style={{ color: "var(--dm-text-muted)" }}>
                 Эскиз вашего здания — в течение 1 часа,
                 <br />
                 совершенно бесплатно
               </div>
             </div>
           </div>
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
             Пока вы ждёте звонка, загляните на наш сайт — там более{" "}
             <strong>400 реализованных проектов</strong> со всей России.
           </p>
@@ -2200,7 +2190,8 @@ function ThankYouPage({ onBack }: { onBack: () => void }) {
         <br />
         <button
           onClick={onBack}
-          className="text-sm text-gray-400 hover:text-gray-600 transition-colors mt-2"
+          className="text-sm transition-colors mt-2"
+          style={{ color: "var(--dm-text-faint)" }}
         >
           ← Вернуться на главную
         </button>
@@ -2223,6 +2214,12 @@ export default function Index({
   quizOptions?: { label: string; icon: string }[];
   quizImg?: string;
 }) {
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem("theme") === "dark");
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", darkMode ? "dark" : "light");
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [callbackOpen, setCallbackOpen] = useState(false);
   const [cbName, setCbName] = useState("");
@@ -2356,14 +2353,14 @@ export default function Index({
 
   return (
     <div
-      className="min-h-screen bg-white text-gray-900"
-      style={{ fontFamily: "Arial,sans-serif" }}
+      className="min-h-screen"
+      style={{ fontFamily: "Arial,sans-serif", background: "var(--dm-bg)", color: "var(--dm-text)" }}
     >
       {showThankYou && <ThankYouPage onBack={() => setShowThankYou(false)} />}
       {quizOpen && <QuizFullscreen onClose={() => setQuizOpen(false)} step1Options={quizOptions} quizImg={quizImg} />}
 
       {/* ══ HEADER ══════════════════════════════════════════════════════════ */}
-      <header className="border-b border-gray-200 bg-white sticky top-0 z-40 shadow-sm">
+      <header className="border-b sticky top-0 z-40 shadow-sm" style={{ background: "var(--dm-header-bg)", borderColor: "var(--dm-border)" }}>
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 shrink-0">
             <img
@@ -2372,8 +2369,8 @@ export default function Index({
               className="h-10 w-auto object-contain shrink-0"
             />
             <div
-              className="hidden lg:block text-gray-500"
-              style={{ fontSize: "9.5px", lineHeight: "1.55" }}
+              className="hidden lg:block"
+              style={{ fontSize: "9.5px", lineHeight: "1.55", color: "var(--dm-text-muted)" }}
             >
               <span className="block whitespace-nowrap">
                 Российский разработчик и поставщик
@@ -2387,15 +2384,15 @@ export default function Index({
             </div>
           </div>
           <div className="hidden xl:block text-center shrink-0">
-            <div className="text-xs font-semibold text-gray-700">
+            <div className="text-xs font-semibold" style={{ color: "var(--dm-text)" }}>
               Время и график работы
             </div>
-            <div className="text-xs text-gray-500">
+            <div className="text-xs" style={{ color: "var(--dm-text-muted)" }}>
               Пн – Пт &nbsp; 09:30 – 18:00
             </div>
           </div>
           <div className="hidden md:block text-right shrink-0">
-            <div className="font-bold text-base text-gray-900 leading-tight">
+            <div className="font-bold text-base leading-tight" style={{ color: "var(--dm-text)" }}>
               +7 (800) 302-65-29
             </div>
             <div className="text-xs" style={{ color: "var(--orange)" }}>
@@ -2404,20 +2401,28 @@ export default function Index({
           </div>
           <a
             href="tel:+78003026529"
-            className="md:hidden font-bold text-sm text-gray-900 leading-tight truncate"
+            className="md:hidden font-bold text-sm leading-tight truncate"
+            style={{ color: "var(--dm-text)" }}
           >
             +7 (800) 302-65-29
           </a>
           <div className="hidden md:flex items-center gap-2 shrink-0">
             <button
+              className="theme-toggle"
+              onClick={() => setDarkMode(v => !v)}
+              title={darkMode ? "Светлая тема" : "Тёмная тема"}
+            />
+            <button
               onClick={openCallback}
-              className="px-3 py-2 rounded border border-gray-300 text-sm font-semibold text-gray-700 hover:border-gray-500 transition-colors whitespace-nowrap"
+              className="px-3 py-2 rounded border text-sm font-semibold transition-colors whitespace-nowrap"
+              style={{ borderColor: "var(--dm-border)", color: "var(--dm-text)" }}
             >
               Обратный звонок
             </button>
           </div>
           <button
-            className="md:hidden p-2 rounded border border-gray-200 shrink-0"
+            className="md:hidden p-2 rounded border shrink-0"
+            style={{ borderColor: "var(--dm-border)", color: "var(--dm-text)" }}
             onClick={() => setMobileMenuOpen((v) => !v)}
           >
             <Icon name={mobileMenuOpen ? "X" : "Menu"} size={20} />
@@ -2432,8 +2437,8 @@ export default function Index({
             className="absolute inset-0 bg-black/50"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <div className="relative ml-auto w-72 max-w-full bg-white h-full flex flex-col shadow-2xl animate-modal-in overflow-y-auto">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+          <div className="relative ml-auto w-72 max-w-full h-full flex flex-col shadow-2xl animate-modal-in overflow-y-auto" style={{ background: "var(--dm-drawer-bg)" }}>
+            <div className="flex items-center justify-between px-5 py-4 border-b" style={{ borderColor: "var(--dm-border)" }}>
               <img
                 src={LOGO_URL}
                 alt="EVRAZ STEEL BOX"
@@ -2441,29 +2446,37 @@ export default function Index({
               />
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-1.5 rounded border border-gray-200"
+                className="p-1.5 rounded border"
+                style={{ borderColor: "var(--dm-border)", color: "var(--dm-text)" }}
               >
                 <Icon name="X" size={18} />
               </button>
             </div>
-            <div className="px-5 py-4 border-b border-gray-100">
-              <p className="text-sm text-gray-600 leading-relaxed">
+            <div className="px-5 py-4 border-b" style={{ borderColor: "var(--dm-border)" }}>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
                 Российский разработчик и поставщик быстровозводимых зданий на
                 металлическом каркасе
               </p>
             </div>
-            <div className="px-5 py-4 border-b border-gray-100">
-              <div className="text-xs font-semibold text-gray-500 mb-1">
+            <div className="px-5 py-3 border-b flex items-center justify-between" style={{ borderColor: "var(--dm-border)" }}>
+              <span className="text-sm font-semibold" style={{ color: "var(--dm-text)" }}>
+                {darkMode ? "Тёмная тема" : "Светлая тема"}
+              </span>
+              <button className="theme-toggle" onClick={() => setDarkMode(v => !v)} />
+            </div>
+            <div className="px-5 py-4 border-b" style={{ borderColor: "var(--dm-border)" }}>
+              <div className="text-xs font-semibold mb-1" style={{ color: "var(--dm-text-muted)" }}>
                 Время и график работы
               </div>
-              <div className="text-sm text-gray-700">
+              <div className="text-sm" style={{ color: "var(--dm-text)" }}>
                 Пн – Пт &nbsp; 09:30 – 18:00
               </div>
             </div>
-            <div className="px-5 py-4 border-b border-gray-100">
+            <div className="px-5 py-4 border-b" style={{ borderColor: "var(--dm-border)" }}>
               <a
                 href="tel:+78003026529"
-                className="font-bold text-lg text-gray-900 block"
+                className="font-bold text-lg block"
+                style={{ color: "var(--dm-text)" }}
               >
                 +7 (800) 302-65-29
               </a>
@@ -2499,7 +2512,7 @@ export default function Index({
           />
           <div
             className="absolute inset-0"
-            style={{ background: "rgba(255,255,255,0.88)" }}
+            style={{ background: "var(--dm-hero-overlay)" }}
           />
         </div>
         <div
@@ -2511,8 +2524,8 @@ export default function Index({
               className={`transition-all duration-700 ${heroRef.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
             >
               <h1
-                className="font-bold leading-tight text-gray-900 mb-4"
-                style={{ fontSize: "clamp(1.2rem,3.5vw,2.2rem)" }}
+                className="font-bold leading-tight mb-4"
+                style={{ fontSize: "clamp(1.2rem,3.5vw,2.2rem)", color: "var(--dm-text)" }}
               >
                 <span className="block">
                   Спроектируем, изготовим и построим
@@ -2528,12 +2541,12 @@ export default function Index({
                     </span>
                   </span>
                 </span>
-                <span className="block text-gray-900">
+                <span className="block" style={{ color: "var(--dm-text)" }}>
                   от <span style={{ color: "var(--orange)" }}>200 м²</span> под ключ за{" "}
                   <span style={{ color: "var(--orange)" }}>{heroVal}</span> дней
                 </span>
               </h1>
-              <p className="text-gray-700 mb-5 text-sm md:text-base leading-relaxed">
+              <p className="mb-5 text-sm md:text-base leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
                 Пройдите тест за <strong>1 минуту</strong> и получите{" "}
                 <span className="font-bold" style={{ color: "var(--orange)" }}>
                   реальную
@@ -2550,7 +2563,7 @@ export default function Index({
               >
                 РАССЧИТАТЬ СТОИМОСТЬ →
               </button>
-              <p className="text-xs text-gray-400 mt-2 flex items-center gap-1.5">
+              <p className="text-xs mt-2 flex items-center gap-1.5" style={{ color: "var(--dm-text-faint)" }}>
                 <Icon name="Info" size={12} />
                 стоимость вы увидите сразу после заполнения формы — без обмана
               </p>
@@ -2578,11 +2591,12 @@ export default function Index({
       <section
         id="portfolio"
         className="py-12 md:py-16"
-        style={{ background: "#f4f4f4" }}
+        style={{ background: "var(--dm-bg-subtle)" }}
       >
         <div ref={portRef.ref} className="max-w-7xl mx-auto px-4">
           <h2
-            className={`text-xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 transition-all duration-700 ${portRef.inView ? "opacity-100" : "opacity-0"}`}
+            className={`text-xl md:text-3xl font-bold mb-6 md:mb-8 transition-all duration-700 ${portRef.inView ? "opacity-100" : "opacity-0"}`}
+            style={{ color: "var(--dm-text)" }}
           >
             Примеры реализованных проектов:
           </h2>
@@ -2604,13 +2618,13 @@ export default function Index({
       </section>
 
       {/* ══ CONTACTS ═════════════════════════════════════════════════════════ */}
-      <section id="contacts" className="py-12 md:py-16 bg-white">
+      <section id="contacts" className="py-12 md:py-16" style={{ background: "var(--dm-bg)" }}>
         <div ref={contRef.ref} className="max-w-7xl mx-auto px-4">
           <div
             className={`grid md:grid-cols-2 gap-8 md:gap-12 items-start transition-all duration-700 ${contRef.inView ? "opacity-100" : "opacity-0"}`}
           >
             <div>
-              <h2 className="text-xl md:text-3xl font-bold text-gray-900 mb-6">
+              <h2 className="text-xl md:text-3xl font-bold mb-6" style={{ color: "var(--dm-text)" }}>
                 Свяжитесь с нами
               </h2>
               <div className="space-y-5">
@@ -2634,7 +2648,7 @@ export default function Index({
                   <div key={i} className="flex items-center gap-4">
                     <div
                       className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-                      style={{ background: "#fff3ee" }}
+                      style={{ background: "var(--dm-icon-bg)" }}
                     >
                       <Icon
                         name={c.icon}
@@ -2643,17 +2657,17 @@ export default function Index({
                       />
                     </div>
                     <div>
-                      <div className="font-semibold text-gray-900 text-sm break-all">
+                      <div className="font-semibold text-sm break-all" style={{ color: "var(--dm-text)" }}>
                         {c.label}
                       </div>
-                      <div className="text-xs text-gray-400">{c.sub}</div>
+                      <div className="text-xs" style={{ color: "var(--dm-text-faint)" }}>{c.sub}</div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-5 md:p-7">
-              <h3 className="font-bold text-gray-900 mb-5">Оставить заявку</h3>
+            <div className="rounded-xl border p-5 md:p-7" style={{ background: "var(--dm-bg-card)", borderColor: "var(--dm-border)" }}>
+              <h3 className="font-bold mb-5" style={{ color: "var(--dm-text)" }}>Оставить заявку</h3>
               <form
                 className="space-y-3 md:space-y-4"
                 onSubmit={submitContactForm}
@@ -2679,7 +2693,8 @@ export default function Index({
                         name: validateName(cfName),
                       }));
                     }}
-                    className={`w-full border rounded px-4 py-3 text-sm outline-none transition-colors ${cfTouched.name && cfErrors.name ? "border-red-400" : "border-gray-200 focus:border-orange-400"}`}
+                    className={`w-full border rounded px-4 py-3 text-sm outline-none transition-colors ${cfTouched.name && cfErrors.name ? "border-red-400" : "focus:border-orange-400"}`}
+                    style={{ background: "var(--dm-bg-input)", borderColor: cfTouched.name && cfErrors.name ? undefined : "var(--dm-border)", color: "var(--dm-text)" }}
                   />
                   <FieldError msg={cfTouched.name ? cfErrors.name : ""} />
                 </div>
@@ -2705,7 +2720,8 @@ export default function Index({
                         phone: validatePhone(cfPhone),
                       }));
                     }}
-                    className={`w-full border rounded px-4 py-3 text-sm outline-none transition-colors ${cfTouched.phone && cfErrors.phone ? "border-red-400" : "border-gray-200 focus:border-orange-400"}`}
+                    className={`w-full border rounded px-4 py-3 text-sm outline-none transition-colors ${cfTouched.phone && cfErrors.phone ? "border-red-400" : "focus:border-orange-400"}`}
+                    style={{ background: "var(--dm-bg-input)", borderColor: cfTouched.phone && cfErrors.phone ? undefined : "var(--dm-border)", color: "var(--dm-text)" }}
                   />
                   <FieldError msg={cfTouched.phone ? cfErrors.phone : ""} />
                 </div>
@@ -2730,7 +2746,8 @@ export default function Index({
                         email: validateEmail(cfEmail),
                       }));
                     }}
-                    className={`w-full border rounded px-4 py-3 text-sm outline-none transition-colors ${cfTouched.email && cfErrors.email ? "border-red-400" : "border-gray-200 focus:border-orange-400"}`}
+                    className={`w-full border rounded px-4 py-3 text-sm outline-none transition-colors ${cfTouched.email && cfErrors.email ? "border-red-400" : "focus:border-orange-400"}`}
+                    style={{ background: "var(--dm-bg-input)", borderColor: cfTouched.email && cfErrors.email ? undefined : "var(--dm-border)", color: "var(--dm-text)" }}
                   />
                   <FieldError msg={cfTouched.email ? cfErrors.email : ""} />
                 </div>
@@ -2739,7 +2756,8 @@ export default function Index({
                   placeholder="Опишите вашу задачу"
                   value={cfMsg}
                   onChange={(e) => setCfMsg(e.target.value)}
-                  className="w-full border border-gray-200 rounded px-4 py-3 text-sm outline-none focus:border-orange-400 transition-colors resize-none"
+                  className="w-full border rounded px-4 py-3 text-sm outline-none focus:border-orange-400 transition-colors resize-none"
+                  style={{ background: "var(--dm-bg-input)", borderColor: "var(--dm-border)", color: "var(--dm-text)" }}
                 />
                 <button
                   type="submit"
@@ -2772,10 +2790,11 @@ export default function Index({
           onClick={() => setActiveProject(null)}
         >
           <div
-            className="bg-white rounded-t-2xl sm:rounded-2xl w-full sm:max-w-xl overflow-hidden animate-modal-in max-h-[92vh] overflow-y-auto"
+            className="rounded-t-2xl sm:rounded-2xl w-full sm:max-w-xl overflow-hidden animate-modal-in max-h-[92vh] overflow-y-auto"
+            style={{ background: "var(--dm-modal-bg)" }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative bg-gray-100" style={{ height: "220px" }}>
+            <div className="relative" style={{ height: "220px", background: "var(--dm-bg-subtle)" }}>
               <img
                 src={activeProject.photos[modalImgIdx]}
                 alt={activeProject.title}
@@ -2810,14 +2829,14 @@ export default function Index({
               </button>
             </div>
             <div className="p-4 md:p-6">
-              <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">
+              <div className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: "var(--dm-text-faint)" }}>
                 Карточка проекта
               </div>
-              <h3 className="text-base md:text-xl font-bold text-gray-900 mb-4">
+              <h3 className="text-base md:text-xl font-bold mb-4" style={{ color: "var(--dm-text)" }}>
                 {activeProject.title}
               </h3>
               <div className="mb-4">
-                <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
+                <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "var(--dm-text-faint)" }}>
                   Характеристики здания
                 </div>
                 <div className="space-y-2 text-sm">
@@ -2847,7 +2866,7 @@ export default function Index({
                       key={label}
                       className="flex items-start justify-between gap-2"
                     >
-                      <div className="flex items-center gap-1.5 text-gray-400 shrink-0">
+                      <div className="flex items-center gap-1.5 shrink-0" style={{ color: "var(--dm-text-faint)" }}>
                         <Icon
                           name={icon}
                           size={12}
@@ -2855,23 +2874,24 @@ export default function Index({
                         />
                         <span>{label}</span>
                       </div>
-                      <span className="text-gray-900 text-right">{value}</span>
+                      <span className="text-right" style={{ color: "var(--dm-text)" }}>{value}</span>
                     </div>
                   ))}
                 </div>
               </div>
               <div
                 className="mb-5 p-3 rounded-lg"
-                style={{ background: "#f9f9f9" }}
+                style={{ background: "var(--dm-surface2)" }}
               >
-                <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">
+                <div className="text-xs font-bold uppercase tracking-widest mb-1.5" style={{ color: "var(--dm-text-faint)" }}>
                   Детали
                 </div>
                 <div className="space-y-1">
                   {activeProject.details.map((d, i) => (
                     <div
                       key={i}
-                      className="flex items-center gap-1.5 text-sm text-gray-700"
+                      className="flex items-center gap-1.5 text-sm"
+                      style={{ color: "var(--dm-text-muted)" }}
                     >
                       <Icon
                         name="Info"
@@ -2904,7 +2924,8 @@ export default function Index({
           onClick={() => setCallbackOpen(false)}
         >
           <div
-            className="bg-white rounded-t-2xl sm:rounded-2xl w-full sm:max-w-sm overflow-hidden animate-modal-in"
+            className="rounded-t-2xl sm:rounded-2xl w-full sm:max-w-sm overflow-hidden animate-modal-in"
+            style={{ background: "var(--dm-modal-bg)" }}
             onClick={(e) => e.stopPropagation()}
           >
             <div
@@ -2935,7 +2956,7 @@ export default function Index({
                 <div className="text-center py-4">
                   <div
                     className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3"
-                    style={{ background: "#fff3ee" }}
+                    style={{ background: "var(--dm-icon-bg)" }}
                   >
                     <Icon
                       name="CheckCircle"
@@ -2943,17 +2964,17 @@ export default function Index({
                       style={{ color: "var(--orange)" }}
                     />
                   </div>
-                  <div className="font-bold text-gray-900 mb-1">
+                  <div className="font-bold mb-1" style={{ color: "var(--dm-text)" }}>
                     Заявка принята!
                   </div>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm" style={{ color: "var(--dm-text-muted)" }}>
                     Перезвоним в рабочее время в течение 15 минут
                   </div>
                 </div>
               ) : (
                 <div className="space-y-3.5">
                   <div>
-                    <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
+                    <label className="text-xs font-semibold mb-1.5 block" style={{ color: "var(--dm-text-muted)" }}>
                       Ваше имя
                     </label>
                     <input
@@ -2975,12 +2996,13 @@ export default function Index({
                           name: validateName(cbName),
                         }));
                       }}
-                      className={`w-full border rounded-lg px-4 py-3 text-sm outline-none transition-colors ${cbTouched.name && cbErrors.name ? "border-red-400" : "border-gray-200 focus:border-orange-300"}`}
+                      className={`w-full border rounded-lg px-4 py-3 text-sm outline-none transition-colors ${cbTouched.name && cbErrors.name ? "border-red-400" : "focus:border-orange-300"}`}
+                      style={{ background: "var(--dm-bg-input)", borderColor: cbTouched.name && cbErrors.name ? undefined : "var(--dm-border)", color: "var(--dm-text)" }}
                     />
                     <FieldError msg={cbTouched.name ? cbErrors.name : ""} />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
+                    <label className="text-xs font-semibold mb-1.5 block" style={{ color: "var(--dm-text-muted)" }}>
                       Телефон
                     </label>
                     <input
@@ -3003,7 +3025,8 @@ export default function Index({
                           phone: validatePhone(cbPhone),
                         }));
                       }}
-                      className={`w-full border rounded-lg px-4 py-3 text-sm outline-none transition-colors ${cbTouched.phone && cbErrors.phone ? "border-red-400" : "border-gray-200 focus:border-orange-300"}`}
+                      className={`w-full border rounded-lg px-4 py-3 text-sm outline-none transition-colors ${cbTouched.phone && cbErrors.phone ? "border-red-400" : "focus:border-orange-300"}`}
+                      style={{ background: "var(--dm-bg-input)", borderColor: cbTouched.phone && cbErrors.phone ? undefined : "var(--dm-border)", color: "var(--dm-text)" }}
                     />
                     <FieldError msg={cbTouched.phone ? cbErrors.phone : ""} />
                   </div>

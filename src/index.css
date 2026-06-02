@@ -26,6 +26,61 @@
     --radius: 0.5rem;
     --orange: #e07e34;
     --orange-dark: #c46920;
+
+    /* Semantic tokens — light */
+    --dm-bg: #ffffff;
+    --dm-bg-subtle: #f4f4f4;
+    --dm-bg-card: #ffffff;
+    --dm-bg-input: #ffffff;
+    --dm-surface: #ffffff;
+    --dm-surface2: #f9f9f9;
+    --dm-border: #e5e5e5;
+    --dm-border2: #e5e7eb; /* gray-200 */
+    --dm-text: #111827;
+    --dm-text-muted: #6b7280;
+    --dm-text-faint: #9ca3af;
+    --dm-header-bg: #ffffff;
+    --dm-hero-overlay: rgba(255, 255, 255, 0.88);
+    --dm-hero-overlay-mobile: rgba(255, 255, 255, 0.92);
+    --dm-icon-bg: #fff3ee;
+    --dm-quiz-bg: #ffffff;
+    --dm-quiz-hover: #fff5f0;
+    --dm-price-bg: #fff3ee;
+    --dm-modal-bg: #ffffff;
+    --dm-drawer-bg: #ffffff;
+    --dm-stat-border: #f3f4f6; /* gray-100 */
+    --dm-scrollbar-track: #f1f1f1;
+  }
+
+  [data-theme="dark"] {
+    --background: 0 0% 7%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 11%;
+    --card-foreground: 0 0% 95%;
+    --border: 0 0% 20%;
+
+    --dm-bg: #111111;
+    --dm-bg-subtle: #1a1a1a;
+    --dm-bg-card: #1c1c1c;
+    --dm-bg-input: #1e1e1e;
+    --dm-surface: #1c1c1c;
+    --dm-surface2: #242424;
+    --dm-border: #2e2e2e;
+    --dm-border2: #2e2e2e;
+    --dm-text: #f0f0f0;
+    --dm-text-muted: #a0a0a0;
+    --dm-text-faint: #666666;
+    --dm-header-bg: #0d0d0d;
+    --dm-hero-overlay: rgba(0, 0, 0, 0.72);
+    --dm-hero-overlay-mobile: rgba(0, 0, 0, 0.82);
+    --dm-icon-bg: rgba(224, 126, 52, 0.12);
+    --dm-quiz-bg: #1c1c1c;
+    --dm-quiz-hover: rgba(224, 126, 52, 0.1);
+    --dm-price-bg: rgba(224, 126, 52, 0.1);
+    --dm-modal-bg: #1c1c1c;
+    --dm-drawer-bg: #161616;
+    --dm-stat-border: #2a2a2a;
+    --dm-scrollbar-track: #1a1a1a;
   }
 }
 
@@ -35,8 +90,12 @@
     font-family: Arial, sans-serif;
   }
   body {
-    @apply bg-white text-gray-900;
+    background: var(--dm-bg);
+    color: var(--dm-text);
     font-family: Arial, sans-serif;
+    transition:
+      background 0.3s,
+      color 0.3s;
   }
   html {
     scroll-behavior: smooth;
@@ -47,7 +106,7 @@
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--dm-scrollbar-track);
 }
 ::-webkit-scrollbar-thumb {
   background: var(--orange);
@@ -60,6 +119,15 @@
     rgba(255, 255, 255, 0.97) 0%,
     rgba(255, 255, 255, 0.85) 45%,
     rgba(255, 255, 255, 0.2) 100%
+  );
+}
+
+[data-theme="dark"] .hero-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.75) 45%,
+    rgba(0, 0, 0, 0.25) 100%
   );
 }
 
@@ -85,12 +153,12 @@
   cursor: pointer;
 }
 .project-card:hover {
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
   transform: translateY(-3px);
 }
 
 .quiz-option {
-  border: 2px solid #e5e5e5;
+  border: 2px solid var(--dm-border);
   transition:
     border-color 0.18s,
     background 0.18s;
@@ -98,11 +166,11 @@
 }
 .quiz-option:hover {
   border-color: var(--orange);
-  background: #fff5f0;
+  background: var(--dm-quiz-hover);
 }
 .quiz-option.selected {
   border-color: var(--orange);
-  background: #fff5f0;
+  background: var(--dm-quiz-hover);
 }
 
 .quiz-bar {
@@ -132,8 +200,8 @@
 }
 
 .modal-backdrop {
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
 }
 
 @keyframes fade-up {
@@ -209,6 +277,39 @@
   animation: word-flip 2s ease both;
 }
 
+/* Dark-mode toggle button */
+.theme-toggle {
+  width: 40px;
+  height: 22px;
+  border-radius: 11px;
+  background: var(--dm-border);
+  position: relative;
+  transition: background 0.25s;
+  cursor: pointer;
+  border: none;
+  flex-shrink: 0;
+}
+.theme-toggle::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--dm-text-muted);
+  transition:
+    transform 0.25s,
+    background 0.25s;
+}
+[data-theme="dark"] .theme-toggle {
+  background: var(--orange);
+}
+[data-theme="dark"] .theme-toggle::after {
+  transform: translateX(18px);
+  background: #fff;
+}
+
 /* Mobile overflow guard */
 * {
   box-sizing: border-box;
@@ -227,6 +328,9 @@ img {
     word-break: break-word;
   }
   .hero-overlay {
-    background: rgba(255, 255, 255, 0.92) !important;
+    background: var(--dm-hero-overlay-mobile) !important;
+  }
+  [data-theme="dark"] .hero-overlay {
+    background: var(--dm-hero-overlay-mobile) !important;
   }
 }
