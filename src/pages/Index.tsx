@@ -1509,7 +1509,7 @@ function QuizFullscreen({ onClose }: { onClose: () => void }) {
               {/* Свой вариант — одно поле */}
               <div className="mb-5">
                 <label className="text-xs font-semibold text-gray-500 mb-1.5 block">
-                  Свой вариант (Ширина × Длина × Высота, м) — min площадь от 200 м²
+                  Свой вариант (Ширина × Длина × Высота, м)
                 </label>
                 <input
                   type="text"
