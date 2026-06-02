@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 import Icon from "@/components/ui/icon";
+import Footer from "@/components/Footer";
 
 // ── Images ───────────────────────────────────────────────────────────────────
 const HERO_BG =
@@ -2206,8 +2208,15 @@ function ThankYouPage({ onBack }: { onBack: () => void }) {
   );
 }
 
+const NAV_CATEGORIES = [
+  { label: "Производственные здания", href: "/proizvodstvennye-zdaniya" },
+  { label: "Здания для транспорта", href: "/zdaniya-dlya-transporta" },
+  { label: "Торговые здания", href: "/torgovye-zdaniya" },
+];
+
 // ════════════════════════════════════════════════════════════════════════════
-export default function Index() {
+export default function Index({ categoryTitle }: { categoryTitle?: string }) {
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [callbackOpen, setCallbackOpen] = useState(false);
   const [cbName, setCbName] = useState("");
@@ -2404,6 +2413,27 @@ export default function Index() {
         </div>
       </header>
 
+      {/* ══ CATEGORY NAV ══════════════════════════════════════════════════════ */}
+      <nav className="bg-gray-50 border-b border-gray-200 hidden md:block">
+        <div className="max-w-7xl mx-auto px-4 flex items-center gap-1">
+          <Link
+            to="/"
+            className={`px-4 py-2.5 text-sm font-medium transition-colors whitespace-nowrap ${location.pathname === "/" ? "text-orange-500 border-b-2 border-orange-500" : "text-gray-600 hover:text-gray-900"}`}
+          >
+            Главная
+          </Link>
+          {NAV_CATEGORIES.map((cat) => (
+            <Link
+              key={cat.href}
+              to={cat.href}
+              className={`px-4 py-2.5 text-sm font-medium transition-colors whitespace-nowrap ${location.pathname === cat.href ? "text-orange-500 border-b-2 border-orange-500" : "text-gray-600 hover:text-gray-900"}`}
+            >
+              {cat.label}
+            </Link>
+          ))}
+        </div>
+      </nav>
+
       {/* Mobile drawer */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 flex">
@@ -2497,15 +2527,21 @@ export default function Index() {
                   Спроектируем, изготовим и построим
                 </span>
                 <span className="block" style={{ color: "var(--orange)" }}>
-                  <span>быстровозводимые&nbsp;</span>
-                  <span className="inline-block" style={{ minWidth: "20ch" }}>
-                    <span
-                      key={wordKey}
-                      className="animate-word-flip inline-block"
-                    >
-                      {ROTATING_WORDS[wordIdx]}
-                    </span>
-                  </span>
+                  {categoryTitle ? (
+                    <span>{categoryTitle}</span>
+                  ) : (
+                    <>
+                      <span>быстровозводимые&nbsp;</span>
+                      <span className="inline-block" style={{ minWidth: "20ch" }}>
+                        <span
+                          key={wordKey}
+                          className="animate-word-flip inline-block"
+                        >
+                          {ROTATING_WORDS[wordIdx]}
+                        </span>
+                      </span>
+                    </>
+                  )}
                 </span>
                 <span className="block text-gray-900">
                   от <span style={{ color: "var(--orange)" }}>200 м²</span> под ключ за{" "}
@@ -3010,6 +3046,8 @@ export default function Index() {
           </div>
         </div>
       )}
+
+      <Footer />
     </div>
   );
 }
