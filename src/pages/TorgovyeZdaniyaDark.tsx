@@ -4,19 +4,18 @@ const WORDS = [
   "торговые здания",
   "торговые павильоны",
   "торговые центры",
-  "рынки",
-  "супермаркеты и гипермаркеты",
-  "кафе и рестораны",
-  "столовые",
+  "супермаркеты",
+  "кафе и столовые",
   "магазины",
+  "рынки",
 ];
 
 const QUIZ_OPTIONS = [
   { label: "Торговый павильон", icon: "Store" },
-  { label: "Торговый центр", icon: "ShoppingBag" },
-  { label: "Супермаркет или гипермаркет", icon: "ShoppingCart" },
-  { label: "Кафе/ресторан/столовая", icon: "UtensilsCrossed" },
   { label: "Магазин", icon: "Tag" },
+  { label: "Супермаркет", icon: "ShoppingCart" },
+  { label: "Торговый центр", icon: "ShoppingBag" },
+  { label: "Кафе/столовая", icon: "UtensilsCrossed" },
   { label: "Другое", icon: "MoreHorizontal" },
 ];
 
