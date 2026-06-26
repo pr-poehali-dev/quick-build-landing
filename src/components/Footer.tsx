@@ -59,11 +59,11 @@ export default function Footer() {
             <h4 className="text-sm font-semibold mb-3" style={{ color: "var(--dm-text)" }}>Контакты</h4>
             <p className="text-xs mb-2" style={{ color: "var(--dm-text-muted)" }}>Пн – Пт &nbsp;09:30 – 18:00</p>
             <a
-              href="tel:+78003026529"
+              href="tel:+74950670755"
               className="block text-base font-bold hover:text-orange-500 transition-colors mb-1"
               style={{ color: "var(--dm-text)" }}
             >
-              +7 (800) 302-65-29
+              +7 (495) 067-07-55
             </a>
             <a
               href="mailto:sales.box@evrazsteel.ru"

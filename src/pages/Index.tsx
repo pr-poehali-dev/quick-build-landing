@@ -2397,18 +2397,18 @@ export default function Index({
           </div>
           <div className="hidden md:block text-right shrink-0">
             <div className="font-bold text-base leading-tight" style={{ color: "var(--dm-text)" }}>
-              +7 (800) 302-65-29
+              +7 (495) 067-07-55
             </div>
             <div className="text-xs" style={{ color: "var(--orange)" }}>
               sales.box@evrazsteel.ru
             </div>
           </div>
           <a
-            href="tel:+78003026529"
+            href="tel:+74950670755"
             className="md:hidden font-bold text-sm leading-tight truncate"
             style={{ color: "var(--dm-text)" }}
           >
-            +7 (800) 302-65-29
+            +7 (495) 067-07-55
           </a>
           <div className="hidden md:flex items-center gap-2 shrink-0">
             <button
@@ -2467,11 +2467,11 @@ export default function Index({
             </div>
             <div className="px-5 py-4 border-b" style={{ borderColor: "var(--dm-border)" }}>
               <a
-                href="tel:+78003026529"
+                href="tel:+74950670755"
                 className="font-bold text-lg block"
                 style={{ color: "var(--dm-text)" }}
               >
-                +7 (800) 302-65-29
+                +7 (495) 067-07-55
               </a>
               <div
                 className="text-xs mt-0.5"
@@ -2624,7 +2624,7 @@ export default function Index({
                 {[
                   {
                     icon: "Phone",
-                    label: "+7 (800) 302-65-29",
+                    label: "+7 (495) 067-07-55",
                     sub: "Бесплатно по России, Пн–Пт 9:30–18:00",
                   },
                   {
