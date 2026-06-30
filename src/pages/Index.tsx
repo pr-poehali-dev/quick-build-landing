@@ -2208,6 +2208,7 @@ export default function Index({
   quizOptions,
   quizImg,
   forceTheme,
+  projects: projectsProp,
 }: {
   pageTitle?: string;
   pageDescription?: string;
@@ -2215,6 +2216,7 @@ export default function Index({
   quizOptions?: { label: string; icon: string }[];
   quizImg?: string;
   forceTheme?: "dark" | "light";
+  projects?: Project[];
 }) {
   useEffect(() => {
     if (forceTheme) {
@@ -2231,6 +2233,7 @@ export default function Index({
   const [cbSent, setCbSent] = useState(false);
   const [cbErrors, setCbErrors] = useState({ name: "", phone: "" });
   const [cbTouched, setCbTouched] = useState({ name: false, phone: false });
+  const activeProjects = projectsProp ?? projects;
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [modalImgIdx, setModalImgIdx] = useState(0);
   const [quizOpen, setQuizOpen] = useState(false);
@@ -2596,7 +2599,7 @@ export default function Index({
           <div
             className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 transition-all duration-700 delay-100 ${portRef.inView ? "opacity-100" : "opacity-0"}`}
           >
-            {projects.map((p) => (
+            {activeProjects.map((p) => (
               <ProjectCard
                 key={p.id}
                 p={p}
