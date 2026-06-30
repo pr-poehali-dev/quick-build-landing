@@ -89,7 +89,7 @@ const STATS = [
   },
 ];
 
-interface Project {
+export interface Project {
   id: number;
   photos: string[];
   title: string;

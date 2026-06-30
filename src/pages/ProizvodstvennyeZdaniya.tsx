@@ -1,4 +1,4 @@
-import Index from "./Index";
+import Index, { Project } from "./Index";
 
 const WORDS = [
   "промышленные здания",
@@ -19,7 +19,7 @@ const QUIZ_OPTIONS = [
   { label: "Другое", icon: "MoreHorizontal" },
 ];
 
-const PROJECTS = [
+const PROJECTS: Project[] = [
   {
     id: 1,
     photos: [
