@@ -75,11 +75,10 @@ const TORGOVYE_PROJECTS: Project[] = [
   {
     id: 3,
     photos: [
-      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/a18783e4-53f3-4cb0-8266-ac1c003a3583.jpg",
-      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/470c1326-116e-4979-87dd-e0cdc2e63a78.jpg",
-      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/66966d14-1e1c-4f73-89dd-6d544524f2b1.jpg",
-      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/f26a7f7d-9b75-42ed-8df6-1ea42b5452f1.jpg",
-      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/f2d7c208-4b96-48f5-9384-048a19cedc7d.jpg",
+      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/058f87fa-8e5c-4c82-a330-319df26dd5de.jpg",
+      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/f3fa9969-abb9-445c-a950-973426f8deba.jpg",
+      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/9366fbd9-2b67-4595-b440-c54b1fc21ec8.jpg",
+      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/8f050785-a59b-4e82-94be-ec3b5a1caa38.jpg",
     ],
     title: "Здание магазина",
     dims: "8,76×13,76×4,6 м",
