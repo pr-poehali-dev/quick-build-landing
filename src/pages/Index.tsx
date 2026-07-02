@@ -91,6 +91,7 @@ export interface Project {
   id: number;
   photos: string[];
   title: string;
+  titleShort?: string;
   dims: string;
   area: string;
   locationShort: string;
@@ -800,7 +801,7 @@ function ProjectCard({ p, onClick }: { p: Project; onClick: () => void }) {
       </div>
       <div className="p-4 flex flex-col gap-1.5">
         <div className="font-bold text-sm leading-snug" style={{ color: "var(--dm-text)" }}>
-          {p.title}
+          {p.titleShort ?? p.title}
         </div>
         <div className="flex items-center gap-1.5 text-xs" style={{ color: "var(--dm-text-muted)" }}>
           <Icon

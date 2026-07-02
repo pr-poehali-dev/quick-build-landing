@@ -11,6 +11,7 @@ const TRANSPORT_PROJECTS: Project[] = [
       "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/7eb08d23-3ac7-4985-9648-6bcf43cac986.jpg",
     ],
     title: "Станция технического обслуживания большегрузного транспорта",
+    titleShort: "Станция технического обслуживания",
     dims: "28×35×10 м",
     area: "980 м²",
     locationShort: "Ярославская обл., г. Ярославль",
