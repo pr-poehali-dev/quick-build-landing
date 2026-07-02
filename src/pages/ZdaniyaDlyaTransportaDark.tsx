@@ -4,6 +4,30 @@ const TRANSPORT_PROJECTS: Project[] = [
   {
     id: 1,
     photos: [
+      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/83a801f3-002d-4f03-b7cd-fc0b8596d7dc.jpg",
+      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/bebe8e5e-8bcc-4979-b50a-d14c2fb024a4.jpg",
+      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/6ea8a835-7138-4c59-90dd-9ee68d3d88ea.jpg",
+      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/cbd03750-9968-4dcb-9d4f-4b0292259724.jpg",
+      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/7eb08d23-3ac7-4985-9648-6bcf43cac986.jpg",
+    ],
+    title: "Станция технического обслуживания большегрузного транспорта",
+    dims: "28×35×10 м",
+    area: "980 м²",
+    locationShort: "Ярославская обл., г. Ярославль",
+    locationFull: "Россия, Ярославская область, г. Ярославль",
+    purpose: "Здания для транспорта",
+    details: [
+      "Стены: сэндвич-панели",
+      "Кровля: мембрана",
+    ],
+    length: "35 м",
+    width: "28 м",
+    height: "10 м",
+    category: "Здания для транспорта",
+  },
+  {
+    id: 2,
+    photos: [
       "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/dfd561e2-6fdb-49ba-800c-31a80f816318.jpg",
       "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/d175b4a0-9816-4513-b964-6de699180322.jpg",
       "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/e7f97895-f1ab-44ab-902c-2216b486153e.jpg",
@@ -26,7 +50,7 @@ const TRANSPORT_PROJECTS: Project[] = [
     category: "Здания для транспорта",
   },
   {
-    id: 2,
+    id: 3,
     photos: [
       "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/e77db425-cfb8-4a22-8bd6-2ad831171587.jpg",
       "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/8aa2ab9d-c126-4083-a99e-5523da378bd9.jpg",
@@ -48,30 +72,6 @@ const TRANSPORT_PROJECTS: Project[] = [
     length: "30 м",
     width: "18 м",
     height: "4,5 м",
-    category: "Здания для транспорта",
-  },
-  {
-    id: 3,
-    photos: [
-      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/cda47c01-f810-4cb2-a607-23ed7ff49c3d.png",
-      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/357a9f24-fb9f-4ed7-ae72-4023b9198f2f.jpg",
-      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/a324d4a6-3641-47f4-acde-1df02c3c5aae.jpg",
-      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/2832f334-fab8-41bc-bbd7-07e41c9e6efd.png",
-    ],
-    title: "Здание по ремонту техники",
-    dims: "14×20×4,8 м",
-    area: "280 м²",
-    locationShort: "Респ. Башкортостан, г. Октябрьский",
-    locationFull: "Россия, Республика Башкортостан, г. Октябрьский",
-    purpose: "Здания для транспорта",
-    details: [
-      "Наличие кранов: нет",
-      "Наличие антресолей: нет",
-      "Кровля и стены: сэндвич-панели",
-    ],
-    length: "20 м",
-    width: "14 м",
-    height: "4,8 м",
     category: "Здания для транспорта",
   },
   {
