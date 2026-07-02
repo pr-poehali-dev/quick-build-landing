@@ -47,9 +47,9 @@ const PROJECTS: Project[] = [
   {
     id: 2,
     photos: [
+      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/88dbb56e-0d3b-4496-b88d-b6b06f9e9266.jpg",
       "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/7f6efaf7-569a-4b2a-832d-06a699e9229f.jpg",
       "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/2cd1c189-1ced-462b-b958-0b4192be83dc.jpg",
-      "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/88dbb56e-0d3b-4496-b88d-b6b06f9e9266.jpg",
     ],
     title: "Производственное здание",
     dims: "18×24×6 м",

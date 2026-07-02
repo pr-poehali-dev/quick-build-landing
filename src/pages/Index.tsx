@@ -18,13 +18,11 @@ const P1_B =
 const P1_C =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/1359336a-aa8d-46e2-ad61-8397109c3978.jpg";
 const P2_BG =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/7f6efaf7-569a-4b2a-832d-06a699e9229f.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/88dbb56e-0d3b-4496-b88d-b6b06f9e9266.jpg";
 const P2_A =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/7f6efaf7-569a-4b2a-832d-06a699e9229f.jpg";
 const P2_B =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/2cd1c189-1ced-462b-b958-0b4192be83dc.jpg";
-const P2_C =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/88dbb56e-0d3b-4496-b88d-b6b06f9e9266.jpg";
 const P3_BG =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/20974fcd-d088-4bad-b865-6100c75100f0.jpg";
 const P3_A =
@@ -122,7 +120,7 @@ const projects: Project[] = [
   },
   {
     id: 2,
-    photos: [P2_BG, P2_A, P2_B, P2_C],
+    photos: [P2_BG, P2_A, P2_B],
     title: "Производственное здание",
     dims: "18×24×6 м",
     area: "432 м²",
