@@ -18,7 +18,7 @@ const CATEGORIES = [
   },
 ];
 
-export default function Footer() {
+export default function Footer({ logoUrl = LOGO_URL }: { logoUrl?: string }) {
   return (
     <footer className="border-t pt-10 pb-6" style={{ background: "var(--dm-bg)", borderColor: "var(--dm-border)" }}>
       <div className="max-w-7xl mx-auto px-4">
@@ -26,7 +26,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <img
-                src={LOGO_URL}
+                src={logoUrl}
                 alt="EVRAZ STEEL BOX"
                 className="h-10 w-auto object-contain"
               />

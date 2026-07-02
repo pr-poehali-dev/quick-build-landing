@@ -7,6 +7,8 @@ const HERO_BG =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/e04968b8-999e-4c94-812a-66bd0ded90d1.jpg";
 const LOGO_URL =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/528f5996-8edc-44d4-8206-5de1a1c38adf.png";
+const LOGO_URL_DARK =
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/a7f6bced-50d3-4c38-a6d7-7a0d5474813b.png";
 const QUIZ_IMG =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/3d3baadb-9088-44d8-b5c3-1f83f8c84ecf.jpg";
 const P1_BG =
@@ -2225,6 +2227,8 @@ export default function Index({
     }
   }, [forceTheme]);
 
+  const logoUrl = forceTheme === "dark" ? LOGO_URL_DARK : LOGO_URL;
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [callbackOpen, setCallbackOpen] = useState(false);
   const [cbName, setCbName] = useState("");
@@ -2370,7 +2374,7 @@ export default function Index({
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 shrink-0">
             <img
-              src={LOGO_URL}
+              src={logoUrl}
               alt="EVRAZ STEEL BOX"
               className="h-10 w-auto object-contain shrink-0"
             />
@@ -2441,7 +2445,7 @@ export default function Index({
           <div className="relative ml-auto w-72 max-w-full h-full flex flex-col shadow-2xl animate-modal-in overflow-y-auto" style={{ background: "var(--dm-drawer-bg)" }}>
             <div className="flex items-center justify-between px-5 py-4 border-b" style={{ borderColor: "var(--dm-border)" }}>
               <img
-                src={LOGO_URL}
+                src={logoUrl}
                 alt="EVRAZ STEEL BOX"
                 className="h-9 w-auto object-contain"
               />
@@ -3050,7 +3054,7 @@ export default function Index({
         </div>
       )}
 
-      <Footer />
+      <Footer logoUrl={logoUrl} />
     </div>
   );
 }
