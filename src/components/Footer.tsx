@@ -5,6 +5,10 @@ const LOGO_URL =
 
 const CATEGORIES = [
   {
+    label: "Быстровозводимые склады",
+    href: "/sklady",
+  },
+  {
     label: "Быстровозводимые производственные здания",
     href: "/proizvodstvennye-zdaniya",
   },
@@ -18,7 +22,8 @@ const CATEGORIES = [
   },
 ];
 
-export default function Footer({ logoUrl = LOGO_URL }: { logoUrl?: string }) {
+export default function Footer({ logoUrl = LOGO_URL, forceTheme }: { logoUrl?: string; forceTheme?: "dark" | "light" }) {
+  const prefix = forceTheme === "dark" ? "/v2" : "";
   return (
     <footer className="border-t pt-10 pb-6" style={{ background: "var(--dm-bg)", borderColor: "var(--dm-border)" }}>
       <div className="max-w-7xl mx-auto px-4">
@@ -44,7 +49,7 @@ export default function Footer({ logoUrl = LOGO_URL }: { logoUrl?: string }) {
               {CATEGORIES.map((cat) => (
                 <li key={cat.href}>
                   <Link
-                    to={cat.href}
+                    to={`${prefix}${cat.href}`}
                     className="text-sm hover:text-orange-500 transition-colors leading-snug block"
                     style={{ color: "var(--dm-text-muted)" }}
                   >

@@ -3054,7 +3054,7 @@ export default function Index({
         </div>
       )}
 
-      <Footer logoUrl={logoUrl} />
+      <Footer logoUrl={logoUrl} forceTheme={forceTheme} />
     </div>
   );
 }
