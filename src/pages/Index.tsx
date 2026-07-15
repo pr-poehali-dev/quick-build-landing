@@ -959,6 +959,34 @@ const UIS_LEAD_URL =
 const UIS_SCRIPT_SRC =
   "https://app.uiscom.ru/static/cs.min.js?k=QfE8S7yq6lnp2xalE1IyUUKrnB4YOFVc";
 
+type ComagicWindow = Window & {
+  Comagic?: { addOfflineRequest: (data: Record<string, unknown>) => void };
+};
+
+// Ждём, пока скрипт UIS полностью инициализирует window.Comagic
+// (скрипт грузится async, к моменту отправки формы он может быть ещё не готов)
+function waitForComagic(timeoutMs = 5000): Promise<ComagicWindow["Comagic"] | null> {
+  return new Promise((resolve) => {
+    const w = window as ComagicWindow;
+    if (w.Comagic && typeof w.Comagic.addOfflineRequest === "function") {
+      resolve(w.Comagic);
+      return;
+    }
+    const start = Date.now();
+    const interval = setInterval(() => {
+      const win = window as ComagicWindow;
+      if (win.Comagic && typeof win.Comagic.addOfflineRequest === "function") {
+        clearInterval(interval);
+        resolve(win.Comagic);
+      } else if (Date.now() - start > timeoutMs) {
+        clearInterval(interval);
+        console.warn("[UIS] Comagic не инициализировался за", timeoutMs, "мс");
+        resolve(null);
+      }
+    }, 150);
+  });
+}
+
 async function sendToUis(params: {
   formName: string;
   source: string;
@@ -983,20 +1011,23 @@ async function sendToUis(params: {
       }),
     });
     const leadId = await res.text();
-    const w = window as unknown as {
-      Comagic?: { addOfflineRequest: (data: Record<string, unknown>) => void };
-    };
-    if (w.Comagic && typeof w.Comagic.addOfflineRequest === "function") {
-      w.Comagic.addOfflineRequest({
+    console.log("[UIS] Заявка сохранена на сервере, ID:", leadId);
+
+    const comagic = await waitForComagic();
+    if (comagic) {
+      comagic.addOfflineRequest({
         form_name: params.formName,
         name: params.name,
         phone: params.phone,
         email: params.email || "",
         message: leadId,
       });
+      console.log("[UIS] Comagic.addOfflineRequest вызван с message =", leadId);
+    } else {
+      console.warn("[UIS] window.Comagic недоступен — заявка НЕ передана в UIS");
     }
-  } catch (_) {
-    /* тихо */
+  } catch (err) {
+    console.error("[UIS] Ошибка отправки заявки:", err);
   }
 }
 
