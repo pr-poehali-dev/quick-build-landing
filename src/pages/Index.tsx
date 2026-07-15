@@ -2323,7 +2323,7 @@ export default function Index({
   quizImg,
   forceTheme,
   projects: projectsProp,
-  enableUis,
+  enableUis = true,
 }: {
   pageTitle?: string;
   pageDescription?: string;
