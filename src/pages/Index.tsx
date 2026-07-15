@@ -987,6 +987,31 @@ function waitForComagic(timeoutMs = 5000): Promise<ComagicWindow["Comagic"] | nu
   });
 }
 
+const QUIZ_FIELD_LABELS: Record<string, string> = {
+  purpose: "Назначение",
+  city: "Город",
+  dims: "Размеры (Ш × Д × В)",
+  area: "Площадь",
+  price: "Расчётная стоимость",
+  cladding: "Тип стен/кровли",
+  crane: "Кран-балка",
+  extras: "Доп. услуги",
+  snow: "Снеговой район",
+  wind: "Ветровой район",
+};
+
+function buildQuizMessage(quiz?: Record<string, unknown>): string {
+  if (!quiz) return "";
+  const lines: string[] = [];
+  for (const [key, label] of Object.entries(QUIZ_FIELD_LABELS)) {
+    const val = quiz[key];
+    if (val === undefined || val === null || val === "") continue;
+    const text = Array.isArray(val) ? val.join(", ") : String(val);
+    lines.push(`${label}: ${text}`);
+  }
+  return lines.join("\n");
+}
+
 async function sendToUis(params: {
   formName: string;
   source: string;
@@ -1020,9 +1045,9 @@ async function sendToUis(params: {
         name: params.name,
         phone: params.phone,
         email: params.email || "",
-        message: leadId,
+        message: params.message || "",
       });
-      console.log("[UIS] Comagic.addOfflineRequest вызван с message =", leadId);
+      console.log("[UIS] Comagic.addOfflineRequest вызван с message =", params.message);
     } else {
       console.warn("[UIS] window.Comagic недоступен — заявка НЕ передана в UIS");
     }
@@ -1417,6 +1442,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
           name: state.name || extraData?.name || "",
           phone: state.phone || extraData?.phone || "",
           email: state.email || extraData?.email || "",
+          message: buildQuizMessage(quizPayload),
           quiz: quizPayload,
         });
       }
@@ -2431,13 +2457,19 @@ export default function Index({
       );
       fireGoal();
       if (enableUis) {
+        let uisMessage = message;
+        if (source === "Обратный звонок") {
+          uisMessage = "Заказ Обратного звонка";
+        } else if (source === "Контактная форма") {
+          uisMessage = message?.trim() || "Форма отправки Контактов";
+        }
         sendToUis({
           formName: `${source} — Склады`,
           source,
           name,
           phone,
           email,
-          message,
+          message: uisMessage,
         });
       }
     } catch (_) {
