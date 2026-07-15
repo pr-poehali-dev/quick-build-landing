@@ -53,6 +53,7 @@ export default function Sklady() {
       quizOptions={QUIZ_OPTIONS}
       quizImg="https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/7e684be1-0307-465d-981e-eab7082944b0.jpg"
       projects={SKLADY_PROJECTS}
+      enableUis
     />
   );
 }

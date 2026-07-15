@@ -954,6 +954,52 @@ interface QuizState {
 const PRICE_API_URL =
   "https://functions.poehali.dev/88524db3-a08f-485b-b913-ae55621e6dc4";
 
+const UIS_LEAD_URL =
+  "https://functions.poehali.dev/c369eba9-9f27-4c02-a69a-322a3b326fab";
+const UIS_SCRIPT_SRC =
+  "https://app.uiscom.ru/static/cs.min.js?k=QfE8S7yq6lnp2xalE1IyUUKrnB4YOFVc";
+
+async function sendToUis(params: {
+  formName: string;
+  source: string;
+  name: string;
+  phone: string;
+  email?: string;
+  message?: string;
+  quiz?: Record<string, unknown>;
+}) {
+  try {
+    const res = await fetch(UIS_LEAD_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        form_name: params.formName,
+        source: params.source,
+        name: params.name,
+        phone: params.phone,
+        email: params.email || "",
+        message: params.message || "",
+        quiz: params.quiz,
+      }),
+    });
+    const leadId = await res.text();
+    const w = window as unknown as {
+      Comagic?: { addOfflineRequest: (data: Record<string, unknown>) => void };
+    };
+    if (w.Comagic && typeof w.Comagic.addOfflineRequest === "function") {
+      w.Comagic.addOfflineRequest({
+        form_name: params.formName,
+        name: params.name,
+        phone: params.phone,
+        email: params.email || "",
+        message: leadId,
+      });
+    }
+  } catch (_) {
+    /* тихо */
+  }
+}
+
 const HEIGHT_TO_PANELS: Record<number, number> = {
   3.6: 4,
   4.8: 5,
@@ -1180,7 +1226,7 @@ function quizToPriceParams(
   }).toString();
 }
 
-function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl }: { onClose: () => void; step1Options?: { label: string; icon: string }[]; quizImg?: string; logoUrl?: string }) {
+function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, enableUis }: { onClose: () => void; step1Options?: { label: string; icon: string }[]; quizImg?: string; logoUrl?: string; enableUis?: boolean }) {
   const [step, setStep] = useState(1);
   const TOTAL = 6;
   const [state, setState] = useState<QuizState>({
@@ -1332,6 +1378,16 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl }
             ym: (id: number, action: string, goal: string) => void;
           }
         ).ym(87107319, "reachGoal", "ALL_FORM_LP_Kviz");
+      }
+      if (enableUis) {
+        sendToUis({
+          formName: "Квиз — Склады",
+          source,
+          name: state.name || extraData?.name || "",
+          phone: state.phone || extraData?.phone || "",
+          email: state.email || extraData?.email || "",
+          quiz: quizPayload,
+        });
       }
     } catch (_) {
       /* тихо */
@@ -2210,6 +2266,7 @@ export default function Index({
   quizImg,
   forceTheme,
   projects: projectsProp,
+  enableUis,
 }: {
   pageTitle?: string;
   pageDescription?: string;
@@ -2218,6 +2275,7 @@ export default function Index({
   quizImg?: string;
   forceTheme?: "dark" | "light";
   projects?: Project[];
+  enableUis?: boolean;
 }) {
   useEffect(() => {
     if (forceTheme) {
@@ -2226,6 +2284,16 @@ export default function Index({
       document.documentElement.setAttribute("data-theme", "light");
     }
   }, [forceTheme]);
+
+  useEffect(() => {
+    if (!enableUis) return;
+    if (document.querySelector(`script[src="${UIS_SCRIPT_SRC}"]`)) return;
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.async = true;
+    script.src = UIS_SCRIPT_SRC;
+    document.head.appendChild(script);
+  }, [enableUis]);
 
   const logoUrl = forceTheme === "dark" ? LOGO_URL_DARK : LOGO_URL;
 
@@ -2331,6 +2399,16 @@ export default function Index({
         },
       );
       fireGoal();
+      if (enableUis) {
+        sendToUis({
+          formName: `${source} — Склады`,
+          source,
+          name,
+          phone,
+          email,
+          message,
+        });
+      }
     } catch (_) {
       /* тихо */
     }
@@ -2367,7 +2445,7 @@ export default function Index({
       style={{ fontFamily: "Arial,sans-serif", background: "var(--dm-bg)", color: "var(--dm-text)" }}
     >
       {showThankYou && <ThankYouPage onBack={() => setShowThankYou(false)} />}
-      {quizOpen && <QuizFullscreen onClose={() => setQuizOpen(false)} step1Options={quizOptions} quizImg={quizImg} logoUrl={logoUrl} />}
+      {quizOpen && <QuizFullscreen onClose={() => setQuizOpen(false)} step1Options={quizOptions} quizImg={quizImg} logoUrl={logoUrl} enableUis={enableUis} />}
 
       {/* ══ HEADER ══════════════════════════════════════════════════════════ */}
       <header className="border-b sticky top-0 z-40 shadow-sm" style={{ background: "var(--dm-header-bg)", borderColor: "var(--dm-border)" }}>
