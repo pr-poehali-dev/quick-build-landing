@@ -55,6 +55,7 @@ export default function SkladyDark() {
       forceTheme="dark"
       projects={SKLADY_PROJECTS}
       enableUis
+      categoryName="Склады"
     />
   );
 }

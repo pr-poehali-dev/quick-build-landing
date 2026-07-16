@@ -129,6 +129,7 @@ export default function ZdaniyaDlyaTransporta() {
       quizOptions={QUIZ_OPTIONS}
       quizImg="https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/475e2a1a-3296-4b98-a077-f52be1c6ece6.jpg"
       projects={TRANSPORT_PROJECTS}
+      categoryName="Здания для транспорта"
     />
   );
 }

@@ -118,6 +118,7 @@ export default function ProizvodstvennyeZdaniyaDark() {
       quizOptions={QUIZ_OPTIONS}
       projects={PROJECTS}
       forceTheme="dark"
+      categoryName="Производственные здания"
     />
   );
 }

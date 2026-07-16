@@ -1014,6 +1014,7 @@ function buildQuizMessage(quiz?: Record<string, unknown>): string {
 
 async function sendToUis(params: {
   formName: string;
+  category?: string;
   source: string;
   name: string;
   phone: string;
@@ -1027,6 +1028,7 @@ async function sendToUis(params: {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         form_name: params.formName,
+        category: params.category || "Главная",
         source: params.source,
         name: params.name,
         phone: params.phone,
@@ -1282,7 +1284,7 @@ function quizToPriceParams(
   }).toString();
 }
 
-function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, enableUis }: { onClose: () => void; step1Options?: { label: string; icon: string }[]; quizImg?: string; logoUrl?: string; enableUis?: boolean }) {
+function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, enableUis, categoryName }: { onClose: () => void; step1Options?: { label: string; icon: string }[]; quizImg?: string; logoUrl?: string; enableUis?: boolean; categoryName?: string }) {
   const [step, setStep] = useState(1);
   const TOTAL = 6;
   const [state, setState] = useState<QuizState>({
@@ -1413,6 +1415,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             source,
+            category: categoryName,
             name: state.name || extraData?.name || "",
             phone: state.phone || extraData?.phone || "",
             email: state.email || extraData?.email || "",
@@ -1437,7 +1440,8 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
       }
       if (enableUis) {
         sendToUis({
-          formName: "Квиз — Склады",
+          formName: `Квиз — ${categoryName || "Главная"}`,
+          category: categoryName || "Главная",
           source,
           name: state.name || extraData?.name || "",
           phone: state.phone || extraData?.phone || "",
@@ -2324,6 +2328,7 @@ export default function Index({
   forceTheme,
   projects: projectsProp,
   enableUis = true,
+  categoryName = "Главная",
 }: {
   pageTitle?: string;
   pageDescription?: string;
@@ -2333,6 +2338,7 @@ export default function Index({
   forceTheme?: "dark" | "light";
   projects?: Project[];
   enableUis?: boolean;
+  categoryName?: string;
 }) {
   useEffect(() => {
     if (forceTheme) {
@@ -2452,7 +2458,7 @@ export default function Index({
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ source, name, phone, email, message }),
+          body: JSON.stringify({ source, category: categoryName, name, phone, email, message }),
         },
       );
       fireGoal();
@@ -2464,7 +2470,8 @@ export default function Index({
           uisMessage = message?.trim() || "Форма отправки Контактов";
         }
         sendToUis({
-          formName: `${source} — Склады`,
+          formName: `${source} — ${categoryName || "Главная"}`,
+          category: categoryName || "Главная",
           source,
           name,
           phone,
@@ -2508,7 +2515,7 @@ export default function Index({
       style={{ fontFamily: "Arial,sans-serif", background: "var(--dm-bg)", color: "var(--dm-text)" }}
     >
       {showThankYou && <ThankYouPage onBack={() => setShowThankYou(false)} />}
-      {quizOpen && <QuizFullscreen onClose={() => setQuizOpen(false)} step1Options={quizOptions} quizImg={quizImg} logoUrl={logoUrl} enableUis={enableUis} />}
+      {quizOpen && <QuizFullscreen onClose={() => setQuizOpen(false)} step1Options={quizOptions} quizImg={quizImg} logoUrl={logoUrl} enableUis={enableUis} categoryName={categoryName} />}
 
       {/* ══ HEADER ══════════════════════════════════════════════════════════ */}
       <header className="border-b sticky top-0 z-40 shadow-sm" style={{ background: "var(--dm-header-bg)", borderColor: "var(--dm-border)" }}>

@@ -117,6 +117,7 @@ export default function ProizvodstvennyeZdaniya() {
       rotatingWords={WORDS}
       quizOptions={QUIZ_OPTIONS}
       projects={PROJECTS}
+      categoryName="Производственные здания"
     />
   );
 }

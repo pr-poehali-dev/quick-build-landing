@@ -4,8 +4,6 @@ from datetime import datetime, timezone
 
 import psycopg2
 
-FORM_ID_SKLADY = 300
-
 # Согласованные fieldId (от 3000) для полей формы склады
 FIELD_IDS = {
     "name": 3001,
@@ -34,10 +32,33 @@ def get_conn():
     return psycopg2.connect(dsn)
 
 
+def get_or_create_form_id(cur, category: str) -> int:
+    """Возвращает form_id для категории. Если категория новая — регистрирует её
+    автоматически со следующим свободным form_id (это позволяет новым разделам
+    сайта, добавленным в будущем, попадать в UIS без ручной настройки)."""
+    cur.execute(
+        "SELECT form_id FROM uis_form_registry WHERE category = %s", (category,)
+    )
+    row = cur.fetchone()
+    if row:
+        return row[0]
+
+    cur.execute("SELECT COALESCE(MAX(form_id), 299) + 1 FROM uis_form_registry")
+    new_form_id = cur.fetchone()[0]
+    cur.execute(
+        "INSERT INTO uis_form_registry (category, form_id) VALUES (%s, %s) "
+        "ON CONFLICT (category) DO UPDATE SET category = EXCLUDED.category "
+        "RETURNING form_id",
+        (category, new_form_id),
+    )
+    return cur.fetchone()[0]
+
+
 def handler(event: dict, context) -> dict:
-    """Принимает заявки со страницы Склады для интеграции с UIS (Comagic).
+    """Принимает заявки со страниц сайта для интеграции с UIS (Comagic).
     POST — сохраняет заявку в БД и возвращает её ID.
-    GET  — отдаёт заявку по ID (для обратной связи с CRM)."""
+    GET ?forms=1 — отдаёт список всех зарегистрированных форм (form_id + категория) для CRM.
+    GET ?id=... — отдаёт заявку по ID (для обратной связи с CRM)."""
     method = event.get("httpMethod", "GET")
 
     if method == "OPTIONS":
@@ -45,6 +66,23 @@ def handler(event: dict, context) -> dict:
 
     if method == "GET":
         params = event.get("queryStringParameters") or {}
+
+        if params.get("forms"):
+            conn = get_conn()
+            cur = conn.cursor()
+            cur.execute(
+                "SELECT form_id, category FROM uis_form_registry ORDER BY form_id"
+            )
+            rows = cur.fetchall()
+            cur.close()
+            conn.close()
+            forms = [{"form_id": r[0], "form_name": r[1]} for r in rows]
+            return {
+                "statusCode": 200,
+                "headers": {**CORS, "Content-Type": "application/json"},
+                "body": json.dumps({"forms": forms}, ensure_ascii=False),
+            }
+
         request_id = params.get("RequestId") or params.get("id")
         if not request_id:
             return {
@@ -138,8 +176,9 @@ def handler(event: dict, context) -> dict:
 
     if method == "POST":
         body = json.loads(event.get("body") or "{}")
-        form_name = body.get("form_name", "Заявка со страницы Склады")
-        source = body.get("source", "Склады")
+        category = body.get("category") or "Главная"
+        form_name = body.get("form_name", f"Заявка со страницы {category}")
+        source = body.get("source", category)
         name = body.get("name", "")
         phone = body.get("phone", "")
         email = body.get("email", "")
@@ -148,14 +187,16 @@ def handler(event: dict, context) -> dict:
 
         conn = get_conn()
         cur = conn.cursor()
+        form_id = get_or_create_form_id(cur, category)
         quiz_json = json.dumps(quiz_data, ensure_ascii=False) if quiz_data else None
         cur.execute(
-            "INSERT INTO uis_leads (form_id, form_name, source, name, phone, email, message, quiz_data, created_at) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id",
+            "INSERT INTO uis_leads (form_id, form_name, source, category, name, phone, email, message, quiz_data, created_at) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id",
             (
-                FORM_ID_SKLADY,
+                form_id,
                 form_name,
                 source,
+                category,
                 name,
                 phone,
                 email,

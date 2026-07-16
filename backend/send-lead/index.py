@@ -16,6 +16,7 @@ def handler(event: dict, context) -> dict:
 
     body = json.loads(event.get("body") or "{}")
     source = body.get("source", "Форма")
+    category = body.get("category", "")
     name   = body.get("name", "—")
     phone  = body.get("phone", "—")
     email  = body.get("email", "—")
@@ -23,9 +24,14 @@ def handler(event: dict, context) -> dict:
     quiz_data = body.get("quiz", {})
 
     # Формируем тело письма
-    subject = f"Новая заявка с лендинга ({source})"
+    subject_suffix = f"{source} — {category}" if category else source
+    subject = f"Новая заявка с лендинга ({subject_suffix})"
     lines = [
         f"<b>Источник:</b> {source}",
+    ]
+    if category:
+        lines.append(f"<b>Раздел сайта:</b> {category}")
+    lines += [
         f"<b>Имя:</b> {name}",
         f"<b>Телефон:</b> {phone}",
         f"<b>Email:</b> {email}",
