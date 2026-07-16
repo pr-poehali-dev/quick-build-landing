@@ -32,12 +32,28 @@ def get_conn():
     return psycopg2.connect(dsn)
 
 
-def get_or_create_form_id(cur, category: str) -> int:
-    """Возвращает form_id для категории. Если категория новая — регистрирует её
-    автоматически со следующим свободным form_id (это позволяет новым разделам
-    сайта, добавленным в будущем, попадать в UIS без ручной настройки)."""
+FORM_TYPE_LABELS = {
+    "Обратный звонок": "Обратный звонок",
+    "Квиз": "Квиз",
+    "Контактная форма": "форма отправки в Контактах",
+}
+
+
+def build_form_name(category: str, form_type: str) -> str:
+    """Формирует каноничное имя формы вида 'Категория - Тип',
+    например 'Склады - Обратный звонок' или 'Склады - форма отправки в Контактах'."""
+    label = FORM_TYPE_LABELS.get(form_type, form_type)
+    return f"{category} - {label}"
+
+
+def get_or_create_form_id(cur, category: str, form_type: str) -> int:
+    """Возвращает form_id для пары (категория, тип формы). Если такой пары ещё
+    нет — регистрирует её автоматически со следующим свободным form_id (это
+    позволяет новым разделам сайта или новым формам попадать в UIS без ручной
+    настройки)."""
     cur.execute(
-        "SELECT form_id FROM uis_form_registry WHERE category = %s", (category,)
+        "SELECT form_id FROM uis_form_registry WHERE category = %s AND form_type = %s",
+        (category, form_type),
     )
     row = cur.fetchone()
     if row:
@@ -46,10 +62,10 @@ def get_or_create_form_id(cur, category: str) -> int:
     cur.execute("SELECT COALESCE(MAX(form_id), 299) + 1 FROM uis_form_registry")
     new_form_id = cur.fetchone()[0]
     cur.execute(
-        "INSERT INTO uis_form_registry (category, form_id) VALUES (%s, %s) "
-        "ON CONFLICT (category) DO UPDATE SET category = EXCLUDED.category "
+        "INSERT INTO uis_form_registry (category, form_type, form_id) VALUES (%s, %s, %s) "
+        "ON CONFLICT (category, form_type) DO UPDATE SET category = EXCLUDED.category "
         "RETURNING form_id",
-        (category, new_form_id),
+        (category, form_type, new_form_id),
     )
     return cur.fetchone()[0]
 
@@ -71,12 +87,18 @@ def handler(event: dict, context) -> dict:
             conn = get_conn()
             cur = conn.cursor()
             cur.execute(
-                "SELECT form_id, category FROM uis_form_registry ORDER BY form_id"
+                "SELECT form_id, category, form_type FROM uis_form_registry ORDER BY form_id"
             )
             rows = cur.fetchall()
             cur.close()
             conn.close()
-            forms = [{"form_id": r[0], "form_name": r[1]} for r in rows]
+            forms = [
+                {
+                    "form_id": r[0],
+                    "form_name": build_form_name(r[1], r[2]),
+                }
+                for r in rows
+            ]
             return {
                 "statusCode": 200,
                 "headers": {**CORS, "Content-Type": "application/json"},
@@ -177,8 +199,9 @@ def handler(event: dict, context) -> dict:
     if method == "POST":
         body = json.loads(event.get("body") or "{}")
         category = body.get("category") or "Главная"
-        form_name = body.get("form_name", f"Заявка со страницы {category}")
-        source = body.get("source", category)
+        source = body.get("source") or "Контактная форма"
+        form_type = source if source in FORM_TYPE_LABELS else "Контактная форма"
+        form_name = build_form_name(category, form_type)
         name = body.get("name", "")
         phone = body.get("phone", "")
         email = body.get("email", "")
@@ -187,7 +210,7 @@ def handler(event: dict, context) -> dict:
 
         conn = get_conn()
         cur = conn.cursor()
-        form_id = get_or_create_form_id(cur, category)
+        form_id = get_or_create_form_id(cur, category, form_type)
         quiz_json = json.dumps(quiz_data, ensure_ascii=False) if quiz_data else None
         cur.execute(
             "INSERT INTO uis_leads (form_id, form_name, source, category, name, phone, email, message, quiz_data, created_at) "
@@ -213,7 +236,10 @@ def handler(event: dict, context) -> dict:
         return {
             "statusCode": 200,
             "headers": {**CORS, "Content-Type": "application/json"},
-            "body": str(new_id),
+            "body": json.dumps(
+                {"id": new_id, "form_id": form_id, "form_name": form_name},
+                ensure_ascii=False,
+            ),
         }
 
     return {

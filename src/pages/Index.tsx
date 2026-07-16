@@ -1027,7 +1027,6 @@ async function sendToUis(params: {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        form_name: params.formName,
         category: params.category || "Главная",
         source: params.source,
         name: params.name,
@@ -1037,13 +1036,15 @@ async function sendToUis(params: {
         quiz: params.quiz,
       }),
     });
-    const leadId = await res.text();
-    console.log("[UIS] Заявка сохранена на сервере, ID:", leadId);
+    const data = await res.json();
+    const leadId = data.id;
+    const formName = data.form_name || params.formName;
+    console.log("[UIS] Заявка сохранена на сервере, ID:", leadId, "форма:", formName);
 
     const comagic = await waitForComagic();
     if (comagic) {
       comagic.addOfflineRequest({
-        form_name: params.formName,
+        form_name: formName,
         name: params.name,
         phone: params.phone,
         email: params.email || "",
