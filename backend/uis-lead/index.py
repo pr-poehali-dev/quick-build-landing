@@ -35,15 +35,18 @@ def get_conn():
 FORM_TYPE_LABELS = {
     "Обратный звонок": "Обратный звонок",
     "Квиз": "Квиз",
-    "Контактная форма": "форма отправки в Контактах",
+    "Контактная форма": "Отправка заявки в Контактах",
 }
+
+DEFAULT_CATEGORY = "Быстровозводимые здания"
 
 
 def build_form_name(category: str, form_type: str) -> str:
-    """Формирует каноничное имя формы вида 'Категория - Тип',
-    например 'Склады - Обратный звонок' или 'Склады - форма отправки в Контактах'."""
+    """Формирует каноничное имя формы вида 'Квиз - Категория - Тип',
+    например 'Квиз - Склады - Обратный звонок' или
+    'Квиз - Склады - Отправка заявки в Контактах'."""
     label = FORM_TYPE_LABELS.get(form_type, form_type)
-    return f"{category} - {label}"
+    return f"Квиз - {category} - {label}"
 
 
 def get_or_create_form_id(cur, category: str, form_type: str) -> int:
@@ -198,7 +201,7 @@ def handler(event: dict, context) -> dict:
 
     if method == "POST":
         body = json.loads(event.get("body") or "{}")
-        category = body.get("category") or "Главная"
+        category = body.get("category") or DEFAULT_CATEGORY
         source = body.get("source") or "Контактная форма"
         form_type = source if source in FORM_TYPE_LABELS else "Контактная форма"
         form_name = build_form_name(category, form_type)

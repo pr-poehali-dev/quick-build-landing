@@ -1027,7 +1027,7 @@ async function sendToUis(params: {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        category: params.category || "Главная",
+        category: params.category || "Быстровозводимые здания",
         source: params.source,
         name: params.name,
         phone: params.phone,
@@ -1441,8 +1441,8 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
       }
       if (enableUis) {
         sendToUis({
-          formName: `Квиз — ${categoryName || "Главная"}`,
-          category: categoryName || "Главная",
+          formName: `Квиз - ${categoryName || "Быстровозводимые здания"} - Квиз`,
+          category: categoryName || "Быстровозводимые здания",
           source,
           name: state.name || extraData?.name || "",
           phone: state.phone || extraData?.phone || "",
@@ -2329,7 +2329,7 @@ export default function Index({
   forceTheme,
   projects: projectsProp,
   enableUis = true,
-  categoryName = "Главная",
+  categoryName = "Быстровозводимые здания",
 }: {
   pageTitle?: string;
   pageDescription?: string;
@@ -2470,9 +2470,11 @@ export default function Index({
         } else if (source === "Контактная форма") {
           uisMessage = message?.trim() || "Форма отправки Контактов";
         }
+        const uisFormType =
+          source === "Контактная форма" ? "Отправка заявки в Контактах" : source;
         sendToUis({
-          formName: `${source} — ${categoryName || "Главная"}`,
-          category: categoryName || "Главная",
+          formName: `Квиз - ${categoryName || "Быстровозводимые здания"} - ${uisFormType}`,
+          category: categoryName || "Быстровозводимые здания",
           source,
           name,
           phone,
