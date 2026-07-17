@@ -59,9 +59,13 @@ def normalize_phone(phone: str) -> str:
     return digits
 
 
-def send_to_partner(name: str, phone: str, email: str, message: str, form_id: int) -> None:
-    """Дублирует заявку на эндпоинт партнёра (CRM). Ошибки не должны ронять
-    основной поток сохранения заявки — только логируем в stdout."""
+def send_to_partner(name: str, phone: str, email: str, message: str, form_id: int) -> str:
+    """Дублирует заявку на эндпоинт партнёра (CRM Битрикс). Партнёр возвращает
+    ID созданной записи в своей БД простым числом (без JSON). Этот ID нужен,
+    чтобы потом передать его в Comagic.addOfflineRequest — так CRM связывает
+    обращение в UIS с записью в БД Битрикса.
+    Возвращает ID записи строкой, либо пустую строку при ошибке (ошибки не
+    должны ронять основной поток сохранения заявки)."""
     payload = json.dumps(
         {
             "name": name,
@@ -80,9 +84,10 @@ def send_to_partner(name: str, phone: str, email: str, message: str, form_id: in
     )
     try:
         with urllib.request.urlopen(req, timeout=10) as resp:
-            resp.read()
+            return resp.read().decode("utf-8").strip()
     except Exception as err:
         print(f"[partner] Ошибка отправки заявки на {PARTNER_ENDPOINT}: {err}")
+        return ""
 
 
 def handler(event: dict, context) -> dict:
@@ -239,13 +244,18 @@ def handler(event: dict, context) -> dict:
         cur.close()
         conn.close()
 
-        send_to_partner(name, phone, email, message, form_id)
+        partner_id = send_to_partner(name, phone, email, message, form_id)
 
         return {
             "statusCode": 200,
             "headers": {**CORS, "Content-Type": "application/json"},
             "body": json.dumps(
-                {"id": new_id, "form_id": form_id, "form_name": form_name},
+                {
+                    "id": new_id,
+                    "form_id": form_id,
+                    "form_name": form_name,
+                    "partner_id": partner_id,
+                },
                 ensure_ascii=False,
             ),
         }

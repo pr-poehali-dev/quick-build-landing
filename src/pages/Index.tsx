@@ -1039,7 +1039,15 @@ async function sendToUis(params: {
     const data = await res.json();
     const leadId = data.id;
     const formName = data.form_name || params.formName;
-    console.log("[UIS] Заявка сохранена на сервере, ID:", leadId, "форма:", formName);
+    const partnerId = data.partner_id || "";
+    console.log(
+      "[UIS] Заявка сохранена на сервере, ID:",
+      leadId,
+      "форма:",
+      formName,
+      "ID записи партнёра:",
+      partnerId,
+    );
 
     const comagic = await waitForComagic();
     if (comagic) {
@@ -1048,9 +1056,9 @@ async function sendToUis(params: {
         name: params.name,
         phone: params.phone,
         email: params.email || "",
-        message: params.message || "",
+        message: partnerId,
       });
-      console.log("[UIS] Comagic.addOfflineRequest вызван с message =", params.message);
+      console.log("[UIS] Comagic.addOfflineRequest вызван с message =", partnerId);
     } else {
       console.warn("[UIS] window.Comagic недоступен — заявка НЕ передана в UIS");
     }
