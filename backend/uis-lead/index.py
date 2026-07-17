@@ -1,10 +1,29 @@
 import json
 import os
+import urllib.request
 from datetime import datetime, timezone
 
 import psycopg2
 
-# Согласованные fieldId (от 3000) для полей формы склады
+# Эндпоинт партнёра (CRM), куда дублируем каждую заявку.
+# Формат запроса согласован с партнёром:
+# {"name": "Igor", "phone": "9999999999", "email": "...", "message": "...", "form_id": 301}
+PARTNER_ENDPOINT = "https://evrazsteelbox.ru/local/ajax/quiz_form.php"
+
+# Единые form_id по типу формы — одинаковые для всех страниц/категорий сайта.
+FORM_IDS = {
+    "Обратный звонок": 300,
+    "Квиз": 301,
+    "Контактная форма": 302,
+}
+
+FORM_NAMES = {
+    "Обратный звонок": "Обратный звонок",
+    "Квиз": "Квиз",
+    "Контактная форма": "Отправка заявки в Контактах",
+}
+
+# Согласованные fieldId (от 3000) для полей формы склады (используются в UIS ответе по id)
 FIELD_IDS = {
     "name": 3001,
     "phone": 3002,
@@ -32,52 +51,47 @@ def get_conn():
     return psycopg2.connect(dsn)
 
 
-FORM_TYPE_LABELS = {
-    "Обратный звонок": "Обратный звонок",
-    "Квиз": "Квиз",
-    "Контактная форма": "Отправка заявки в Контактах",
-}
-
-DEFAULT_CATEGORY = "Быстровозводимые здания"
-
-
-def build_form_name(category: str, form_type: str) -> str:
-    """Формирует каноничное имя формы вида 'Квиз - Категория - Тип',
-    например 'Квиз - Склады - Обратный звонок' или
-    'Квиз - Склады - Отправка заявки в Контактах'."""
-    label = FORM_TYPE_LABELS.get(form_type, form_type)
-    return f"Квиз - {category} - {label}"
+def normalize_phone(phone: str) -> str:
+    """Партнёр ожидает телефон 10 цифрами без кода страны, например '9999999999'."""
+    digits = "".join(ch for ch in phone if ch.isdigit())
+    if len(digits) == 11 and digits[0] in ("7", "8"):
+        digits = digits[1:]
+    return digits
 
 
-def get_or_create_form_id(cur, category: str, form_type: str) -> int:
-    """Возвращает form_id для пары (категория, тип формы). Если такой пары ещё
-    нет — регистрирует её автоматически со следующим свободным form_id (это
-    позволяет новым разделам сайта или новым формам попадать в UIS без ручной
-    настройки)."""
-    cur.execute(
-        "SELECT form_id FROM uis_form_registry WHERE category = %s AND form_type = %s",
-        (category, form_type),
+def send_to_partner(name: str, phone: str, email: str, message: str, form_id: int) -> None:
+    """Дублирует заявку на эндпоинт партнёра (CRM). Ошибки не должны ронять
+    основной поток сохранения заявки — только логируем в stdout."""
+    payload = json.dumps(
+        {
+            "name": name,
+            "phone": normalize_phone(phone),
+            "email": email,
+            "message": message,
+            "form_id": form_id,
+        },
+        ensure_ascii=False,
+    ).encode("utf-8")
+    req = urllib.request.Request(
+        PARTNER_ENDPOINT,
+        data=payload,
+        headers={"Content-Type": "application/json"},
+        method="POST",
     )
-    row = cur.fetchone()
-    if row:
-        return row[0]
-
-    cur.execute("SELECT COALESCE(MAX(form_id), 299) + 1 FROM uis_form_registry")
-    new_form_id = cur.fetchone()[0]
-    cur.execute(
-        "INSERT INTO uis_form_registry (category, form_type, form_id) VALUES (%s, %s, %s) "
-        "ON CONFLICT (category, form_type) DO UPDATE SET category = EXCLUDED.category "
-        "RETURNING form_id",
-        (category, form_type, new_form_id),
-    )
-    return cur.fetchone()[0]
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            resp.read()
+    except Exception as err:
+        print(f"[partner] Ошибка отправки заявки на {PARTNER_ENDPOINT}: {err}")
 
 
 def handler(event: dict, context) -> dict:
-    """Принимает заявки со страниц сайта для интеграции с UIS (Comagic).
-    POST — сохраняет заявку в БД и возвращает её ID.
-    GET ?forms=1 — отдаёт список всех зарегистрированных форм (form_id + категория) для CRM.
-    GET ?id=... — отдаёт заявку по ID (для обратной связи с CRM)."""
+    """Принимает заявки со страниц сайта, сохраняет в БД и дублирует на эндпоинт
+    партнёра (CRM). form_id зависит только от типа формы и одинаков для всех
+    страниц сайта: 300 — Обратный звонок, 301 — Квиз, 302 — Отправка заявки в Контактах.
+    POST — сохраняет заявку и пересылает партнёру, возвращает её ID.
+    GET ?forms=1 — отдаёт список форм (form_id + название) для CRM.
+    GET ?id=... — отдаёт заявку по ID (для обратной связи с UIS)."""
     method = event.get("httpMethod", "GET")
 
     if method == "OPTIONS":
@@ -87,21 +101,10 @@ def handler(event: dict, context) -> dict:
         params = event.get("queryStringParameters") or {}
 
         if params.get("forms"):
-            conn = get_conn()
-            cur = conn.cursor()
-            cur.execute(
-                "SELECT form_id, category, form_type FROM uis_form_registry ORDER BY form_id"
-            )
-            rows = cur.fetchall()
-            cur.close()
-            conn.close()
             forms = [
-                {
-                    "form_id": r[0],
-                    "form_name": build_form_name(r[1], r[2]),
-                }
-                for r in rows
+                {"form_id": FORM_IDS[t], "form_name": FORM_NAMES[t]} for t in FORM_IDS
             ]
+            forms.sort(key=lambda f: f["form_id"])
             return {
                 "statusCode": 200,
                 "headers": {**CORS, "Content-Type": "application/json"},
@@ -201,10 +204,11 @@ def handler(event: dict, context) -> dict:
 
     if method == "POST":
         body = json.loads(event.get("body") or "{}")
-        category = body.get("category") or DEFAULT_CATEGORY
+        category = body.get("category") or ""
         source = body.get("source") or "Контактная форма"
-        form_type = source if source in FORM_TYPE_LABELS else "Контактная форма"
-        form_name = build_form_name(category, form_type)
+        form_type = source if source in FORM_IDS else "Контактная форма"
+        form_id = FORM_IDS[form_type]
+        form_name = FORM_NAMES[form_type]
         name = body.get("name", "")
         phone = body.get("phone", "")
         email = body.get("email", "")
@@ -213,7 +217,6 @@ def handler(event: dict, context) -> dict:
 
         conn = get_conn()
         cur = conn.cursor()
-        form_id = get_or_create_form_id(cur, category, form_type)
         quiz_json = json.dumps(quiz_data, ensure_ascii=False) if quiz_data else None
         cur.execute(
             "INSERT INTO uis_leads (form_id, form_name, source, category, name, phone, email, message, quiz_data, created_at) "
@@ -235,6 +238,8 @@ def handler(event: dict, context) -> dict:
         conn.commit()
         cur.close()
         conn.close()
+
+        send_to_partner(name, phone, email, message, form_id)
 
         return {
             "statusCode": 200,

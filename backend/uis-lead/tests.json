@@ -10,7 +10,7 @@
       "name": "Create lead",
       "method": "POST",
       "path": "/",
-      "body": {"form_name": "Заявка со страницы Склады", "source": "Склады", "name": "Тест Тестов", "phone": "+7 999 000-00-00", "email": "test@test.ru", "quiz": {"purpose": "Холодильные склады", "city": "Москва"}},
+      "body": {"category": "Склады", "source": "Квиз", "name": "Тест Тестов", "phone": "+7 999 000-00-00", "email": "test@test.ru", "quiz": {"purpose": "Холодильные склады", "city": "Москва"}},
       "expectedStatus": 200
     },
     {
