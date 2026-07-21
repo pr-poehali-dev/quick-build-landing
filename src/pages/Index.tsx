@@ -45,6 +45,16 @@ const P4_C =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/fb5200be-a084-44c8-a75f-b9733741f5fc.jpg";
 const P4_D =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/e5b61b86-54b7-47a3-bd4f-50f4702ecf2b.jpg";
+const P5_BG =
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/2f9f7464-9fcb-48c6-8088-1d06c8f81cd4.jpg";
+const P5_A =
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/8bfbb1a3-f53f-4e70-8f78-96b274ac93c6.jpg";
+const P5_B =
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/0f4d7f4e-6240-49a9-80a6-449a1cf7d507.jpg";
+const P5_C =
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/124b5d80-08a8-439b-b2bd-22cd9447babd.jpg";
+const P5_D =
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/559acb40-7627-4358-b4a8-90e8fec0a635.jpg";
 
 const ROTATING_WORDS = [
   "здания",
@@ -136,21 +146,6 @@ const projects: Project[] = [
   },
   {
     id: 3,
-    photos: [P3_BG, P3_A, P3_B, P3_C, P3_D],
-    title: "Производственно-складское здание",
-    dims: "24×60×6 м",
-    area: "1440 м²",
-    locationShort: "Московская обл., д. Селевкино",
-    locationFull: "Россия, Московская обл., д. Селевкино",
-    purpose: "Производственные и промышленные здания",
-    details: ["Наличие кранов: нет", "Наличие антресолей: нет"],
-    length: "60 м",
-    width: "24 м",
-    height: "6 м",
-    category: "Производственные и промышленные здания",
-  },
-  {
-    id: 4,
     photos: [P4_BG, P4_A, P4_B, P4_C, P4_D],
     title: "Склад кухонных изделий",
     dims: "16×32×5 м",
@@ -163,6 +158,36 @@ const projects: Project[] = [
     width: "16 м",
     height: "5 м",
     category: "Склады",
+  },
+  {
+    id: 4,
+    photos: [P5_BG, P5_A, P5_B, P5_C, P5_D],
+    title: "Продуктовый склад с антресолью",
+    dims: "18×62,4×8,5 м",
+    area: "1123 м²",
+    locationShort: "Московская обл., д. Андреевское",
+    locationFull: "Россия, Московская обл., д. Андреевское",
+    purpose: "Склады",
+    details: ["Наличие кранов: нет", "Тип стен и кровли: Сэндвич-панели"],
+    length: "62,4 м",
+    width: "18 м",
+    height: "8,5 м",
+    category: "Склады",
+  },
+  {
+    id: 5,
+    photos: [P3_BG, P3_A, P3_B, P3_C, P3_D],
+    title: "Производственно-складское здание",
+    dims: "24×60×6 м",
+    area: "1440 м²",
+    locationShort: "Московская обл., д. Селевкино",
+    locationFull: "Россия, Московская обл., д. Селевкино",
+    purpose: "Производственные и промышленные здания",
+    details: ["Наличие кранов: нет", "Наличие антресолей: нет"],
+    length: "60 м",
+    width: "24 м",
+    height: "6 м",
+    category: "Производственные и промышленные здания",
   },
 ];
 
