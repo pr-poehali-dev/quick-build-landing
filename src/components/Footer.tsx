@@ -9,6 +9,10 @@ const CATEGORIES = [
     href: "/sklady",
   },
   {
+    label: "Быстровозводимые ангары",
+    href: "/angary",
+  },
+  {
     label: "Быстровозводимые производственные здания",
     href: "/proizvodstvennye-zdaniya",
   },

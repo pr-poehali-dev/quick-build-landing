@@ -11,10 +11,12 @@ import ProizvodstvennyeZdaniya from "./pages/ProizvodstvennyeZdaniya";
 import ZdaniyaDlyaTransporta from "./pages/ZdaniyaDlyaTransporta";
 import TorgovyeZdaniya from "./pages/TorgovyeZdaniya";
 import Sklady from "./pages/Sklady";
+import Angary from "./pages/Angary";
 import ProizvodstvennyeZdaniyaDark from "./pages/ProizvodstvennyeZdaniyaDark";
 import ZdaniyaDlyaTransportaDark from "./pages/ZdaniyaDlyaTransportaDark";
 import TorgovyeZdaniyaDark from "./pages/TorgovyeZdaniyaDark";
 import SkladyDark from "./pages/SkladyDark";
+import AngaryDark from "./pages/AngaryDark";
 
 const queryClient = new QueryClient();
 
@@ -31,10 +33,12 @@ const App = () => (
           <Route path="/v2/zdaniya-dlya-transporta" element={<ZdaniyaDlyaTransportaDark />} />
           <Route path="/v2/torgovye-zdaniya" element={<TorgovyeZdaniyaDark />} />
           <Route path="/v2/sklady" element={<SkladyDark />} />
+          <Route path="/v2/angary" element={<AngaryDark />} />
           <Route path="/proizvodstvennye-zdaniya" element={<ProizvodstvennyeZdaniya />} />
           <Route path="/zdaniya-dlya-transporta" element={<ZdaniyaDlyaTransporta />} />
           <Route path="/torgovye-zdaniya" element={<TorgovyeZdaniya />} />
           <Route path="/sklady" element={<Sklady />} />
+          <Route path="/angary" element={<Angary />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
