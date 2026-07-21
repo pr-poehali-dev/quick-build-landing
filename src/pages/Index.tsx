@@ -76,10 +76,10 @@ const STATS = [
     desc: "Промышленных и коммерческих зданий по всей России",
   },
   {
-    num: 45,
+    num: 50,
     suffix: " дней",
     title: "Срок поставки и монтажа",
-    desc: "Всего за 45 дней мы обеспечиваем поставку и монтаж быстровозводимых зданий SMALL BOX для малого и среднего бизнеса",
+    desc: "Всего за 50 дней мы обеспечиваем поставку и монтаж быстровозводимых зданий SMALL BOX для малого и среднего бизнеса",
   },
   {
     num: 150,
@@ -2384,7 +2384,7 @@ export default function Index({
   const [wordIdx, setWordIdx] = useState(0);
   const [wordKey, setWordKey] = useState(0);
   const [heroStarted, setHeroStarted] = useState(false);
-  const heroVal = useCounter(45, 1600, heroStarted);
+  const heroVal = useCounter(50, 1600, heroStarted);
 
   // Contact form
   const [cfName, setCfName] = useState("");

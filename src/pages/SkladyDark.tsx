@@ -48,7 +48,7 @@ export default function SkladyDark() {
   return (
     <Index
       pageTitle="Быстровозводимые склады под ключ"
-      pageDescription="Проектирование, изготовление и строительство быстровозводимых складов из металлоконструкций под ключ за 45 дней по всей России"
+      pageDescription="Проектирование, изготовление и строительство быстровозводимых складов из металлоконструкций под ключ за 50 дней по всей России"
       rotatingWords={WORDS}
       quizOptions={QUIZ_OPTIONS}
       quizImg="https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/7e684be1-0307-465d-981e-eab7082944b0.jpg"

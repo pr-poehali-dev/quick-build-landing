@@ -113,7 +113,7 @@ export default function ProizvodstvennyeZdaniya() {
   return (
     <Index
       pageTitle="Быстровозводимые производственные здания под ключ"
-      pageDescription="Проектирование, изготовление и строительство быстровозводимых производственных зданий из металлоконструкций под ключ за 45 дней по всей России"
+      pageDescription="Проектирование, изготовление и строительство быстровозводимых производственных зданий из металлоконструкций под ключ за 50 дней по всей России"
       rotatingWords={WORDS}
       quizOptions={QUIZ_OPTIONS}
       projects={PROJECTS}
