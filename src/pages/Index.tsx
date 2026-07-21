@@ -36,25 +36,17 @@ const P3_C =
 const P3_D =
   "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/3e78c886-0bee-44a2-8973-4e29ee332fac.jpg";
 const P4_BG =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/527ee443-6e11-4483-ae58-2259cafb4265.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/7e684be1-0307-465d-981e-eab7082944b0.jpg";
 const P4_A =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/eeb51a23-7c52-48c6-a765-2d325a768858.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/6c5b623c-44ca-49a5-a3a5-ff707b2122f7.jpg";
 const P4_B =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/cdc91bf1-d78b-4340-b621-c7e6ea758836.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/9ab7741b-5749-4861-8068-f14317ba1ebe.jpg";
 const P4_C =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/fb5200be-a084-44c8-a75f-b9733741f5fc.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/f79defa9-1fac-4671-a354-f979f704808e.jpg";
 const P4_D =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/e5b61b86-54b7-47a3-bd4f-50f4702ecf2b.jpg";
-const P5_BG =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/2f9f7464-9fcb-48c6-8088-1d06c8f81cd4.jpg";
-const P5_A =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/8bfbb1a3-f53f-4e70-8f78-96b274ac93c6.jpg";
-const P5_B =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/0f4d7f4e-6240-49a9-80a6-449a1cf7d507.jpg";
-const P5_C =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/124b5d80-08a8-439b-b2bd-22cd9447babd.jpg";
-const P5_D =
-  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/559acb40-7627-4358-b4a8-90e8fec0a635.jpg";
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/1973cc88-213b-4417-9d67-88ba5621f3fe.jpg";
+const P4_E =
+  "https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/f37c447b-50e9-4de1-a519-7d9740155de9.jpg";
 
 const ROTATING_WORDS = [
   "здания",
@@ -146,36 +138,6 @@ const projects: Project[] = [
   },
   {
     id: 3,
-    photos: [P4_BG, P4_A, P4_B, P4_C, P4_D],
-    title: "Склад кухонных изделий",
-    dims: "16×32×5 м",
-    area: "512 м²",
-    locationShort: "Московская обл., г. Сергиев Посад",
-    locationFull: "Россия, Московская обл., г. Сергиев Посад",
-    purpose: "Склады",
-    details: ["Наличие кранов: нет", "Тип стен и кровли: Сэндвич-панели"],
-    length: "32 м",
-    width: "16 м",
-    height: "5 м",
-    category: "Склады",
-  },
-  {
-    id: 4,
-    photos: [P5_BG, P5_A, P5_B, P5_C, P5_D],
-    title: "Продуктовый склад с антресолью",
-    dims: "18×62,4×8,5 м",
-    area: "1123 м²",
-    locationShort: "Московская обл., д. Андреевское",
-    locationFull: "Россия, Московская обл., д. Андреевское",
-    purpose: "Склады",
-    details: ["Наличие кранов: нет", "Тип стен и кровли: Сэндвич-панели"],
-    length: "62,4 м",
-    width: "18 м",
-    height: "8,5 м",
-    category: "Склады",
-  },
-  {
-    id: 5,
     photos: [P3_BG, P3_A, P3_B, P3_C, P3_D],
     title: "Производственно-складское здание",
     dims: "24×60×6 м",
@@ -188,6 +150,21 @@ const projects: Project[] = [
     width: "24 м",
     height: "6 м",
     category: "Производственные и промышленные здания",
+  },
+  {
+    id: 4,
+    photos: [P4_BG, P4_A, P4_B, P4_C, P4_D, P4_E],
+    title: "Склад",
+    dims: "24×60×7,5 м",
+    area: "1440 м²",
+    locationShort: "Московская обл., г. Химки",
+    locationFull: "Россия, Московская обл., г. Химки",
+    purpose: "Склады и Ангары",
+    details: ["Наличие кранов: да, 3.2т", "Наличие антресолей: нет"],
+    length: "60 м",
+    width: "24 м",
+    height: "7,5 м",
+    category: "Склады и Ангары",
   },
 ];
 
