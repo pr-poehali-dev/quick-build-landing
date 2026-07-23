@@ -93,11 +93,11 @@ const WORDS = [
 ];
 
 const QUIZ_OPTIONS = [
-  { label: "Теплые ангары", icon: "ThermometerSun" },
-  { label: "Холодильные ангары", icon: "Snowflake" },
-  { label: "Складские комплексы", icon: "Warehouse" },
-  { label: "Сухие ангары", icon: "PackageCheck" },
-  { label: "Мультитемпературные ангары", icon: "ThermometerSnowflake" },
+  { label: "Складской комплекс", icon: "Warehouse" },
+  { label: "Быстровозводимый склад/ангар", icon: "Building2" },
+  { label: "Ангар из сэндвич-панелей", icon: "PanelsTopLeft" },
+  { label: "Теплый ангар", icon: "ThermometerSun" },
+  { label: "Логистический комплекс", icon: "Truck" },
   { label: "Другое", icon: "MoreHorizontal" },
 ];
 
@@ -108,7 +108,7 @@ export default function Angary() {
       pageDescription="Проектирование, изготовление и строительство быстровозводимых ангаров из металлоконструкций под ключ за 50 дней по всей России"
       rotatingWords={WORDS}
       quizOptions={QUIZ_OPTIONS}
-      quizImg="https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/a0680e47-b153-49fe-8fb2-dfbd01b2440c.jpg"
+      quizImg="https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/89385ba1-7a7f-4d27-9074-db4be9b47ef4.jpg"
       projects={ANGARY_PROJECTS}
       enableUis
       categoryName="Ангары"

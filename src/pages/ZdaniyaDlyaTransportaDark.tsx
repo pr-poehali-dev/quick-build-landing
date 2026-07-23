@@ -131,6 +131,7 @@ export default function ZdaniyaDlyaTransportaDark() {
       forceTheme="dark"
       projects={TRANSPORT_PROJECTS}
       categoryName="Здания для транспорта"
+      hideCrane
     />
   );
 }

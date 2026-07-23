@@ -93,11 +93,11 @@ const WORDS = [
 ];
 
 const QUIZ_OPTIONS = [
-  { label: "Теплые склады", icon: "ThermometerSun" },
-  { label: "Холодильные склады", icon: "Snowflake" },
-  { label: "Складские комплексы", icon: "Warehouse" },
-  { label: "Сухие склады", icon: "PackageCheck" },
-  { label: "Мультитемпературные склады", icon: "ThermometerSnowflake" },
+  { label: "Складской комплекс", icon: "Warehouse" },
+  { label: "Быстровозводимый склад/ангар", icon: "Building2" },
+  { label: "Склад из сэндвич-панелей", icon: "PanelsTopLeft" },
+  { label: "Теплый склад", icon: "ThermometerSun" },
+  { label: "Логистический комплекс", icon: "Truck" },
   { label: "Другое", icon: "MoreHorizontal" },
 ];
 
@@ -108,7 +108,7 @@ export default function SkladyDark() {
       pageDescription="Проектирование, изготовление и строительство быстровозводимых складов из металлоконструкций под ключ за 50 дней по всей России"
       rotatingWords={WORDS}
       quizOptions={QUIZ_OPTIONS}
-      quizImg="https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/a0680e47-b153-49fe-8fb2-dfbd01b2440c.jpg"
+      quizImg="https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/89385ba1-7a7f-4d27-9074-db4be9b47ef4.jpg"
       forceTheme="dark"
       projects={SKLADY_PROJECTS}
       enableUis

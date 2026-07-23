@@ -123,6 +123,7 @@ export default function TorgovyeZdaniya() {
       quizImg="https://cdn.poehali.dev/projects/571d06ae-01f7-46bc-a2c0-5e7834965168/bucket/67469387-74c8-416d-aed0-495aca623f3f.jpg"
       projects={TORGOVYE_PROJECTS}
       categoryName="Торговые здания"
+      hideCrane
     />
   );
 }

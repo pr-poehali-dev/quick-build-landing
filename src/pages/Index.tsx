@@ -1293,7 +1293,7 @@ function quizToPriceParams(
   }).toString();
 }
 
-function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, enableUis, categoryName }: { onClose: () => void; step1Options?: { label: string; icon: string }[]; quizImg?: string; logoUrl?: string; enableUis?: boolean; categoryName?: string }) {
+function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, enableUis, categoryName, hideCrane }: { onClose: () => void; step1Options?: { label: string; icon: string }[]; quizImg?: string; logoUrl?: string; enableUis?: boolean; categoryName?: string; hideCrane?: boolean }) {
   const [step, setStep] = useState(1);
   const TOTAL = 6;
   const [state, setState] = useState<QuizState>({
@@ -1313,11 +1313,12 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
     agreePromo: false,
   });
   const [submitted, setSubmitted] = useState(false);
-  const [errors, setErrors] = useState({ name: "", phone: "", email: "" });
+  const [errors, setErrors] = useState({ name: "", phone: "", email: "", agree: "" });
   const [touched, setTouched] = useState({
     name: false,
     phone: false,
     email: false,
+    agree: false,
   });
   const [price, setPrice] = useState<number | null>(null);
   const [priceLoading, setPriceLoading] = useState(false);
@@ -1485,10 +1486,11 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
       name: validateName(state.name),
       phone: validatePhone(state.phone),
       email: validateEmail(state.email),
+      agree: state.agreePersonal ? "" : "Необходимо согласие на обработку персональных данных",
     };
     setErrors(e);
-    setTouched({ name: true, phone: true, email: true });
-    return !e.name && !e.phone && !e.email && state.agreePersonal;
+    setTouched({ name: true, phone: true, email: true, agree: true });
+    return !e.name && !e.phone && !e.email && !e.agree;
   };
 
   const canNext = () => {
@@ -1750,27 +1752,29 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
                   ))}
                 </div>
               </div>
-              <div>
-                <div className="text-sm font-bold mb-3" style={{ color: "var(--dm-text)" }}>
-                  Наличие кран-балки 5 тонн:
+              {!hideCrane && (
+                <div>
+                  <div className="text-sm font-bold mb-3" style={{ color: "var(--dm-text)" }}>
+                    Наличие кран-балки 5 тонн:
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {CRANE_OPTIONS.map((opt) => (
+                      <button
+                        key={opt}
+                        onClick={() => setState((s) => ({ ...s, crane: opt }))}
+                        className="rounded-xl py-3.5 text-sm font-medium border-2 transition-all"
+                        style={{
+                          borderColor: state.crane === opt ? "var(--orange)" : "var(--dm-border)",
+                          background: state.crane === opt ? "var(--dm-price-bg)" : "var(--dm-surface)",
+                          color: state.crane === opt ? "var(--orange)" : "var(--dm-text)",
+                        }}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  {CRANE_OPTIONS.map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => setState((s) => ({ ...s, crane: opt }))}
-                      className="rounded-xl py-3.5 text-sm font-medium border-2 transition-all"
-                      style={{
-                        borderColor: state.crane === opt ? "var(--orange)" : "var(--dm-border)",
-                        background: state.crane === opt ? "var(--dm-price-bg)" : "var(--dm-surface)",
-                        color: state.crane === opt ? "var(--orange)" : "var(--dm-text)",
-                      }}
-                    >
-                      {opt}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              )}
             </div>
           )}
 
@@ -1855,7 +1859,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
                         `${width} × ${length} × ${height} м`,
                       ],
                       ["Тип стен/кровли", state.cladding],
-                      ["Кран-балка", state.crane],
+                      ...(hideCrane ? [] : [["Кран-балка", state.crane]]),
                       ...(state.city
                         ? [
                             ["Снеговой район", `${zones.snow}`],
@@ -2122,45 +2126,55 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
                         </div>
                         <FieldError msg={touched.email ? errors.email : ""} />
                       </div>
-                      <label className="flex items-start gap-2.5 cursor-pointer">
-                        <div
-                          onClick={() =>
-                            setState((s) => ({
-                              ...s,
-                              agreePersonal: !s.agreePersonal,
-                            }))
-                          }
-                          className="w-5 h-5 rounded mt-0.5 flex items-center justify-center shrink-0 transition-all"
-                          style={{
-                            background: state.agreePersonal
-                              ? "var(--orange)"
-                              : "transparent",
-                            border: state.agreePersonal
-                              ? "none"
-                              : `2px solid var(--dm-border)`,
-                          }}
-                        >
-                          {state.agreePersonal && (
-                            <Icon
-                              name="Check"
-                              size={12}
-                              className="text-white"
-                            />
-                          )}
-                        </div>
-                        <span className="text-xs leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
-                          Я согласен на{" "}
-                          <a
-                            href="https://evrazsteelbox.ru/politika_v_oblasti_obrabotki_personalnyh_dannyh/"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="underline"
-                            style={{ color: "var(--orange)" }}
+                      <div>
+                        <label className="flex items-start gap-2.5 cursor-pointer">
+                          <div
+                            onClick={() => {
+                              setState((s) => ({
+                                ...s,
+                                agreePersonal: !s.agreePersonal,
+                              }));
+                              if (touched.agree)
+                                setErrors((err) => ({
+                                  ...err,
+                                  agree: state.agreePersonal
+                                    ? "Необходимо согласие на обработку персональных данных"
+                                    : "",
+                                }));
+                            }}
+                            className="w-5 h-5 rounded mt-0.5 flex items-center justify-center shrink-0 transition-all"
+                            style={{
+                              background: state.agreePersonal
+                                ? "var(--orange)"
+                                : "transparent",
+                              border: state.agreePersonal
+                                ? "none"
+                                : `2px solid ${touched.agree && errors.agree ? "#f87171" : "var(--dm-border)"}`,
+                            }}
                           >
-                            обработку персональных данных
-                          </a>
-                        </span>
-                      </label>
+                            {state.agreePersonal && (
+                              <Icon
+                                name="Check"
+                                size={12}
+                                className="text-white"
+                              />
+                            )}
+                          </div>
+                          <span className="text-xs leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
+                            Я согласен на{" "}
+                            <a
+                              href="https://evrazsteelbox.ru/politika_v_oblasti_obrabotki_personalnyh_dannyh/"
+                              target="_blank"
+                              rel="noreferrer"
+                              className="underline"
+                              style={{ color: "var(--orange)" }}
+                            >
+                              обработку персональных данных
+                            </a>
+                          </span>
+                        </label>
+                        <FieldError msg={touched.agree ? errors.agree : ""} />
+                      </div>
                       <label className="flex items-start gap-2.5 cursor-pointer">
                         <div
                           onClick={() =>
@@ -2338,6 +2352,7 @@ export default function Index({
   projects: projectsProp,
   enableUis = true,
   categoryName = "Быстровозводимые здания",
+  hideCrane = false,
 }: {
   pageTitle?: string;
   pageDescription?: string;
@@ -2348,6 +2363,7 @@ export default function Index({
   projects?: Project[];
   enableUis?: boolean;
   categoryName?: string;
+  hideCrane?: boolean;
 }) {
   useEffect(() => {
     if (forceTheme) {
@@ -2526,7 +2542,7 @@ export default function Index({
       style={{ fontFamily: "Arial,sans-serif", background: "var(--dm-bg)", color: "var(--dm-text)" }}
     >
       {showThankYou && <ThankYouPage onBack={() => setShowThankYou(false)} />}
-      {quizOpen && <QuizFullscreen onClose={() => setQuizOpen(false)} step1Options={quizOptions} quizImg={quizImg} logoUrl={logoUrl} enableUis={enableUis} categoryName={categoryName} />}
+      {quizOpen && <QuizFullscreen onClose={() => setQuizOpen(false)} step1Options={quizOptions} quizImg={quizImg} logoUrl={logoUrl} enableUis={enableUis} categoryName={categoryName} hideCrane={hideCrane} />}
 
       {/* ══ HEADER ══════════════════════════════════════════════════════════ */}
       <header className="border-b sticky top-0 z-40 shadow-sm" style={{ background: "var(--dm-header-bg)", borderColor: "var(--dm-border)" }}>
