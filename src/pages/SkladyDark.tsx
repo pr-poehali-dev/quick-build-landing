@@ -94,7 +94,7 @@ const WORDS = [
 
 const QUIZ_OPTIONS = [
   { label: "Складской комплекс", icon: "Warehouse" },
-  { label: "Быстровозводимый склад/ангар", icon: "Building2" },
+  { label: "Быстровозводимый склад", icon: "Building2" },
   { label: "Склад из сэндвич-панелей", icon: "PanelsTopLeft" },
   { label: "Теплый склад", icon: "ThermometerSun" },
   { label: "Логистический комплекс", icon: "Truck" },
