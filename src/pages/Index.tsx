@@ -1293,7 +1293,7 @@ function quizToPriceParams(
   }).toString();
 }
 
-function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, enableUis, categoryName, hideCrane }: { onClose: () => void; step1Options?: { label: string; icon: string }[]; quizImg?: string; logoUrl?: string; enableUis?: boolean; categoryName?: string; hideCrane?: boolean }) {
+function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, enableUis, categoryName, hideCrane, hideSketch }: { onClose: () => void; step1Options?: { label: string; icon: string }[]; quizImg?: string; logoUrl?: string; enableUis?: boolean; categoryName?: string; hideCrane?: boolean; hideSketch?: boolean }) {
   const [step, setStep] = useState(1);
   const TOTAL = 6;
   const [state, setState] = useState<QuizState>({
@@ -2551,7 +2551,7 @@ export default function Index({
       style={{ fontFamily: "Arial,sans-serif", background: "var(--dm-bg)", color: "var(--dm-text)" }}
     >
       {showThankYou && <ThankYouPage onBack={() => setShowThankYou(false)} />}
-      {quizOpen && <QuizFullscreen onClose={() => setQuizOpen(false)} step1Options={quizOptions} quizImg={quizImg} logoUrl={logoUrl} enableUis={enableUis} categoryName={categoryName} hideCrane={hideCrane} />}
+      {quizOpen && <QuizFullscreen onClose={() => setQuizOpen(false)} step1Options={quizOptions} quizImg={quizImg} logoUrl={logoUrl} enableUis={enableUis} categoryName={categoryName} hideCrane={hideCrane} hideSketch={hideSketch} />}
 
       {/* ══ HEADER ══════════════════════════════════════════════════════════ */}
       <header className="border-b sticky top-0 z-40 shadow-sm" style={{ background: "var(--dm-header-bg)", borderColor: "var(--dm-border)" }}>
