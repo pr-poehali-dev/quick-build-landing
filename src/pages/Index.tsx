@@ -1831,7 +1831,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
                 Заполните форму и получите предварительный расчёт стоимости
                 здания прямо сейчас
                 {hideSketch ? (
-                  " "
+                  <br />
                 ) : (
                   <>
                     <br className="hidden md:block" />+ эскиз в течение 1 часа.{" "}
