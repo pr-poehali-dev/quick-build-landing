@@ -124,6 +124,7 @@ export default function TorgovyeZdaniya() {
       projects={TORGOVYE_PROJECTS}
       categoryName="Торговые здания"
       hideCrane
+      hideSketch
     />
   );
 }

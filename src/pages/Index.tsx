@@ -642,7 +642,7 @@ const STEP1_OPTIONS = [
 ];
 
 
-const LENGTHS = [24, 30, 36, 42, 48, 54];
+const LENGTHS = [18, 24, 30, 36, 42, 48, 54, 60];
 const WIDTHS = [12, 18, 24];
 const HEIGHTS = [3.6, 4.8, 6, 7.2, 8.4, 9.6];
 const CLADDING_OPTIONS = ["Профилированный лист", "Сэндвич панели"];
@@ -1329,7 +1329,8 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
     height = state.height;
   if (state.customDims.trim()) {
     const parts = state.customDims
-      .replace(/[хx×*\s]+/gi, " ")
+      .replace(/на/gi, " ")
+      .replace(/[хx×*\-\s]+/gi, " ")
       .trim()
       .split(/\s+/);
     if (parts.length >= 1 && !isNaN(+parts[0])) width = +parts[0];
@@ -1829,7 +1830,13 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
               <p className="text-sm text-center mb-6 leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
                 Заполните форму и получите предварительный расчёт стоимости
                 здания прямо сейчас
-                <br className="hidden md:block" />+ эскиз в течение 1 часа.{" "}
+                {hideSketch ? (
+                  " "
+                ) : (
+                  <>
+                    <br className="hidden md:block" />+ эскиз в течение 1 часа.{" "}
+                  </>
+                )}
                 <span className="font-semibold" style={{ color: "var(--dm-text)" }}>
                   Это бесплатно и ни к чему не обязывает.
                 </span>
@@ -2353,6 +2360,7 @@ export default function Index({
   enableUis = true,
   categoryName = "Быстровозводимые здания",
   hideCrane = false,
+  hideSketch = false,
 }: {
   pageTitle?: string;
   pageDescription?: string;
@@ -2364,6 +2372,7 @@ export default function Index({
   enableUis?: boolean;
   categoryName?: string;
   hideCrane?: boolean;
+  hideSketch?: boolean;
 }) {
   useEffect(() => {
     if (forceTheme) {
@@ -2729,7 +2738,7 @@ export default function Index({
                 <span className="hidden md:inline">
                   <br />
                 </span>{" "}
-                полноценный расчёт + эскиз в течение 1 часа
+                полноценный расчёт{hideSketch ? "" : " + эскиз в течение 1 часа"}
               </p>
               <button
                 onClick={() => setQuizOpen(true)}
