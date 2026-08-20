@@ -2401,6 +2401,10 @@ export default function Index({
   const [cbSent, setCbSent] = useState(false);
   const [cbErrors, setCbErrors] = useState({ name: "", phone: "" });
   const [cbTouched, setCbTouched] = useState({ name: false, phone: false });
+  const [cbAgreePersonal, setCbAgreePersonal] = useState(false);
+  const [cbAgreePromo, setCbAgreePromo] = useState(false);
+  const [cbAgreeTouched, setCbAgreeTouched] = useState(false);
+  const [cbAgreeError, setCbAgreeError] = useState("");
   const activeProjects = projectsProp ?? projects;
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [modalImgIdx, setModalImgIdx] = useState(0);
@@ -2422,6 +2426,10 @@ export default function Index({
     phone: false,
     email: false,
   });
+  const [cfAgreePersonal, setCfAgreePersonal] = useState(false);
+  const [cfAgreePromo, setCfAgreePromo] = useState(false);
+  const [cfAgreeTouched, setCfAgreeTouched] = useState(false);
+  const [cfAgreeError, setCfAgreeError] = useState("");
 
   useEffect(() => {
     setTimeout(() => setHeroStarted(true), 300);
@@ -2465,6 +2473,10 @@ export default function Index({
     setCbPhone("");
     setCbErrors({ name: "", phone: "" });
     setCbTouched({ name: false, phone: false });
+    setCbAgreePersonal(false);
+    setCbAgreePromo(false);
+    setCbAgreeTouched(false);
+    setCbAgreeError("");
   };
 
   const fireGoal = () => {
@@ -2522,9 +2534,14 @@ export default function Index({
 
   const submitCallback = () => {
     const e = { name: validateName(cbName), phone: validatePhone(cbPhone) };
+    const agreeErr = cbAgreePersonal
+      ? ""
+      : "Необходимо согласие на обработку персональных данных";
     setCbErrors(e);
     setCbTouched({ name: true, phone: true });
-    if (!e.name && !e.phone) {
+    setCbAgreeTouched(true);
+    setCbAgreeError(agreeErr);
+    if (!e.name && !e.phone && !agreeErr) {
       setCbSent(true);
       sendSimpleLead("Обратный звонок", cbName, cbPhone);
     }
@@ -2537,9 +2554,14 @@ export default function Index({
       phone: validatePhone(cfPhone),
       email: validateEmail(cfEmail),
     };
+    const agreeErr = cfAgreePersonal
+      ? ""
+      : "Необходимо согласие на обработку персональных данных";
     setCfErrors(e);
     setCfTouched({ name: true, phone: true, email: true });
-    if (!e.name && !e.phone && !e.email) {
+    setCfAgreeTouched(true);
+    setCfAgreeError(agreeErr);
+    if (!e.name && !e.phone && !e.email && !agreeErr) {
       setShowThankYou(true);
       sendSimpleLead("Контактная форма", cfName, cfPhone, cfEmail, cfMsg);
     }
@@ -2942,24 +2964,75 @@ export default function Index({
                   className="w-full border rounded px-4 py-3 text-sm outline-none focus:border-orange-400 transition-colors resize-none"
                   style={{ background: "var(--dm-bg-input)", borderColor: "var(--dm-border)", color: "var(--dm-text)" }}
                 />
+                <div>
+                  <label className="flex items-start gap-2.5 cursor-pointer">
+                    <div
+                      onClick={() => {
+                        setCfAgreePersonal((v) => !v);
+                        if (cfAgreeTouched)
+                          setCfAgreeError(
+                            cfAgreePersonal
+                              ? "Необходимо согласие на обработку персональных данных"
+                              : "",
+                          );
+                      }}
+                      className="w-5 h-5 rounded mt-0.5 flex items-center justify-center shrink-0 transition-all"
+                      style={{
+                        background: cfAgreePersonal
+                          ? "var(--orange)"
+                          : "transparent",
+                        border: cfAgreePersonal
+                          ? "none"
+                          : `2px solid ${cfAgreeTouched && cfAgreeError ? "#f87171" : "var(--dm-border)"}`,
+                      }}
+                    >
+                      {cfAgreePersonal && (
+                        <Icon name="Check" size={12} className="text-white" />
+                      )}
+                    </div>
+                    <span className="text-xs leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
+                      Я согласен на{" "}
+                      <a
+                        href="https://evrazsteelbox.ru/politika_v_oblasti_obrabotki_personalnyh_dannyh/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="underline"
+                        style={{ color: "var(--orange)" }}
+                      >
+                        обработку персональных данных
+                      </a>
+                    </span>
+                  </label>
+                  <FieldError msg={cfAgreeTouched ? cfAgreeError : ""} />
+                </div>
+                <label className="flex items-start gap-2.5 cursor-pointer">
+                  <div
+                    onClick={() => setCfAgreePromo((v) => !v)}
+                    className="w-5 h-5 rounded mt-0.5 flex items-center justify-center shrink-0 transition-all"
+                    style={{
+                      background: cfAgreePromo
+                        ? "var(--orange)"
+                        : "transparent",
+                      border: cfAgreePromo
+                        ? "none"
+                        : `2px solid var(--dm-border)`,
+                    }}
+                  >
+                    {cfAgreePromo && (
+                      <Icon name="Check" size={12} className="text-white" />
+                    )}
+                  </div>
+                  <span className="text-xs leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
+                    Согласен на получение информационных и рекламных
+                    сообщений (необязательно)
+                  </span>
+                </label>
                 <button
                   type="submit"
-                  className="btn-orange w-full py-3.5 rounded text-sm"
+                  className="btn-orange w-full py-3.5 rounded text-sm mt-1"
                 >
                   ОТПРАВИТЬ ЗАЯВКУ →
                 </button>
-                <p className="text-center text-xs" style={{ color: "var(--dm-text-faint)" }}>
-                  Нажимая кнопку, вы соглашаетесь с{" "}
-                  <a
-                    href="https://evrazsteelbox.ru/politika_v_oblasti_obrabotki_personalnyh_dannyh/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="underline"
-                    style={{ color: "var(--orange)" }}
-                  >
-                    политикой конфиденциальности
-                  </a>
-                </p>
               </form>
             </div>
           </div>
@@ -3213,24 +3286,75 @@ export default function Index({
                     />
                     <FieldError msg={cbTouched.phone ? cbErrors.phone : ""} />
                   </div>
+                  <div>
+                    <label className="flex items-start gap-2.5 cursor-pointer">
+                      <div
+                        onClick={() => {
+                          setCbAgreePersonal((v) => !v);
+                          if (cbAgreeTouched)
+                            setCbAgreeError(
+                              cbAgreePersonal
+                                ? "Необходимо согласие на обработку персональных данных"
+                                : "",
+                            );
+                        }}
+                        className="w-5 h-5 rounded mt-0.5 flex items-center justify-center shrink-0 transition-all"
+                        style={{
+                          background: cbAgreePersonal
+                            ? "var(--orange)"
+                            : "transparent",
+                          border: cbAgreePersonal
+                            ? "none"
+                            : `2px solid ${cbAgreeTouched && cbAgreeError ? "#f87171" : "var(--dm-border)"}`,
+                        }}
+                      >
+                        {cbAgreePersonal && (
+                          <Icon name="Check" size={12} className="text-white" />
+                        )}
+                      </div>
+                      <span className="text-xs leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
+                        Я согласен на{" "}
+                        <a
+                          href="https://evrazsteelbox.ru/politika_v_oblasti_obrabotki_personalnyh_dannyh/"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="underline"
+                          style={{ color: "var(--orange)" }}
+                        >
+                          обработку персональных данных
+                        </a>
+                      </span>
+                    </label>
+                    <FieldError msg={cbAgreeTouched ? cbAgreeError : ""} />
+                  </div>
+                  <label className="flex items-start gap-2.5 cursor-pointer">
+                    <div
+                      onClick={() => setCbAgreePromo((v) => !v)}
+                      className="w-5 h-5 rounded mt-0.5 flex items-center justify-center shrink-0 transition-all"
+                      style={{
+                        background: cbAgreePromo
+                          ? "var(--orange)"
+                          : "transparent",
+                        border: cbAgreePromo
+                          ? "none"
+                          : `2px solid var(--dm-border)`,
+                      }}
+                    >
+                      {cbAgreePromo && (
+                        <Icon name="Check" size={12} className="text-white" />
+                      )}
+                    </div>
+                    <span className="text-xs leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
+                      Согласен на получение информационных и рекламных
+                      сообщений (необязательно)
+                    </span>
+                  </label>
                   <button
                     onClick={submitCallback}
-                    className="btn-orange w-full py-3.5 rounded-lg text-sm"
+                    className="btn-orange w-full py-3.5 rounded-lg text-sm mt-1"
                   >
                     ПОЗВОНИТЕ МНЕ →
                   </button>
-                  <p className="text-center text-xs" style={{ color: "var(--dm-text-faint)" }}>
-                    Нажимая кнопку, вы соглашаетесь с{" "}
-                    <a
-                      href="https://evrazsteelbox.ru/politika_v_oblasti_obrabotki_personalnyh_dannyh/"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="underline"
-                      style={{ color: "var(--orange)" }}
-                    >
-                      политикой конфиденциальности
-                    </a>
-                  </p>
                 </div>
               )}
             </div>
