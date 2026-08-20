@@ -2209,8 +2209,17 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
                           )}
                         </div>
                         <span className="text-xs leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
-                          Согласен на получение информационных и рекламных
-                          сообщений (необязательно)
+                          Согласен на{" "}
+                          <a
+                            href="https://evrazsteelbox.ru/politika_v_oblasti_obrabotki_personalnyh_dannyh/soglasie_na_poluchenie_rassilok/"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="underline"
+                            style={{ color: "var(--orange)" }}
+                          >
+                            получение информационных и рекламных сообщений
+                          </a>{" "}
+                          (необязательно)
                         </span>
                       </label>
                       <button
@@ -3023,8 +3032,17 @@ export default function Index({
                     )}
                   </div>
                   <span className="text-xs leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
-                    Согласен на получение информационных и рекламных
-                    сообщений (необязательно)
+                    Согласен на{" "}
+                    <a
+                      href="https://evrazsteelbox.ru/politika_v_oblasti_obrabotki_personalnyh_dannyh/soglasie_na_poluchenie_rassilok/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="underline"
+                      style={{ color: "var(--orange)" }}
+                    >
+                      получение информационных и рекламных сообщений
+                    </a>{" "}
+                    (необязательно)
                   </span>
                 </label>
                 <button
@@ -3345,8 +3363,17 @@ export default function Index({
                       )}
                     </div>
                     <span className="text-xs leading-relaxed" style={{ color: "var(--dm-text-muted)" }}>
-                      Согласен на получение информационных и рекламных
-                      сообщений (необязательно)
+                      Согласен на{" "}
+                      <a
+                        href="https://evrazsteelbox.ru/politika_v_oblasti_obrabotki_personalnyh_dannyh/soglasie_na_poluchenie_rassilok/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="underline"
+                        style={{ color: "var(--orange)" }}
+                      >
+                        получение информационных и рекламных сообщений
+                      </a>{" "}
+                      (необязательно)
                     </span>
                   </label>
                   <button
