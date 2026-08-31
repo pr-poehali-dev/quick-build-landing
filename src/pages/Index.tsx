@@ -651,8 +651,6 @@ const EXTRA_SERVICES = [
   "Подбор земельного участка",
   "Оценка пригодности участка для реализации проекта",
   "Проектирование и получение разрешения на строительство",
-  "Поставка комплекта здания",
-  "Доставка комплекта здания до стройплощадки",
   "Монтаж здания",
   "Сдача в эксплуатацию",
 ];
@@ -1305,7 +1303,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
     customDims: "",
     cladding: "Профилированный лист",
     crane: "Нет",
-    extras: ["Поставка комплекта здания"],
+    extras: [],
     name: "",
     phone: "",
     email: "",
@@ -1327,15 +1325,29 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
   let length = state.length,
     width = state.width,
     height = state.height;
+  let customDimsError = "";
   if (state.customDims.trim()) {
     const parts = state.customDims
       .replace(/на/gi, " ")
       .replace(/[хx×*\-\s]+/gi, " ")
       .trim()
       .split(/\s+/);
-    if (parts.length >= 1 && !isNaN(+parts[0])) width = +parts[0];
-    if (parts.length >= 2 && !isNaN(+parts[1])) length = +parts[1];
-    if (parts.length >= 3 && !isNaN(+parts[2])) height = +parts[2];
+    const nums = parts.map((p) => +p).filter((n) => !isNaN(n)).slice(0, 3);
+    if (nums.length >= 3) {
+      const [n1, n2, n3] = nums;
+      if (n1 === n2 && n2 === n3) {
+        customDimsError = "Некорректный ввод данных";
+      } else {
+        const sorted = [n1, n2, n3].sort((a, b) => a - b);
+        // Самое большое число — длина, самое маленькое — высота, оставшееся — ширина
+        height = sorted[0];
+        width = sorted[1];
+        length = sorted[2];
+      }
+    } else {
+      if (nums.length >= 1) width = nums[0];
+      if (nums.length >= 2) length = nums[1];
+    }
   }
   const area = length * width;
   const zones = getCityZones(state.city);
@@ -1641,7 +1653,12 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
                   className="w-full border rounded-xl px-4 py-3 text-sm outline-none focus:border-orange-300 transition-colors"
                   style={{ background: "var(--dm-bg-input)", borderColor: "var(--dm-border)", color: "var(--dm-text)" }}
                 />
-                {state.customDims && (
+                {state.customDims && customDimsError && (
+                  <p className="text-xs mt-1.5 text-red-500 font-medium">
+                    {customDimsError}
+                  </p>
+                )}
+                {state.customDims && !customDimsError && (
                   <p
                     className="text-xs mt-1"
                     style={{ color: "var(--orange)" }}
@@ -1649,7 +1666,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
                     Распознано: {width} × {length} × {height} м
                   </p>
                 )}
-                {state.customDims.trim() && area > 0 && area < 200 && (
+                {!customDimsError && state.customDims.trim() && area > 0 && area < 200 && (
                   <p className="text-xs mt-1.5 text-red-500 font-medium">
                     Минимальная площадь — 200 м². Сейчас: {area} м². Увеличьте размеры здания.
                   </p>
@@ -1756,7 +1773,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
               {!hideCrane && (
                 <div>
                   <div className="text-sm font-bold mb-3" style={{ color: "var(--dm-text)" }}>
-                    Наличие кран-балки 5 тонн:
+                    Наличие кран-балки:
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     {CRANE_OPTIONS.map((opt) => (
@@ -1783,7 +1800,7 @@ function QuizFullscreen({ onClose, step1Options, quizImg, logoUrl: quizLogoUrl, 
           {step === 5 && (
             <div>
               <h2 className="text-xl md:text-2xl font-bold mb-6 text-center" style={{ color: "var(--dm-text)" }}>
-                Дополнительные услуги
+                Дополнительные услуги от партнеров
               </h2>
               <div className="space-y-2">
                 {EXTRA_SERVICES.map((svc) => {
