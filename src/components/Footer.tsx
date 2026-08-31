@@ -81,7 +81,7 @@ export default function Footer({ logoUrl = LOGO_URL, forceTheme }: { logoUrl?: s
             >
               sales.box@evrazsteel.ru
             </a>
-            <p className="text-xs" style={{ color: "var(--dm-text-muted)" }}>Москва, Пресненская наб., 12</p>
+            <p className="text-xs" style={{ color: "var(--dm-text-muted)" }}>Москва, ул. Авиаконструктора Микояна, д. 12</p>
           </div>
         </div>
 
