@@ -2,7 +2,7 @@ import os, json, smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-RECIPIENTS = ["alexeyesbox@yandex.ru", "Igor.podurets@evraz.com", "sales.box@evrazsteel.ru"]
+RECIPIENTS = ["alexeyesbox@yandex.ru", "sales.box@evrazsteel.ru"]
 
 def handler(event: dict, context) -> dict:
     """Отправляет заявку с лендинга на почты менеджеров. v3"""
